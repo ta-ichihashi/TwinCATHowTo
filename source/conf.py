@@ -195,13 +195,10 @@ latex_elements = {
             \if@openright\cleardoublepage\else\clearpage\fi
             \sphinxrestorepageanchorsetting
         } % 表紙スタイル終わり
-        
-        
-        \setcounter{tocdepth}{1}
-
         % アットマークを特殊文字に戻す
         \makeatother
 
+        \setcounter{tocdepth}{1}
         \usepackage[titles]{tocloft}
         %\usepackage[OT1]{fontenc}
         \cftsetpnumwidth {1.25cm}\cftsetrmarg{1.5cm}
