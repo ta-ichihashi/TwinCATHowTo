@@ -1,9 +1,9 @@
 # PowerShellを用いたシステムレイテンシ計測
 
 
-```{toctree} 
+```{toctree}
 :maxdepth: 2
-:caption: 目次:
+:caption: 目次
 
 latency.md
 ```
