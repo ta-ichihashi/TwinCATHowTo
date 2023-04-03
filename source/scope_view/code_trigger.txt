@@ -1,0 +1,12 @@
+VAR
+	axes		:ARRAY [0..2] OF AXIS_REF;
+	export_trigger :BOOL;
+END_VAR
+
+
+// Trigger for csv saving
+IF axes[0].Status.InTargetPosition AND axes[0].NcToPlc.SetPos = 0 THEN;
+	export_trigger := TRUE;
+ELSE;
+	export_trigger := FALSE;
+END_IF
