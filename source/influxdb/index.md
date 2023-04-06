@@ -18,7 +18,7 @@ TwinCATではこのような密度の高いデータをInfluxDBというオー�
 
 ```{toctree}
 :maxdepth: 2
-:caption: 目次:
+:caption: 目次
 
 setup_influxdb_windows
 setup_tf6420_influxdb

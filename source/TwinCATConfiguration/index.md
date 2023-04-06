@@ -9,5 +9,4 @@
 
 scan.md
 slave_version.md
-#esi.md
 ```
