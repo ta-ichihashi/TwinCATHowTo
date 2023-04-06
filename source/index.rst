@@ -11,15 +11,10 @@ TwinCAT HOW TO へようこそ
    :numbered:
    :caption: 目次:
 
-   TwinCATConfiguration/index.md
-   scope_view/index.rst
-   library/index.md
-   dongle/index.md
-   latency/index.md
-   2146/index.md
-   auto_deploy/index.md
-   BSoD/index.rst
-   influxdb/index.rst
+   basic.md
+   develop.md
+   operation.md
+
 
 .. Indices and tables
    ==================
