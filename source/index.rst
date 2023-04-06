@@ -18,6 +18,8 @@ TwinCAT HOW TO へようこそ
    2146/index.md
    auto_deploy/index.md
    BSoD/index.rst
+   influxdb/index.rst
+   TwinCATConfiguration/index.md
 
 .. Indices and tables
    ==================
