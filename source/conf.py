@@ -84,7 +84,7 @@ html_theme_options = {
 
 myst_enable_extensions = [
     "amsmath",
-    "attrs_inline",
+    "attrs_image",
     "colon_fence",
     "deflist",
     "dollarmath",
