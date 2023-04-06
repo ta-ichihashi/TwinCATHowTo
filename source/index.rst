@@ -11,6 +11,7 @@ TwinCAT HOW TO へようこそ
    :numbered:
    :caption: 目次:
 
+   TwinCATConfiguration/index.md
    scope_view/index.rst
    library/index.md
    dongle/index.md
@@ -19,7 +20,6 @@ TwinCAT HOW TO へようこそ
    auto_deploy/index.md
    BSoD/index.rst
    influxdb/index.rst
-   TwinCATConfiguration/index.md
 
 .. Indices and tables
    ==================
