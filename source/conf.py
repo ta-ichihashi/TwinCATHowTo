@@ -42,7 +42,16 @@ release = '第1版'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['myst_parser','sphinx_revealjs', 'docxbuilder', 'sphinx.ext.githubpages']
+extensions = [
+    'myst_parser',
+    'sphinx_revealjs', 
+    'docxbuilder', 
+    'sphinx.ext.githubpages',
+    'sphinxcontrib.blockdiag',
+    'sphinxcontrib.seqdiag',
+    'sphinxcontrib.actdiag',
+    'sphinxcontrib.nwdiag'
+    ]
 
 source_suffix = {
     '.rst': 'restructuredtext',
@@ -55,8 +64,18 @@ templates_path = ['_templates']
 exclude_patterns = []
 
 language = 'ja'
+
+#### Config for plugins
+
 numfig = True
 
+# Fontpath for blockdiag (truetype font)
+#blockdiag_fontpath = 'C:/Windows/fonts/YuGothM.ttc'
+# Fontpath for blockdiag (truetype font)
+blockdiag_fontpath = './source/assets/ipaexg.ttf'
+actdiag_fontpath = './source/assets/ipaexg.ttf'
+seqdiag_fontpath = './source/assets/ipaexg.ttf'
+nwdiag_fontpath = './source/assets/ipaexg.ttf'
 
 # -- Options for revealjs output -------------------------------------------------
 revealjs_style_theme = 'sky'
