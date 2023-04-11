@@ -20,7 +20,7 @@ reStructuredTextはMarkdownと異なり独自の方言が少ないマークア�
 
 ### ライブラリドキュメントの概要
 
-ライブラリのドキュメントを参照するには、ライブラリマネージャを開く必要があります。ライブラリマネージャは、PLCプロジェクト内の`References`ツリーをダブルクリックする事で開きます。（{ref}`TableOfContents`）
+ライブラリのドキュメントを参照するには、ライブラリマネージャを開く必要があります。ライブラリマネージャは、PLCプロジェクト内の`References`ツリーをダブルクリックする事で開きます。（{numref}`TableOfContents`）
 
 ```{figure} 2023-03-01-17-30-20.png
 :width: 900px
@@ -51,7 +51,7 @@ PLCのソースコードに記述された内容を基に、各オブジェク�
 (section_inputs_outputs)=
 #### Inputs/Outputsタブ
 
-ライブラリマネージャの{ref}`InputsOutputs` の通り、ファンクションブロックやファンクションなどの入出力変数や、DUTsで定義される構造体やEnumなどの要素にプログラム上で記述された行コメント[^row_comment] が自動的に転記されます。
+ライブラリマネージャの{numref}`InputsOutputs` の通り、ファンクションブロックやファンクションなどの入出力変数や、DUTsで定義される構造体やEnumなどの要素にプログラム上で記述された行コメント[^row_comment] が自動的に転記されます。
 
 [^row_comment]: `//` から行末まで続くコメント
 
@@ -111,7 +111,7 @@ END_VAR
   :
 ```
 
-上記のようにreStructuredTextで記述したドキュメントを記述したライブラリを読み込んだPLCプロジェクトのライブラリマネージャでは、{ref}`LibraryManagerWindow` のような整形された文書が表示されます。図や表、表題、箇条書きなど多彩なレイアウト文書の閲覧が可能です。
+上記のようにreStructuredTextで記述したドキュメントを記述したライブラリを読み込んだPLCプロジェクトのライブラリマネージャでは、{numref}`LibraryManagerWindow` のような整形された文書が表示されます。図や表、表題、箇条書きなど多彩なレイアウト文書の閲覧が可能です。
 
 ```{figure} 2023-03-01-12-10-20.png
 :width: 900px
@@ -133,7 +133,7 @@ Documentationタブ
 
 ### reStructuredTextの基本の書き方
 
-reStructuredTextの基本的な記述ルールについては、Sphinxの以下のリンクを参照いただき、{ref}`section_write_restructured_text`節に記載した通り各プログラムオブジェクトの変数宣言部の先頭の複数行コメントとして、そのプログラムの構成や機能仕様など記述してください。
+reStructuredTextの基本的な記述ルールについては、Sphinxの以下のリンクを参照いただき、{numref}`section_write_restructured_text`節に記載した通り各プログラムオブジェクトの変数宣言部の先頭の複数行コメントとして、そのプログラムの構成や機能仕様など記述してください。
 
 * トップページ
 
@@ -233,12 +233,12 @@ PLCプロジェクト内での図などのファイルの取り扱い方は少�
 
     先ほど示した`figure`命令の例のキャプションである、「influxDBのデータタグの格納用構造体定義」に対して本文から参照リンクを張ることを相互参照と呼びます。
 
-    説明本文中に `:ref:` に続いて `:name:`で定義したキーをバックスラッシュで囲む事でキャプションの文字を使った図へのリンクに置き換えられます。
+    説明本文中に `:numref:` に続いて `:name:`で定義したキーをバックスラッシュで囲む事でキャプションの文字を使った図へのリンクに置き換えられます。
 
     ```{admonition} 注意
     :class: attention
 
-    ``` :ref:`figure_data_structure` ``` の前後には必ず半角スペースを入れてください。
+    ``` :numref:`figure_data_structure` ``` の前後には必ず半角スペースを入れてください。
 
     ```
 
@@ -250,7 +250,7 @@ PLCプロジェクト内での図などのファイルの取り扱い方は少�
 :開発者: *** **
 
 TF6420 database serverを用いた、influxDBのMeasurementにデータを書き込む際のタグ部分の構造体です。
-タグを定義する構造体は :ref:`figure_data_structure` に示す通り、フィールドを定義する構造体により継承されます。 
+タグを定義する構造体は :numref:`figure_data_structure` に示す通り、フィールドを定義する構造体により継承されます。 
 
 .. figure:: ../../LibraryBundle/data_struct.svg
     :width: 250px
@@ -313,7 +313,7 @@ Documentationの例
     :align: center
     ``` 
 
-4. 再度 {ref}`library_making_basic` の手順のlibrary保存とインストールを行い、ドキュメントが正しく反映されたか確認します。
+4. 再度 {numref}`library_making_basic` の手順のlibrary保存とインストールを行い、ドキュメントが正しく反映されたか確認します。
 
 5. 一度編集ツールとの関連付け設定が行われたら、次からは`Open`で同じツールを使って編集する事ができるようになります。
 

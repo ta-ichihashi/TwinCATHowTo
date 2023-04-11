@@ -1,3 +1,5 @@
+# セットアップ
+
 ## influxDB のインストール
 
 ```{admonition} 警告
@@ -105,7 +107,7 @@
    :align: center
    ```
 
-6. {ref}`initial_data_loading` で設定は完了です。次の3つから続く作業を選んでください。
+6. {numref}`initial_data_loading` で設定は完了です。次の3つから続く作業を選んでください。
 
    `QUICK START`
 

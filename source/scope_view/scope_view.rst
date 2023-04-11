@@ -253,7 +253,7 @@ DataPoolに登録された変数のデータを任意のYT ChartのAxisに表示
 
     DataPoolからViewへの登録
 
-以上で、変数登録からYT Chartへのビューへの一連の流れについて説明しました。この方法で、 :ref:`section_plc_trigger` 節のプログラムの、 ``export_trigger`` をDataPoolに登録し、CSVへ出力したい各軸のデータを YT Chart上に表示するよう、設定してください。
+以上で、変数登録からYT Chartへのビューへの一連の流れについて説明しました。この方法で、 :numref:`section_plc_trigger` 節のプログラムの、 ``export_trigger`` をDataPoolに登録し、CSVへ出力したい各軸のデータを YT Chart上に表示するよう、設定してください。
 
 DataPoolに登録した ``export_trigger`` フラグの使い方は、次章のトリガの設定で説明します。
 
