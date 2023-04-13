@@ -17,5 +17,5 @@ TwinCATからEtherCATデバイスに対して “Scan”をかけて状況を見
 
 次図の通りの操作で、Slaveをスキャンし、PLCをRUNモードへ遷移させることができます。
 
-![](2023-04-06-15-26-06.png){align=center idth=300px}
+![](2023-04-06-15-26-06.png){align=center width=500px}
 
