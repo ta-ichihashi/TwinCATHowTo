@@ -36,8 +36,7 @@ TwinCAT Safety (TwinSafe) に対するソフトウェアの書き込み、更新
 ```
 
 ```{toctree}
-:maxdepth: 2
-:caption: 目次
+:hidden:
 
 develop_project.md
 deploy_project.md
