@@ -6,8 +6,7 @@
 # CAMの追加手順
 
 ```{toctree}
-:maxdepth: 2
-:caption: 目次
+:hidden:
 
 add_cam
 ```
