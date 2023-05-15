@@ -2,9 +2,7 @@
 
 
 ```{toctree}
-:maxdepth: 2
-:numbered:
-:caption: 目次
+:hidden:
 
 setup
 version_control
