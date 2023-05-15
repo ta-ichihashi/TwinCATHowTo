@@ -10,4 +10,5 @@ scope_view/index.rst
 2146/index.md
 latency/index.md
 influxdb/index.rst
+software_protection/index.md
 ```
