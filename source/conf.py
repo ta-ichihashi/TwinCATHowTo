@@ -44,8 +44,8 @@ release = '第1版'
 
 extensions = [
     'myst_parser',
-    'sphinx_revealjs', 
-    'docxbuilder', 
+    'sphinx_revealjs',
+    'docxbuilder',
     'sphinx.ext.githubpages',
     'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag',
@@ -126,14 +126,14 @@ docx_documents = [
 
 docx_style = '_templates/beckhoff_document_template.docx'
 
-docx_coverpage = True 
-docx_pagebreak_before_section = 1 
+docx_coverpage = True
+docx_pagebreak_before_section = 1
 docx_pagebreak_after_table_of_contents = 0
 docx_table_options = {
-  'landscape_columns': 6,      # 
+  'landscape_columns': 6,      #
   'in_single_page': True,      #
-  'row_splittable': True,      # 
-  'header_in_all_page': True,  # 
+  'row_splittable': True,      #
+  'header_in_all_page': True,  #
 }
 
 

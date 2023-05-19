@@ -6,9 +6,8 @@
 
 version_control/index.md
 library/index.md
-scope_view/index.rst
 2146/index.md
 latency/index.md
-influxdb/index.rst
+iot/index.md
 software_protection/index.md
 ```
