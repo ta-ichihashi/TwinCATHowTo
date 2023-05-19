@@ -20,7 +20,7 @@ scoop bucket add versions
 scoop bucket add extras
 
 # python インストール
-scoop install python vscode
+scoop install python vscode latex perl
 
 # vs-code extension インストール
 code --install-extension ExecutableBookProject.myst-highlight
