@@ -5,12 +5,10 @@
 
 # TwinCAT3 ライブラリ開発
 
-```{include} dev_ops.md
-```
+TwinCATにおけるモジュール開発を実現するため、ライブラリ管理システムとそれを活用する開発フローの標準化について説明します。
 
 ```{toctree}
-:maxdepth: 2
-:caption: 目次
+:hidden:
 
 make_library
 documentation
