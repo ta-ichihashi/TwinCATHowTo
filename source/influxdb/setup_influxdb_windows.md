@@ -121,10 +121,8 @@
    
       何もせずにここで終了します。
 
-   ```{figure} 2023-02-19-15-28-14.png
-   :width: 380px
-   :align: center
-   :name: initial_data_loading
+   ```{figure-md} initial_data_loading
+   ![](2023-02-19-15-28-14.png){width=380px align=center}
    
    初期設定完了画面
    ```
