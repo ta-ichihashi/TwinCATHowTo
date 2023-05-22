@@ -11,7 +11,32 @@
 
 ```
 
-## クイックスタート
+このライブラリでは、{numref}`figure_tsdb_library_feature` に示す通りサイクル実行中に収集されるデータと、データベース書込みを非同期で実行できるようにキューバッファによる書込み制御を行う機能を提供します。
+
+```{figure-md} figure_tsdb_library_feature
+![](tsdb_library_feature.png){width=600px align=center}
+
+本ライブラリの機能概要
+```
+
+次の手順で本ライブラリを用いたデータベース書込みプログラムを実装を行います。
+
+1. InfluxDBに書き込むデータセットを定義する構造体を定義します。
+
+2. グローバルラベルにコマンドキューの変数を定義します。
+
+3. データベース書込みプログラム専用のタスクを作成します。このタスクで実行する、キューからデータをInfluxDBへ書込むプログラムを実装します。
+
+4. 制御タスク上にデータ収集用のプログラムを配置し、`RecordDataQueue`ファンクションブロックのインスタンスを設けます。`RecordDataQueue`ファンクションブロックでは、1レコードだけを書き込む `record_once` メソッドと、バッファに連続して書込み、一定のチャンクサイズになった時点でデータベースへ書き込む `cyclic_record` の二つのメソッドがあります。`cyclic_record` メソッド使用時のチャンクサイズの決定方法は、 `minimum_chunk_size` サイズで指定するチャンク数を下限値とし、データバッファの使用状況に応じてサイズが自動的に拡張され、データベース書込み遅延をバッファで吸収します。（ {numref}`figure_cyclic_data_buffer` ）
+
+	```{figure-md} figure_cyclic_data_buffer
+	![](cyclic_data_buffer.png){width=400px align=center}
+
+	サイクリックデータバッファの構造
+	```
+
+
+## 実装手順
 
 本プロジェクトに含まれるファンクションブロック等を用いる事で、次の手順でInfluxDBへアクセス頂く事ができます。
 
@@ -108,36 +133,64 @@ END_STRUCT
 END_TYPE
 
 ```
+### グローバルラベルにおけるキューの宣言
 
-###  メインプログラムの作成
+DBへ書込みを行う低速の処理と、記録データをバッファにセットしてキューインする高速周期タスクで、個別のタスクを作成します。
 
-メインプログラムでは、{numref}`figure_tsdb_library_feature` に示す通り、データ記録用のバッファと、そこから適切な書込みチャンクを切り出してキューを通してデータベースに書込み処理を依頼するファンクションブロック定義をデータの種類毎に行い、最後にデータベースに書込みを実行するファンクションブロックを配置します。
+このタスク間通信のために`CommandQueueMember`構造体変数と、キューサイズの定数を`GVL` に定義します。
 
-```{figure} tsdb_library_feature.png
-:width: 600px
-:align: center
-:name: figure_tsdb_library_feature
+```{code-block} pascal
+{attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT
+	COMMAND_BUFFER_SIZE :UDINT := 63; // Queue size for database insert command.
+END_VAR
 
-本ライブラリの機能概要
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	tsdb_command_queue	:CommandQueueMember;
+END_VAR
 ```
 
-データの記録方法は、PLCのサイクル処理毎にバッファに蓄積して一定量毎に書き込む「サイクリック記録方式」と、任意のタイミングで単一データを書き込む「イベントデータ記録方式」の二通りがあります。それぞれの実装例をご紹介します。
+### データベース書込みプログラムの作成
+
+データベース書き込み部のプログラムを作成します。作成したプログラムは、制御サイクルほど高速のサイクルタイムは必要としません。専用のタスクを生成し、10ms程度のサイクルタイムを設定の上、このタスク上で実行させてください。
+
+```{admonition} 注意
+:class: warning
+
+TF6420とのADS通信での同期制御が行われる関係で、データベースのレスポンスが悪くなるとレイテンシが生じる可能性があります。できるだけ独立コアで実行させるか、レイテンシが許容できないタスクと同じコアで実行しないようにご注意ください。
+```
+
+* 宣言部
+
+	```{code-block} pascal
+	PROGRAM DbWriteInfluxDB
+	VAR
+		// Cycle record data
+		fbInfluxDBRecorder	:RecordInfluxDB;
+	END_VAR
+	```
+
+* プログラム部
+
+	```pascal
+	// Insert DB
+	fbInfluxDBRecorder(
+		command_queue := GVL.tsdb_command_queue,
+		nDBID := 1      // Database ID by TF6420 configurator
+	);
+	```
+
+
 
 #### サイクル記録（cyclic_record）実装例
 
-PLCの制御サイクル毎に取得できるデータを、あらかじめ用意したバッファに記録しつつ、一定のサイズのチャンクとなるまで蓄積されたら、コマンドキューを通じてデータベースに書込みコマンドを送る記録方式です。バッファそのものはメインプログラムで定義しますが、バッファ制御を担う`RecordDataQueue`ファンクションブロックにその最大インデックスの値をセットし、このファンクションブロックがサーチしているindex番号に応じたデータ領域に実データを書込みます。
+サイクル毎にデータを記録し、適切なチャンクサイズでデータベースへ書き込むコマンドをキューインする制御部です。このタスクは制御サイクルのタスク上で実行してください。
 
-一定のサイズになるまでバッファにデータが蓄積されたら、これを一つのチャンクとしてデータベースに書込みコマンドを発行します。チャンクサイズの決定方法は最小値を設定した上で、データベースの負荷やネットワークの影響により発生した遅延時間に比例して動的に増加させています。（{numref}`figure_cyclic_data_buffer`）
-
-```{figure} cyclic_data_buffer.png
-:width: 400px
-:align: center
-:name: figure_cyclic_data_buffer
-
-サイクリックデータバッファの構造
-```
-
-以上を満たすプログラム実装例を次に示します。
+`PerformanceDataRecordBuffer`
+	: データベースに記録するデータモデル `PerformanceData` 構造体型の配列バッファ。定数 `RECORD_DATA_MAX_INDEX` を上限としている。この例のバッファサイズでは0～4999の5000個であるが、1msよりも短い周期のデータであれば、この10倍は欲しい。
+`fbPerfromanceDataCommandBuffer`
+	: `RecordDataQueue` ファンクションブロックインスタンス。
 
 * 宣言部
 
@@ -156,9 +209,6 @@ PLCの制御サイクル毎に取得できるデータを、あらかじめ用�
 		// 現在のサイクルで登録するデータセット
 		PerformanceDataRecordData	:PerformanceData;
 
-		// データベース書き込みコマンドを処理するFIFOキュー
-		command_queue	: CommandQueueMember;
-
 		// ビジネスロジック用ファンクションブロック
 		fbPerfromanceDataCommandBuffer	:RecordDataQueue; // バッファキュー制御ロジック
 		fbInfluxDBRecorder	:RecordInfluxDB;	// データベース書込みロジック
@@ -173,15 +223,14 @@ PLCの制御サイクル毎に取得できるデータを、あらかじめ用�
 
 	まずはデータの収集とバッファへのデータセットです。
 	```pascal
-	// コマンドキューの生成
-	command_queue.controller(aData := command_queue.buffer_index);
-
 	// Tag Dataのセット
 	PerformanceDataRecordData.machine_id := 'machine-1';  // 装置1のデータである事を示す
 	PerformanceDataRecordData.job_id := 'task_info';	　// データ種別
 
-	// Field Data のセット（IPCの各種状態を計測し、書込みデータモデルにセット）
+	// Field Data のセット（IPCの各種状態を計測）
 	fb_PLCTaskMeasurement(ec_master_netid := '169.254.55.71.4.1');
+
+	// 書込みデータセット
 	PerformanceDataRecordData.task_time := fb_PLCTaskMeasurement.total_task_time;
 	PerformanceDataRecordData.cpu_usage := fb_PLCTaskMeasurement.cpu_usage;
 	PerformanceDataRecordData.latency := fb_PLCTaskMeasurement.latency;
@@ -192,6 +241,7 @@ PLCの制御サイクル毎に取得できるデータを、あらかじめ用�
 	PerformanceDataRecordData.ec_lost_frames := fb_PLCTaskMeasurement.ec_lost_frames;
 	PerformanceDataRecordData.ec_lost_q_frames := fb_PLCTaskMeasurement.ec_lost_q_frames;
 
+
 	// 上記までで収集したデータが PerformanceRecordData にセットされたため、
 	// コマンドバッファが管理している現在記録中のindexへ書き込む。
 	PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index] := PerformanceDataRecordData;
@@ -200,10 +250,14 @@ PLCの制御サイクル毎に取得できるデータを、あらかじめ用�
 	続いてバッファ制御部（一定量蓄積したら書込みキューに送る処理）の実装です。
 
 	```pascal
-	// 書き込んだデータをジェネリクス型（T_Arg）に変換してセットする。
+	// 書き込んだデータポインタを教えるため、ジェネリクス型（T_Arg）としてセットする。
 	fbPerfromanceDataCommandBuffer.data_pointer := F_BIGTYPE(
-			pData := ADR(PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index]), 
-			cbLen := SIZEOF(PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index])
+			pData := ADR(
+				PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index]
+				), 
+			cbLen := SIZEOF(
+				PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index]
+				)
 		);
 	// InfluxDBの書込み対象Measurement名をセット
 	fbPerfromanceDataCommandBuffer.db_table_name := 'PerformanceData';
@@ -213,31 +267,19 @@ PLCの制御サイクル毎に取得できるデータを、あらかじめ用�
 	fbPerfromanceDataCommandBuffer.minimum_chunk_size := 500;
 	// データバッファ（PerformanceDataRecordBuffer）の配列の最大要素番号をセット
 	fbPerfromanceDataCommandBuffer.upper_bound_of_data_buffer	:= RECORD_DATA_MAX_INDEX;
+
 	// バッファ制御FBを実行。コマンドキューを渡す。
-	fbPerfromanceDataCommandBuffer(
-		command_queue := command_queue
-	);
+	fbPerfromanceDataCommandBuffer(command_queue := GVL.tsdb_command_queue);
 
 	// サイクル記録メソッドの連続実行
 	fbPerfromanceDataCommandBuffer.cyclic_record();
 	```
 
-	最後にデータベース書込み制御部です。
-
-	```pascal
-	// データベース書込みロジック
-
-	fbInfluxDBRecorder(
-		command_queue := command_queue,
-		nDBID := 1,      // Database ID by TF6420 configurator
-	);
-	```
-
 #### イベントデータ記録（record_once）実装例
 
-この書込みは任意のタイミングで単一のデータをキューインするだけですので、シンプルです。ファンクションブロックは共用されており、必要なメンバーだけセットすれば良い設計となっています。
+この書込みは任意のタイミングで単一のデータをキューインします。このプログラムは制御サイクルのタスク上で実行してください。
 
-注意点としては、実行する `record_once` メソッドは1サイクルだけにしておくべきである点です。下記実装例では、 処理 `bExecuting` の開始、終了の立ち上がり `R_TRIG` および立下り`F_TRIG` 毎にイベントデータを書き込む処理を行っています。
+実行する `record_once` メソッドは実行するたびに書込みコマンドが発行されます。よって、イベント発生時の1サイクルだけ実行されるようにご配慮ください。下記実装例では、 処理 `bExecuting` の開始、終了の立ち上がり `R_TRIG` および立下り`F_TRIG` の1サイクル時のイベントデータを書き込む処理を行っています。
 
 * 宣言部
 
@@ -308,7 +350,7 @@ PLCの制御サイクル毎に取得できるデータを、あらかじめ用�
 	fbProcessModeBuffer.minimum_chunk_size := 1;
 	// バッファ制御FBを実行。コマンドキューを渡す。
 	fbProcessModeBuffer(
-		command_queue := command_queue
+		command_queue := GVL.tsdb_command_queue
 	);
 
 	IF bExecRTrig.Q OR bExecFTrig.Q THEN

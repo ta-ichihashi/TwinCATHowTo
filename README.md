@@ -1,6 +1,10 @@
-# TwinCAT HowTo
+# TwinCAT テクニカルノート
 
-このサイトは、Beckhoff Automation Gmbh の日本法人である、ベッコフオートメーション株式会社が運営するTwinCATを中心とした日本語マニュアルサイトです。
+このサイトは、Beckhoff Automation GmbH & Co. KG の日本法人である、ベッコフオートメーション株式会社が運営するTwinCATを中心とした日本語技術情報ページです。
+
+本ページは、文書作成システム [Sphinx](https://www.sphinx-doc.org/ja/master/) 上に [MyST](https://myst-parser.readthedocs.io/en/latest/) エクステンションにて Markdown 形式のソース文書をベースに構築され、以下のURLにてHTML形式で公開しています。
+
+[https://beckhoff-jp.github.io/TwinCATHowTo/](https://beckhoff-jp.github.io/TwinCATHowTo/)
 
 ## 環境構築
 
