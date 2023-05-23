@@ -211,9 +211,8 @@ TF6420とのADS通信での同期制御が行われる関係で、データベ�
 
 		// ビジネスロジック用ファンクションブロック
 		fbPerfromanceDataCommandBuffer	:RecordDataQueue; // バッファキュー制御ロジック
-		fbInfluxDBRecorder	:RecordInfluxDB;	// データベース書込みロジック
 
-		// おまけ。IPCの各種メトリクス（CPU占有率やメトリクス等）を収集する独自のFB
+		// 本ライブラリのおまけ。IPCの各種メトリクス（CPU占有率やメトリクス等）を収集する独自のFB
 		fb_PLCTaskMeasurement: PLCTaskMeasurement;
 
 	END_VAR
@@ -252,12 +251,8 @@ TF6420とのADS通信での同期制御が行われる関係で、データベ�
 	```pascal
 	// 書き込んだデータポインタを教えるため、ジェネリクス型（T_Arg）としてセットする。
 	fbPerfromanceDataCommandBuffer.data_pointer := F_BIGTYPE(
-			pData := ADR(
-				PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index]
-				), 
-			cbLen := SIZEOF(
-				PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index]
-				)
+			pData := ADR(PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index]), 
+			cbLen := SIZEOF(PerformanceDataRecordBuffer[fbPerfromanceDataCommandBuffer.index])
 		);
 	// InfluxDBの書込み対象Measurement名をセット
 	fbPerfromanceDataCommandBuffer.db_table_name := 'PerformanceData';
@@ -296,7 +291,6 @@ TF6420とのADS通信での同期制御が行われる関係で、データベ�
 
 		// ビジネスロジック用ファンクションブロック
 		fbProcessModeBuffer	:RecordDataQueue; // キュー制御ロジック
-		fbInfluxDBRecorder	:RecordInfluxDB;	// データベース書込みロジック
 
 		// おまけ。処理開始、終了のイベントとプロセス番号定義
 		bExecuting	: BOOL;
@@ -312,9 +306,6 @@ TF6420とのADS通信での同期制御が行われる関係で、データベ�
 	まずはデータのセット部。サイクル記録と違うのは、バッファが無いこと。直接 `DataBaseProcessModeRecordData` という単一データ（配列化して複数データを用意する事も可能）を作成し、データベース書込みチャンクとする。
 
 	```pascal
-	// コマンドキューの生成
-	command_queue.controller(aData := command_queue.buffer_index);
-
 	// Tag Dataのセット
 	DataBaseProcessModeRecordData.machine_id := 'machine-1';  // 装置1のデータである事を示す
 	DataBaseProcessModeRecordData.job_id := 'task_info';	　// データ種別
@@ -358,17 +349,6 @@ TF6420とのADS通信での同期制御が行われる関係で、データベ�
 		// 実行し続けたら極小のチャンクの書込み命令が毎サイクルキューインするため、あっという間にキューが溢れる。
 		fbProcessModeBuffer.record_once();
 	END_IF
-	```
-
-	最後にデータベース書込み制御部です。
-
-	```pascal
-	// データベース書込みロジック
-
-	fbInfluxDBRecorder(
-		command_queue := command_queue,
-		nDBID := 1,      // Database ID by TF6420 configurator
-	);
 	```
 
 ## Chronograf による可視化
