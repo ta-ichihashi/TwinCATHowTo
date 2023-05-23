@@ -2,23 +2,41 @@
 
 Gitおよび、TortoiseGitのインストールを行います。[GitのWindows向けのインストーラ](https://gitforwindows.org/)が用意されていますが、ここではscoopと呼ばれるWindows向けのパッケージマネージャを用いてインストールします。
 
-scoopパッケージマネージャを使うメリットは、インストール作業がスクリプトで自動化できる点にあります。本HowToサイトの文書ソースはGithubで公開されており、この中に文書作成ビルド環境を構築するPowerShellスクリプトがあります。この中にGitのインストールおよび初期設定を自動化する機能が含まれています。
+scoopパッケージマネージャを使うメリットは、インストール作業をスクリプトで自動化できる点にあります。本手順書ではこのスクリプトを実行することで次の項目の実施を自動化します。
 
-ここでは、このスクリプトを流用してGitをインストール、設定する手順をご紹介します。
+* Gitのインストール
+* Gitの初期設定（ユーザ名、メールアドレス設定）
+* vscodeインストール
+* Gitの差分、マージツールをTwinCAT 差分ビューワにセットする
+* コミットログエディタをvscodeにする
 
-1. 以下のGithubのURLへアクセスし、右上のダウンロードボタンを押して、`setup_environment.ps1` ファイルを保存します。
+次の手順にしたがってインストールを行ってください。
 
-    [https://github.com/Beckhoff-JP/TwinCATHowTo/blob/1200ad7e38057d5eb2605545fa1b466f51903f0b/setup_environment.ps1](https://github.com/Beckhoff-JP/TwinCATHowTo/blob/1200ad7e38057d5eb2605545fa1b466f51903f0b/setup_environment.ps1)
+## Git for windows のインストールと初期設定
 
-    ![](assets/2023-04-27-14-36-58.png){w=30px align=right}
+```{admonition} 実施するまえに
+:class: warning
 
-2. ダウンロードした場所でPowerShellターミナルを開き、以下の通りダウンロードしたPowerShellコマンドを実行します。
+本手順書は、TwinCAT XAEがインストールされている環境にて行ってください。
+```
+
+1. 下記リンクをクリックしてzipファイルをダウンロードする。
+
+    [https://github.com/Beckhoff-JP/TwinCATHowTo/archive/refs/heads/main.zip](https://github.com/Beckhoff-JP/TwinCATHowTo/archive/refs/heads/main.zip)
+
+2. zipファイルを解凍し、TwinCatHowTo-mainフォルダ直下にある`setup_environment.ps1` ファイルを取り出します。
+
+3. エクスプローラで取り出した `setup_environment.ps1` ファイルを選択し、右クリックしてプロパティを選びます。全般タブの、セキュリティ項目を "許可する(K)" にチェックを入れてください。
+
+    ![](assets/2023-05-23-22-05-15.png){width=300px align=center}
+
+3. `setup_environment.ps1` ファイルを配置した場所でPowerShellターミナルを開き、以下のPowerShellコマンドを実行します。
 
     ```{code-block} powershell
     PS> PowerShell -ExecutionPolicy RemoteSigned ./setup_environment.ps1 -gitonly -tcconfig
     ```
 
-3. 途中でGitの初期設定のためユーザ名とメールアドレスを聞かれますので、半角英数で入力してください。
+4. 途中でGitの初期設定のためユーザ名とメールアドレスを聞かれますので、半角英数で入力してください。
 
     ```{code-block} powershell
     Type user name for git author : Hanako Bekchoff
@@ -29,3 +47,13 @@ scoopパッケージマネージャを使うメリットは、インストール
 Gitをインストールしただけですと、原則CUI（コマンドユーザインターフェース）のみの機能が提供されます。Windowsエクスプローラに紐づいてGitの操作を行う便利なヘルパーソフトもありますので、必要に応じて以下のリンクからインストールしてください。
 https://tortoisegit.org/
 ```
+## TwinCATの設定
+
+1. TwinCAT XAEを立ち上げ、`Tools` > `Options` を開きます。ツリーメニューの、 `TwinCAT` > `XAE Environment` > `File settings` を開き、 `Enable Multiple Project Files` を `True` にします。
+
+    ![](assets/2023-05-23-23-10-38.png){width=600px align=center}
+
+2. 続いて `Source Control` > `Plug-in Slection` にて、`Current source control plug-in` を、 `Git` に設定します。
+
+    ![](assets/2023-05-23-23-17-46.png){width=600px align=center}
+
