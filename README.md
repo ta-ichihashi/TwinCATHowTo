@@ -118,6 +118,20 @@ slave_version.md
 
 ![](assets/2023-04-13-10-42-20.png)
 
+```{note}
+本例では章ごとに目次が付加されていますが、章ごとの目次が不要な場合は次のとおり`:hidden:`を定義してください。
+
+```{code-block} markdown
+```{toctree}
+:hidden:
+
+scan.md
+slave_version.md
+```
+```
+
+```
+
 ## vscodeによる編集テクニック
 
 ### プレビュー

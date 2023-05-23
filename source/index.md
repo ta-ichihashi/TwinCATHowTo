@@ -18,7 +18,7 @@
 
 ```{toctree}
 :maxdepth: 2
-:numbered:
+:numbered: 3
 :caption: 目次
 
 basic.md
