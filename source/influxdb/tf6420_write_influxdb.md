@@ -10,6 +10,31 @@
 [https://github.com/Beckhoff-JP/tc_influxdb_client](https://github.com/Beckhoff-JP/tc_influxdb_client) 
 
 ```
+## ライブラリのインストール
+
+1. リポジトリから取得したソリューションを開きます。
+
+2. PLCプロジェクトを右クリックし、`Save as library and install...` を選択します。`database_connection.library` ファイルを保存するウィンドウが現われます。適当な場所へ保存してください。
+
+	![](assets/2023-05-23-18-33-17.png){width=500px align=center}
+
+	```{note}
+	同じXAE環境であればインストールを同時に行っていますので、保存じた `database_connection.library` ファイルは今回使用しません。他のXAEでライブラリを使いたい場合は、ライブラリマネージャからこのファイルをインストールしてください。
+	```
+
+3. ライブラリを適用したいTwinCATプロジェクトを開き、TF6420のライセンスを有効にしてください。
+
+4. 続いて、PLCプロジェクトの `References` メニューを右クリックして`Add library...` を選択します。
+
+	![](assets/2023-05-23-18-45-22.png){width=600px align=center}
+
+5. `Beckhoff-JP` > `Utility` > `Database` > `InfluxDB` > `influxdb-client` を選択してOKボタンを押します。
+
+	![](assets/2023-05-23-20-51-12.png){width=700px align=center}
+
+
+
+## ライブラリを使った実装方法
 
 このライブラリでは、{numref}`figure_tsdb_library_feature` に示す通りサイクル実行中に収集されるデータと、データベース書込みを非同期で実行できるようにキューバッファによる書込み制御を行う機能を提供します。
 
