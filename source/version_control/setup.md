@@ -45,7 +45,8 @@ scoopパッケージマネージャを使うメリットは、インストール
 
 ```{admonition} Git用Windows向けクライアントソフト TortoiseGit のご紹介
 Gitをインストールしただけですと、原則CUI（コマンドユーザインターフェース）のみの機能が提供されます。Windowsエクスプローラに紐づいてGitの操作を行う便利なヘルパーソフトもありますので、必要に応じて以下のリンクからインストールしてください。
-https://tortoisegit.org/
+
+[https://tortoisegit.org/](https://tortoisegit.org/)
 ```
 ## TwinCATの設定
 
