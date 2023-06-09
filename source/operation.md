@@ -9,4 +9,5 @@ auto_deploy/index.md
 BSoD/index.rst
 bundle/index.md
 latency/index.md
+bst/index.md
 ```
