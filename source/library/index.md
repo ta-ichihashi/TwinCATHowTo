@@ -3,13 +3,14 @@
 %   You can adapt this file completely to your liking, but it should at least
 %   contain the root `toctree` directive.
 
-# TwinCAT3 ライブラリ開発
+# TwinCAT3 ライブラリの活用
 
 TwinCATにおけるモジュール開発を実現するため、ライブラリ管理システムとそれを活用する開発フローの標準化について説明します。
 
 ```{toctree}
 :hidden:
 
+use_library
 make_library
 documentation
 ```
