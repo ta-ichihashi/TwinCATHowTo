@@ -1,11 +1,12 @@
-## ユーザーライブラリの作成と使用方法
+(section_make_library)=
+## 独自ライブラリのつくりかた
 
 開発時に作成したソフトウェア部品をライブラリとして登録する方法について示します。ライブラリ化したソフトウェアは、部品として再利用できる状態になります。
 
-この章では、このライブラリ機能の基本的な使い方について説明します。最初にライブラリの作成と、その使い方について大まかな手順を説明し、後半ではライブラリ作成時の詳細な設定方法について説明します。
+この章では、このライブラリ機能の基本的な使い方について説明します。最初にライブラリの作成と、その使い方について大まかな手順概要を説明し、続いてライブラリ作成の詳細な設定方法について説明します。
 
 (library_making_basic)=
-### ライブラリの作成手順
+### 概要編
 
 1. PLC $>$ Project で右クリックして、 `Properties` を選択する。
 
@@ -67,124 +68,14 @@
 
       コンパイル済みのプログラムイメージ。ライブラリのソースコードを閲覧する事はできません。
 
-   ```{image} 2023-02-28-08-55-34.png
+   ```{image} assets/2023-02-28-08-55-34.png
    :width: 400px
    :align: center
    :name: Dialog_SaveLibrary
    ```
 
-
-### ライブラリの使用方法
-
-(install_library)=
-#### ユーザライブラリのインストール
-
-ユーザライブラリは、XAE単位でインストールが必要となり、プロジェクト毎にインポートする必要があります。ここではユーザライブラリをXAEにインストールを行う手順について説明します。
-
-ライブラリを作成したXAEにおいて、ライブラリ保存時に`Save as library and install ...`を選択された場合はこの節の手順を実施する必要はありません。
-
-ただし、ライブラリを更新インストールされた場合は必ずライブラリ読み出し側のプロジェクトのVisualStudioもしくはXAEシェルを再起動してください。
-
-1. PLCのプロジェクトツリーから `References` 以下のメニューをダブルクリックします。
-
-    これによりメインウィンドウにライブラリマネージャが現れます。
-
-    ```{image} 2023-02-21-13-37-07.png
-    :width: 500px
-    :align: center
-    :name: 2023-02-21-13-37-07
-    ```
-
-2. `Library repository`ボタンを押してください。
-
-    ```{image} assets/LibraryManager_Main.png
-    :width: 500px
-    :align: center
-    :name: LibraryManager_Main
-    ```
-
-3. `Library Repository`ウィンドウからインストールする  
-
-    `Install...` ボタンを押すとエクスプローラが現れます。インストールしたい library ファイルを選択します。
-
-    ```{image} assets/LibraryRepository_Main.png
-    :width: 300px
-    :align: center
-    :name: LibraryRepository_Main
-    ```
-
-4. ここで一度プロジェクトを上書き保存してXAEを終了します。
-
-    ```{admonition} 警告
-    :class: warning
-
-    インストールしたライブラリを正しくお使いいただくには一度ライブラリ呼び出し側のプロジェクトのVisualStudioもしくはXAEシェルを再起動する必要があります。再起動なしにライブラリマネージャを閲覧した場合、特に{numref}`chapter_documentation` 章で説明する、ライブラリのドキュメントの表示が行われない問題が生じます。
-    ```
-
-5. 再度プロジェクトを開いてライブラリマネージャの`Library repository`を開くと、インストールしたライブラリが一覧されていることが確認できます。
-
-    ```{figure} assets/LibraryRepository_InstalledLibrary.png
-    :width: 500px
-    :align: center
-    :name: LibraryRepository_InstalledLibrary
-
-    追加したライブラリ
-    ```
-
-(import_library)=
-#### プロジェクトへのライブラリの追加
-
-XAEにインストールしたライブラリをプロジェクトへ追加する手順を説明します。
-
-1. 以下いずれかの方法でライブラリの追加を行います。
-
-   * Library Manager から `Add library` ボタンを押す
-    
-        ```{image} assets/LibraryManager_AddLibrary.png
-        :width: 500px
-        :align: center
-        :name: LibraryManager_AddLibrary
-        ```
-   * PLCプロジェクトツリーの`References`を右クリックして`Add library...`を選択する
-
-
-3. 登録したライブラリを追加します。
-
-    ```{image} assets/AddLibrary_UseLibrary.png
-    :width: 500px
-    :align: center
-    :name: AddLibrary_UseLibrary
-    ```
-    
-4. 登録したライブラリが References に追加されることを確認します。
-
-    ```{image} assets/Solution_References.png
-    :width: 150px
-    :align: center
-    :name: Solution_References
-    ```
-
-(update_library)=
-#### ライブラリの更新
-
-新しいライブラリが発行されましたら{numref}`install_library` を行うことで最新版が使える状態となります。
-
-デフォルトでは常に最新版を使う設定になっていますので、新しいライブラリをインストールすれば即プログラムは更新された状態となります。しかし、Placeholderを使わずにライブラリをインストールしていたり、特定バージョンにPlaceholderが固定されている場合は、新しいライブラリをインストール後、そのバージョンを使うように設定しなおす必要があります。
-
-この場合、{numref}`placeholder_change_resolution`の図の通り`References`以下の目的のライブラリを選択し、右クリックして現れたサブメニューから`Properties`を選ぶと、`Properties`ウィンドウが現れます。この中の`Misc`カテゴリに`Resolution`という項目から選択することができます。
-
-常に最新バージョンを使う設定にする場合は、ライブラリ名の後がバージョン番号ではなくアスタリスク `*` のものを選択してください。
-
-```{figure} 2023-03-02-16-13-13.png
-:width: 700px
-:align: center
-:name: placeholder_change_resolution
-
-Placeholderに紐づいたライブラリのバージョン切替方法
-```
-
 (prject_detail_setting)=
-### 詳しい使い方
+### 詳細編
 
 #### Placeholdersの活用
 
@@ -192,7 +83,7 @@ Placeholderとは、ひとことでいうとライブラリに対するショー
 
 {numref}`import_library`節で説明するライブラリ追加手順では、暗黙的にライブラリ名と同名のPlaceholderが作成され、このPlaceholderを経由してライブラリ読み込みされます。{numref}`placeholder_overview` の図に示される赤下線で引かれた部分にある`=`の左辺にある文字がPlaceholderです。この`=`の右辺にあるものが実際のライブラリを示していて、`ライブラリ名, バージョン番号（組織名）`という書式になっています。デフォルトでは、バージョン番号部分は`*`となっていて、常に最新のライブラリバージョンと紐づく仕様となっています。
 
-```{figure} 2023-03-02-16-05-14.png
+```{figure} assets/2023-03-02-16-05-14.png
 :width: 400px
 :align: center
 :name: placeholder_overview
@@ -212,7 +103,7 @@ Placeholderにリンクするライブラリバージョンを切り替える方
 
 複数のライブラリやライブラリを読み込むプログラムで使われているライブラリが共有されるケースがあります。例えば、{numref}`placeholder_tc3_module_recent_version` に示す通り、どのライブラリやプログラムもTc3_Moduleという名前のPlaceholderを使用しており、デフォルトで最新版を使う設定となっています。
 
-```{figure} 2023-03-02-17-03-24.png
+```{figure} assets/2023-03-02-17-03-24.png
 :width: 700px
 :align: center
 :name: placeholder_tc3_module_recent_version
@@ -222,7 +113,7 @@ Tc3_Module 最新版を使う設定
 
 このPlaceholderを{numref}`placeholder_tc3_module_fixed_version`のように、PropertyのResolutionで特定バージョンを使う様に設定を変えると、関連するライブラリやプログラム全てが指定したバージョンのものに固定されます。
 
-```{figure} 2023-03-02-17-16-54.png
+```{figure} assets/2023-03-02-17-16-54.png
 :width: 700px
 :align: center
 :name: placeholder_tc3_module_fixed_version
@@ -242,7 +133,7 @@ Placeholder名は、デフォルトでライブラリ名と同一のものが自
 
 1. {numref}`import_library`に示す手順の`Add library`ウィンドウにて左下の`Advanced...` ボタンを押します。
 
-    ```{image} 2023-03-02-18-04-27.png
+    ```{image} assets/2023-03-02-18-04-27.png
     :width: 300px
     :align: center
     ```
@@ -250,27 +141,27 @@ Placeholder名は、デフォルトでライブラリ名と同一のものが自
 
     この例として`Tc3-Module`に対する別名であることがわかるように`Tc3-Module-fixed-version`と入力しています。
 
-    ```{image} 2023-03-02-18-11-37.png
+    ```{image} assets/2023-03-02-18-11-37.png
     :width: 300px
     :align: center
     ```
 
 3. 何等かの文字を入力した時点でXAEにインストールされたライブラリが一覧されます。ここから`Placeholder`に関連付けるライブラリを選択します。
 
-    ```{image} 2023-03-02-18-05-38.png
+    ```{image} assets/2023-03-02-18-05-38.png
     :width: 300px
     :align: center
     ```
 4. 追加されたライブラリが、`Tc3-Module`ではなく、指定した名前`Tc3-Module-fixed-version`で追加された事がわかります。
 
-    ```{image} 2023-03-02-18-25-31.png
+    ```{image} assets/2023-03-02-18-25-31.png
     :width: 500px
     :align: center
     ```
 
 上記の手順で作成されたユーザライブラリを追加したPLCプロジェクトのライブラリ構成は、{numref}`another_placeholder_for_user_library`の通りとなります。`Tc3_Module`ライブラリが複数使われていますが、"IPC Performance to influxDB via TF6420" のユーザライブラリで使われている`Tc3_Mdoules`ライブラリだけは、バージョンが固定された状態となっています。
 
-```{figure} 2023-03-02-18-37-55.png
+```{figure} assets/2023-03-02-18-37-55.png
 :width: 500px
 :align: center
 :name: another_placeholder_for_user_library
@@ -302,7 +193,7 @@ Default namespaceには、ライブラリで使用されるさまざまなリソ
 このチェックを入れることにより、そのあとプログラム変更を行おうとした際に{numref}`released_flag_warning`のような警告メッセージが出現します。`Released`チェックが付けられていてもプログラム変更を禁止するのではなく、単なる警告のみです。ここで`Yes`ボタンを押すと`Released`チェックが自動的に外れます。
 
 
-```{figure} 2023-03-02-17-31-59.png
+```{figure} assets/2023-03-02-17-31-59.png
 :width: 300px
 :align: center
 :name: released_flag_warning
@@ -393,7 +284,7 @@ Released チェックのPLCプロジェクトに変更を与えようとした�
     4. 現在のPLCプロジェクトの提供する機能が含まれる末端のカテゴリだけにチェックを入れます。
     5. OKボタンを押します。 
 
-    ```{figure} 2023-02-28-11-41-44.png
+    ```{figure} assets/2023-02-28-11-41-44.png
     :width: 600px
     :align: center
     :name: add_category_procedure
@@ -403,14 +294,14 @@ Released チェックのPLCプロジェクトに変更を与えようとした�
 
 5. 選択されたカテゴリが一覧されたのを確認し、OKボタンを押してください。
 
-    ```{image} 2023-02-28-11-43-30.png
+    ```{image} assets/2023-02-28-11-43-30.png
     :width: 400px
     :align: center
     ```
 
 6. {numref}`install_library`節に示す手順を実施する際にライブラリをインストールすると、{numref}`install_library_with_category`図の通りのカテゴリに一覧された状態で配置されます。複数個所に一覧されますが実態は同じです。
 
-    ```{figure} 2023-02-28-11-47-23.png
+    ```{figure} assets/2023-02-28-11-47-23.png
     :width: 450px
     :align: center
     :name: install_library_with_category

@@ -42,7 +42,7 @@
 
 4. Firewallがこのプログラムによるポート受信を許可してよいか確認ダイアログが現れるので、 Allow ボタンを押す
 
-   ![](2023-02-19-15-13-54.png){align=center w=380px}
+   ![](assets/2023-02-19-15-13-54.png){align=center w=380px}
 
 5. ローカルブラウザを立ち上げて、 `http://localhost:8086` へアクセスしたら Welcome to InfluxDB の画面が現れるか確認します。
 
@@ -53,23 +53,23 @@
 1. Windows の Schedule tasks を起動します。
 2. `Task Scheduler Library` を右クリックし、 `Create Task...` を選びます。
 
-   ![](2023-04-05-09-29-04.png){align=center w=350px}
+   ![](assets/2023-04-05-09-29-04.png){align=center w=350px}
 
 3. Nameに `Run InfluxDB` を入力し、`Run whther user is logged on or not` を選択する。
 
-   ![](2023-04-05-09-38-57.png){align=center w=400px}
+   ![](assets/2023-04-05-09-38-57.png){align=center w=400px}
 
 4. Triggersタブを開き、 `New...` ボタンを押す。現れた New Trigger ウィンドウのBegin the task: フィールドから `At startup` を選択してOKボタンを押す。
 
-   ![](2023-04-05-09-41-40.png){align=center w=500px}
+   ![](assets/2023-04-05-09-41-40.png){align=center w=500px}
 
 5. Actionタブを開き、`New...` ボタンを押す。現れた New Action ウィンドウの Program/script フィールドに、`Browse...` ボタンを押して、前項でインストールした influxd.exe を選択し、最後にOKボタンを押す。
 
-   ![](2023-04-05-09-48-40.png){align=center w=500px}
+   ![](assets/2023-04-05-09-48-40.png){align=center w=500px}
 
 6. Settingタブを開き、`Stop the task if it runs longer than:` の項目のチェックを外す。
 
-   ![](2023-04-05-09-53-55.png){align=center w=400px}
+   ![](assets/2023-04-05-09-53-55.png){align=center w=400px}
 
 7. 以上全て設定し終わったらOKボタンを押して、コンピュータを再起動します。再起動後、ブラウザへアクセスして Welcome to InfluxDB 画面が現れたら自動起動の設定は成功です。
 
@@ -83,7 +83,7 @@
 
    最初に以下のような画面が現れます。 GET STARTED ボタンをクリックしてください。
 
-   ```{image} 2023-02-19-15-19-18.png
+   ```{image} assets/2023-02-19-15-19-18.png
    :width: 380px
    :align: center
    ```
@@ -102,7 +102,7 @@
 
        influxDBでは、データベース名のことを Bucket とよびます。初期に作成する Bucket 名を入力します。
 
-   ```{image} 2023-02-19-15-22-53.png
+   ```{image} assets/2023-02-19-15-22-53.png
    :width: 380px
    :align: center
    ```
@@ -122,35 +122,35 @@
       何もせずにここで終了します。
 
    ```{figure-md} initial_data_loading
-   ![](2023-02-19-15-28-14.png){width=380px align=center}
+   ![](assets/2023-02-19-15-28-14.png){width=380px align=center}
    
    初期設定完了画面
    ```
 
 7. メイン画面が現れるので、最初にbucketを新規に作成します。左側メニューの上から2番目をクリックして現れるメニューから`Buckets`を選びます。
 
-   ```{image} 2023-03-06-17-28-28.png
+   ```{image} assets/2023-03-06-17-28-28.png
    :width: 300px
    :align: center
    ```
 
    現れた画面で`CREATE BUCKET` ボタンを押します。
 
-   ```{image} 2023-03-06-17-36-15.png
+   ```{image} assets/2023-03-06-17-36-15.png
    :width: 500px
    :align: center
    ```
 
 8. bucket名と記録データの永続期間（リテンションポリシー）を設定します。初期値はNEVER（削除せず無制限に記録する）となります。
 
-   ```{image} 2023-03-06-17-40-56.png
+   ```{image} assets/2023-03-06-17-40-56.png
    :width: 300px
    :align: center
    ```
 
    あるいは、ディスク容量に限りがある場合、次の通り有限期間を設定できます。この設定期間を経過すると、古いものから順に削除してデータを消去します。
 
-   ```{image} 2023-03-06-17-43-12.png
+   ```{image} assets/2023-03-06-17-43-12.png
    :width: 300px
    :align: center
    ```
