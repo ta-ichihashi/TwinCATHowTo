@@ -33,7 +33,7 @@ IPCとは別の専用サーバへインストールすることで、InfluxDBだ
     [https://docs.docker.com/desktop/install/windows-install/](https://docs.docker.com/desktop/install/windows-install/)
 
     インストールを開始すると次の画面が現われます。`Use WSL 2 Instead of Hyper-V` には必ずチェックを居sれ手OKボタンを押してください。インストールが開始します。
-    
+
     ![](assets/InstallingDockerDesktopOptions.png){width=500px align=center}
 
     ![](assets/InstallingDockerDesktopProgress.png){width=500px align=center}
@@ -55,9 +55,9 @@ IPCとは別の専用サーバへインストールすることで、InfluxDBだ
 
 ## InfluxDBとGrafanaのインストール
 
-まず空のフォルダを作成し、次の2つのテキストファイルを作成します。メモ帳などで下記をコピーペーストし、それぞれ下記のとおりのファイル名で保存してください。
+まず空のフォルダを作成し、次の2つのテキストファイルを作成します。メモ帳などで下記をコピーペーストし、それぞれ冒頭に記載している名前のファイル名で保存してください。
 
-なお、 `.env` ファイルの内容は、初期設定に関する設定項目がありますので、それぞれコメントに従い適切な値に書き換えてください。
+なお、 `.env` ファイルの内容は、初期設定に関する設定項目です。それぞれコメントに従い適切な値に書き換えてください。
 
 
 ```{literalinclude} assets/.env
@@ -72,7 +72,7 @@ IPCとは別の専用サーバへインストールすることで、InfluxDBだ
 :linenos:
 ```
 
-上記2ファイルが存在する
+上記2ファイルが存在するディレクトリでユーザ権限でPower shellを開き、以下のコマンドを実行します。
 
 ```{code-block} powershell
 PS> docker compose up -d
@@ -94,5 +94,5 @@ PS> docker compose up -d
 
 ![](assets/2023-06-19-11-25-26.png)
 
-ブラウザより `http://<サーバIPアドレス>:8086/` にアクセスして、InfluxDBの管理画面へログインします。`.env` ファイルで設定したユーザ名、パスワードでログインできることを確かめてください。
+外部のPCからブラウザより `http://<InfluxDBをインストールしたサーバIPアドレス>:8086/` にアクセスして、InfluxDBの管理画面へログインします。`.env` ファイルで設定したユーザ名、パスワードでログインできることを確かめてください。
 
