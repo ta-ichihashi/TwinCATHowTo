@@ -20,7 +20,9 @@ TwinCATではこのような密度の高いデータをInfluxDBというオー�
 :hidden:
 
 setup_influxdb_windows
+setup_docker
 setup_tf6420_influxdb
 tf6420_write_influxdb
+telegraf
 visualization
 ```
