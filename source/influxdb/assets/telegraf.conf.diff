@@ -1,0 +1,536 @@
+--- C:/Users/Takashii/Documents/manual/TwinCATHowTo/source/influxdb/assets/telegraf.conf.org	Tue Jun 20 17:44:29 2023
++++ C:/Users/Takashii/Documents/manual/TwinCATHowTo/source/influxdb/assets/telegraf.conf	Tue Jun 20 17:45:52 2023
+@@ -275,22 +275,22 @@
+ 
+ 
+ # # Configuration for sending metrics to InfluxDB 2.0
+-# [[outputs.influxdb_v2]]
++[[outputs.influxdb_v2]]
+ #   ## The URLs of the InfluxDB cluster nodes.
+ #   ##
+ #   ## Multiple URLs can be specified for a single cluster, only ONE of the
+ #   ## urls will be written to each interval.
+ #   ##   ex: urls = ["https://us-west-2-1.aws.cloud2.influxdata.com"]
+-#   urls = ["http://127.0.0.1:8086"]
++  urls = ["http://192.168.1.32:8086"]
+ #
+ #   ## Token for authentication.
+-#   token = ""
++  token = "m4PbYq_vVRZDjbgRwyEF4BXPDpinq7CkBRX4JJnYNacbD6bSSLaF3AsDvip9vQfmF0A8ZpOlQHYBawCHf_X6-g=="
+ #
+ #   ## Organization is the name of the organization you wish to write to.
+-#   organization = ""
++  organization = "beckhoff.co.jp"
+ #
+ #   ## Destination bucket to write into.
+-#   bucket = ""
++  bucket = "machine_data"
+ #
+ #   ## The value of this tag will be used to determine the bucket.  If this
+ #   ## tag is not set the 'bucket' option is used as the default.
+@@ -3786,95 +3786,95 @@
+ ###############################################################################
+ 
+ 
+-# Read metrics about cpu usage
+-[[inputs.cpu]]
+-  ## Whether to report per-cpu stats or not
+-  percpu = true
+-  ## Whether to report total system cpu stats or not
+-  totalcpu = true
+-  ## If true, collect raw CPU time metrics
+-  collect_cpu_time = false
+-  ## If true, compute and report the sum of all non-idle CPU states
+-  report_active = false
+-  ## If true and the info is available then add core_id and physical_id tags
+-  core_tags = false
+-
+-
+-# Read metrics about disk usage by mount point
+-[[inputs.disk]]
+-  ## By default stats will be gathered for all mount points.
+-  ## Set mount_points will restrict the stats to only the specified mount points.
+-  # mount_points = ["/"]
+-
+-  ## Ignore mount points by filesystem type.
+-  ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
+-
+-  ## Ignore mount points by mount options.
+-  ## The 'mount' command reports options of all mounts in parathesis.
+-  ## Bind mounts can be ignored with the special 'bind' option.
+-  # ignore_mount_opts = []
+-
+-
+-# Read metrics about disk IO by device
+-[[inputs.diskio]]
+-  ## By default, telegraf will gather stats for all devices including
+-  ## disk partitions.
+-  ## Setting devices will restrict the stats to the specified devices.
+-  ## NOTE: Globbing expressions (e.g. asterix) are not supported for
+-  ##       disk synonyms like '/dev/disk/by-id'.
+-  # devices = ["sda", "sdb", "vd*", "/dev/disk/by-id/nvme-eui.00123deadc0de123"]
+-  ## Uncomment the following line if you need disk serial numbers.
+-  # skip_serial_number = false
+-  #
+-  ## On systems which support it, device metadata can be added in the form of
+-  ## tags.
+-  ## Currently only Linux is supported via udev properties. You can view
+-  ## available properties for a device by running:
+-  ## 'udevadm info -q property -n /dev/sda'
+-  ## Note: Most, but not all, udev properties can be accessed this way. Properties
+-  ## that are currently inaccessible include DEVTYPE, DEVNAME, and DEVPATH.
+-  # device_tags = ["ID_FS_TYPE", "ID_FS_USAGE"]
+-  #
+-  ## Using the same metadata source as device_tags, you can also customize the
+-  ## name of the device via templates.
+-  ## The 'name_templates' parameter is a list of templates to try and apply to
+-  ## the device. The template may contain variables in the form of '$PROPERTY' or
+-  ## '${PROPERTY}'. The first template which does not contain any variables not
+-  ## present for the device is used as the device name tag.
+-  ## The typical use case is for LVM volumes, to get the VG/LV name instead of
+-  ## the near-meaningless DM-0 name.
+-  # name_templates = ["$ID_FS_LABEL","$DM_VG_NAME/$DM_LV_NAME"]
+-
+-
+-# Get kernel statistics from /proc/stat
+-# This plugin ONLY supports Linux
+-[[inputs.kernel]]
+-  # no configuration
+-
+-
+-# Read metrics about memory usage
+-[[inputs.mem]]
+-  # no configuration
+-
+-
+-# Get the number of processes and group them by status
+-# This plugin ONLY supports non-Windows
+-[[inputs.processes]]
+-  ## Use sudo to run ps command on *BSD systems. Linux systems will read
+-  ## /proc, so this does not apply there.
+-  use_sudo = false
+-
+-
+-# Read metrics about swap memory usage
+-[[inputs.swap]]
+-  # no configuration
+-
+-
+-# Read metrics about system load & uptime
+-[[inputs.system]]
+-  # no configuration
+-
+-
++# # Read metrics about cpu usage
++# [[inputs.cpu]]
++#   ## Whether to report per-cpu stats or not
++#   percpu = true
++#   ## Whether to report total system cpu stats or not
++#   totalcpu = true
++#   ## If true, collect raw CPU time metrics
++#   collect_cpu_time = false
++#   ## If true, compute and report the sum of all non-idle CPU states
++#   report_active = false
++#   ## If true and the info is available then add core_id and physical_id tags
++#   core_tags = false
++#
++#
++# # Read metrics about disk usage by mount point
++# [[inputs.disk]]
++#   ## By default stats will be gathered for all mount points.
++#   ## Set mount_points will restrict the stats to only the specified mount points.
++#   # mount_points = ["/"]
++#
++#   ## Ignore mount points by filesystem type.
++#   ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
++#
++#   ## Ignore mount points by mount options.
++#   ## The 'mount' command reports options of all mounts in parathesis.
++#   ## Bind mounts can be ignored with the special 'bind' option.
++#   # ignore_mount_opts = []
++#
++#
++# # Read metrics about disk IO by device
++# [[inputs.diskio]]
++#   ## By default, telegraf will gather stats for all devices including
++#   ## disk partitions.
++#   ## Setting devices will restrict the stats to the specified devices.
++#   ## NOTE: Globbing expressions (e.g. asterix) are not supported for
++#   ##       disk synonyms like '/dev/disk/by-id'.
++#   # devices = ["sda", "sdb", "vd*", "/dev/disk/by-id/nvme-eui.00123deadc0de123"]
++#   ## Uncomment the following line if you need disk serial numbers.
++#   # skip_serial_number = false
++#   #
++#   ## On systems which support it, device metadata can be added in the form of
++#   ## tags.
++#   ## Currently only Linux is supported via udev properties. You can view
++#   ## available properties for a device by running:
++#   ## 'udevadm info -q property -n /dev/sda'
++#   ## Note: Most, but not all, udev properties can be accessed this way. Properties
++#   ## that are currently inaccessible include DEVTYPE, DEVNAME, and DEVPATH.
++#   # device_tags = ["ID_FS_TYPE", "ID_FS_USAGE"]
++#   #
++#   ## Using the same metadata source as device_tags, you can also customize the
++#   ## name of the device via templates.
++#   ## The 'name_templates' parameter is a list of templates to try and apply to
++#   ## the device. The template may contain variables in the form of '$PROPERTY' or
++#   ## '${PROPERTY}'. The first template which does not contain any variables not
++#   ## present for the device is used as the device name tag.
++#   ## The typical use case is for LVM volumes, to get the VG/LV name instead of
++#   ## the near-meaningless DM-0 name.
++#   # name_templates = ["$ID_FS_LABEL","$DM_VG_NAME/$DM_LV_NAME"]
++#
++#
++# # Get kernel statistics from /proc/stat
++# # This plugin ONLY supports Linux
++# [[inputs.kernel]]
++#   # no configuration
++#
++#
++# # Read metrics about memory usage
++# [[inputs.mem]]
++#   # no configuration
++#
++#
++# # Get the number of processes and group them by status
++# # This plugin ONLY supports non-Windows
++# [[inputs.processes]]
++#   ## Use sudo to run ps command on *BSD systems. Linux systems will read
++#   ## /proc, so this does not apply there.
++#   #use_sudo = false
++#
++#
++# # Read metrics about swap memory usage
++# [[inputs.swap]]
++#   # no configuration
++#
++#
++# # Read metrics about system load & uptime
++# [[inputs.system]]
++#   # no configuration
++#
++#
+ # # Gather ActiveMQ metrics
+ # [[inputs.activemq]]
+ #   ## ActiveMQ WebConsole URL
+@@ -8511,141 +8511,149 @@
+ 
+ # # # Input plugin to counterPath Performance Counters on Windows operating systems
+ # # # This plugin ONLY supports Windows
+-# # [[inputs.win_perf_counters]]
+-# #   ## By default this plugin returns basic CPU and Disk statistics.
+-# #   ## See the README file for more examples.
+-# #   ## Uncomment examples below or write your own as you see fit. If the system
+-# #   ## being polled for data does not have the Object at startup of the Telegraf
+-# #   ## agent, it will not be gathered.
+-# #   ## Settings:
+-# #   # PrintValid = false # Print All matching performance counters
+-# #   # Whether request a timestamp along with the PerfCounter data or just use current time
+-# #   # UsePerfCounterTime=true
+-# #   # If UseWildcardsExpansion params is set to true, wildcards (partial wildcards in instance names and wildcards in counters names) in configured counter paths will be expanded
+-# #   # and in case of localized Windows, counter paths will be also localized. It also returns instance indexes in instance names.
+-# #   # If false, wildcards (not partial) in instance names will still be expanded, but instance indexes will not be returned in instance names.
+-# #   #UseWildcardsExpansion = false
+-# #   # When running on a localized version of Windows and with UseWildcardsExpansion = true, Windows will
+-# #   # localize object and counter names. When LocalizeWildcardsExpansion = false, use the names in object.Counters instead
+-# #   # of the localized names. Only Instances can have wildcards in this case. ObjectName and Counters must not have wildcards when this
+-# #   # setting is false.
+-# #   #LocalizeWildcardsExpansion = true
+-# #   # Period after which counters will be reread from configuration and wildcards in counter paths expanded
+-# #   CountersRefreshInterval="1m"
+-# #   ## Accepts a list of PDH error codes which are defined in pdh.go, if this error is encountered it will be ignored
+-# #   ## For example, you can provide "PDH_NO_DATA" to ignore performance counters with no instances
+-# #   ## By default no errors are ignored
+-# #   ## You can find the list here: https://github.com/influxdata/telegraf/blob/master/plugins/inputs/win_perf_counters/pdh.go
+-# #   ## e.g.: IgnoredErrors = ["PDH_NO_DATA"]
+-# #   # IgnoredErrors = []
+-# #
+-# #   [[inputs.win_perf_counters.object]]
+-# #     # Processor usage, alternative to native, reports on a per core.
+-# #     ObjectName = "Processor"
+-# #     Instances = ["*"]
+-# #     Counters = [
+-# #       "% Idle Time",
+-# #       "% Interrupt Time",
+-# #       "% Privileged Time",
+-# #       "% User Time",
+-# #       "% Processor Time",
+-# #       "% DPC Time",
+-# #     ]
+-# #     Measurement = "win_cpu"
+-# #     # Set to true to include _Total instance when querying for all (*).
+-# #     # IncludeTotal=false
+-# #     # Print out when the performance counter is missing from object, counter or instance.
+-# #     # WarnOnMissing = false
+-# #     # Gather raw values instead of formatted. Raw value is stored in the field name with the "_Raw" suffix, e.g. "Disk_Read_Bytes_sec_Raw".
+-# #     # UseRawValues = true
+-# #
+-# #   [[inputs.win_perf_counters.object]]
+-# #     # Disk times and queues
+-# #     ObjectName = "LogicalDisk"
+-# #     Instances = ["*"]
+-# #     Counters = [
+-# #       "% Idle Time",
+-# #       "% Disk Time",
+-# #       "% Disk Read Time",
+-# #       "% Disk Write Time",
+-# #       "% User Time",
+-# #       "% Free Space",
+-# #       "Current Disk Queue Length",
+-# #       "Free Megabytes",
+-# #     ]
+-# #     Measurement = "win_disk"
+-# #
+-# #   [[inputs.win_perf_counters.object]]
+-# #     ObjectName = "PhysicalDisk"
+-# #     Instances = ["*"]
+-# #     Counters = [
+-# #       "Disk Read Bytes/sec",
+-# #       "Disk Write Bytes/sec",
+-# #       "Current Disk Queue Length",
+-# #       "Disk Reads/sec",
+-# #       "Disk Writes/sec",
+-# #       "% Disk Time",
+-# #       "% Disk Read Time",
+-# #       "% Disk Write Time",
+-# #     ]
+-# #     Measurement = "win_diskio"
+-# #
+-# #   [[inputs.win_perf_counters.object]]
+-# #     ObjectName = "Network Interface"
+-# #     Instances = ["*"]
+-# #     Counters = [
+-# #       "Bytes Received/sec",
+-# #       "Bytes Sent/sec",
+-# #       "Packets Received/sec",
+-# #       "Packets Sent/sec",
+-# #       "Packets Received Discarded",
+-# #       "Packets Outbound Discarded",
+-# #       "Packets Received Errors",
+-# #       "Packets Outbound Errors",
+-# #     ]
+-# #     Measurement = "win_net"
+-# #
+-# #
+-# #   [[inputs.win_perf_counters.object]]
+-# #     ObjectName = "System"
+-# #     Counters = [
+-# #       "Context Switches/sec",
+-# #       "System Calls/sec",
+-# #       "Processor Queue Length",
+-# #       "System Up Time",
+-# #     ]
+-# #     Instances = ["------"]
+-# #     Measurement = "win_system"
+-# #
+-# #   [[inputs.win_perf_counters.object]]
+-# #     # Example counterPath where the Instance portion must be removed to get data back,
+-# #     # such as from the Memory object.
+-# #     ObjectName = "Memory"
+-# #     Counters = [
+-# #       "Available Bytes",
+-# #       "Cache Faults/sec",
+-# #       "Demand Zero Faults/sec",
+-# #       "Page Faults/sec",
+-# #       "Pages/sec",
+-# #       "Transition Faults/sec",
+-# #       "Pool Nonpaged Bytes",
+-# #       "Pool Paged Bytes",
+-# #       "Standby Cache Reserve Bytes",
+-# #       "Standby Cache Normal Priority Bytes",
+-# #       "Standby Cache Core Bytes",
+-# #     ]
+-# #     Instances = ["------"] # Use 6 x - to remove the Instance bit from the counterPath.
+-# #     Measurement = "win_mem"
+-# #
+-# #   [[inputs.win_perf_counters.object]]
+-# #     # Example query where the Instance portion must be removed to get data back,
+-# #     # such as from the Paging File object.
+-# #     ObjectName = "Paging File"
+-# #     Counters = [
+-# #       "% Usage",
+-# #     ]
+-# #     Instances = ["_Total"]
+-# #     Measurement = "win_swap"
++[[inputs.win_perf_counters]]
++   ## By default this plugin returns basic CPU and Disk statistics.
++   ## See the README file for more examples.
++   ## Uncomment examples below or write your own as you see fit. If the system
++   ## being polled for data does not have the Object at startup of the Telegraf
++   ## agent, it will not be gathered.
++   ## Settings:
++   # PrintValid = false # Print All matching performance counters
++   # Whether request a timestamp along with the PerfCounter data or just use current time
++   # UsePerfCounterTime=true
++   # If UseWildcardsExpansion params is set to true, wildcards (partial wildcards in instance names and wildcards in counters names) in configured counter paths will be expanded
++   # and in case of localized Windows, counter paths will be also localized. It also returns instance indexes in instance names.
++   # If false, wildcards (not partial) in instance names will still be expanded, but instance indexes will not be returned in instance names.
++   #UseWildcardsExpansion = false
++   # When running on a localized version of Windows and with UseWildcardsExpansion = true, Windows will
++   # localize object and counter names. When LocalizeWildcardsExpansion = false, use the names in object.Counters instead
++   # of the localized names. Only Instances can have wildcards in this case. ObjectName and Counters must not have wildcards when this
++   # setting is false.
++   #LocalizeWildcardsExpansion = true
++   # Period after which counters will be reread from configuration and wildcards in counter paths expanded
++   CountersRefreshInterval="1m"
++   ## Accepts a list of PDH error codes which are defined in pdh.go, if this error is encountered it will be ignored
++   ## For example, you can provide "PDH_NO_DATA" to ignore performance counters with no instances
++   ## By default no errors are ignored
++   ## You can find the list here: https://github.com/influxdata/telegraf/blob/master/plugins/inputs/win_perf_counters/pdh.go
++   ## e.g.: IgnoredErrors = ["PDH_NO_DATA"]
++   # IgnoredErrors = []
++
++   [[inputs.win_perf_counters.object]]
++     # Processor usage, alternative to native, reports on a per core.
++     ObjectName = "Processor"
++     Instances = ["*"]
++     Counters = [
++       "% Idle Time",
++       "% Interrupt Time",
++       "% Privileged Time",
++       "% User Time",
++       "% Processor Time",
++       "% DPC Time",
++     ]
++     Measurement = "win_cpu"
++     # Set to true to include _Total instance when querying for all (*).
++     # IncludeTotal=false
++     # Print out when the performance counter is missing from object, counter or instance.
++     # WarnOnMissing = false
++     # Gather raw values instead of formatted. Raw value is stored in the field name with the "_Raw" suffix, e.g. "Disk_Read_Bytes_sec_Raw".
++     # UseRawValues = true
++
++   [[inputs.win_perf_counters.object]]
++     # Disk times and queues
++     ObjectName = "LogicalDisk"
++     Instances = ["*"]
++     Counters = [
++       "% Idle Time",
++       "% Disk Time",
++       "% Disk Read Time",
++       "% Disk Write Time",
++       "% User Time",
++       "% Free Space",
++       "Current Disk Queue Length",
++       "Free Megabytes",
++     ]
++     Measurement = "win_disk"
++
++   [[inputs.win_perf_counters.object]]
++     ObjectName = "PhysicalDisk"
++     Instances = ["*"]
++     Counters = [
++       "Disk Read Bytes/sec",
++       "Disk Write Bytes/sec",
++       "Current Disk Queue Length",
++       "Disk Reads/sec",
++       "Disk Writes/sec",
++       "% Disk Time",
++       "% Disk Read Time",
++       "% Disk Write Time",
++     ]
++     Measurement = "win_diskio"
++
++   [[inputs.win_perf_counters.object]]
++     ObjectName = "Network Interface"
++     Instances = ["*"]
++     Counters = [
++       "Bytes Received/sec",
++       "Bytes Sent/sec",
++       "Packets Received/sec",
++       "Packets Sent/sec",
++       "Packets Received Discarded",
++       "Packets Outbound Discarded",
++       "Packets Received Errors",
++       "Packets Outbound Errors",
++     ]
++     Measurement = "win_net"
++
++
++   [[inputs.win_perf_counters.object]]
++     ObjectName = "System"
++     Counters = [
++       "Context Switches/sec",
++       "System Calls/sec",
++       "Processor Queue Length",
++       "System Up Time",
++     ]
++     Instances = ["------"]
++     Measurement = "win_system"
++
++   [[inputs.win_perf_counters.object]]
++     # Example counterPath where the Instance portion must be removed to get data back,
++     # such as from the Memory object.
++     ObjectName = "Memory"
++     Counters = [
++       "Available Bytes",
++       "Cache Faults/sec",
++       "Demand Zero Faults/sec",
++       "Page Faults/sec",
++       "Pages/sec",
++       "Transition Faults/sec",
++       "Pool Nonpaged Bytes",
++       "Pool Paged Bytes",
++       "Standby Cache Reserve Bytes",
++       "Standby Cache Normal Priority Bytes",
++       "Standby Cache Core Bytes",
++     ]
++     Instances = ["------"] # Use 6 x - to remove the Instance bit from the counterPath.
++     Measurement = "win_mem"
++
++   [[inputs.win_perf_counters.object]]
++     # Example query where the Instance portion must be removed to get data back,
++     # such as from the Paging File object.
++     ObjectName = "Paging File"
++     Counters = [
++       "% Usage",
++     ]
++     Instances = ["_Total"]
++     Measurement = "win_swap"
++
++    [[inputs.win_perf_counters.object]]
++      # Process metrics, in this case for IIS only
++      ObjectName = "Process"
++      Counters = ["% Processor Time","Handle Count","Private Bytes","Thread Count","Virtual Bytes","Working Set"]
++      Instances = ["TcSysUI", "TCATSysSrv", "TcNcI", "TcHmiSrv", "TF6420Server"]
++      Measurement = "win_proc"
++      #IncludeTotal=false #Set to true to include _Total instance when querying for all (*).
+ 
+ 
+ # # Input plugin to report Windows services info.
+@@ -8660,20 +8668,21 @@
+ #   excluded_service_names = ['WinRM'] # optional, list of service names to exclude
+ 
+ 
+-# # Input plugin to query Windows Management Instrumentation
+-# # This plugin ONLY supports Windows
+-# [[inputs.win_wmi]]
+-#   [[inputs.win_wmi.query]]
+-#     # a string representing the WMI namespace to be queried
+-#     namespace = "root\\cimv2"
+-#     # a string representing the WMI class to be queried
+-#     class_name = "Win32_Volume"
+-#     # an array of strings representing the properties of the WMI class to be queried
+-#     properties = ["Name", "Capacity", "FreeSpace"]
+-#     # a string specifying a WHERE clause to use as a filter for the WQL
+-#     filter = 'NOT Name LIKE "\\\\?\\%"'
+-#     # WMI class properties which should be considered tags instead of fields
+-#     tag_properties = ["Name"]
++# Input plugin to query Windows Management Instrumentation
++# This plugin ONLY supports Windows
++[[inputs.win_wmi]]
++  [[inputs.win_wmi.query]]
++    # a string representing the WMI namespace to be queried
++    namespace = "root\\cimv2"
++    # a string representing the WMI class to be queried
++    class_name = "Win32_Volume"
++    # an array of strings representing the properties of the WMI class to be queried
++    properties = ["Name", "Capacity", "FreeSpace"]
++    # a string specifying a WHERE clause to use as a filter for the WQL
++    filter = 'NOT Name LIKE "\\\\?\\%"'
++    # WMI class properties which should be considered tags instead of fields
++    tag_properties = ["Name"]
++
+ 
+ 
+ # # Collect Wireguard server interface and peer statistics

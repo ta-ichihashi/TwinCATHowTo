@@ -25,4 +25,5 @@ setup_tf6420_influxdb
 tf6420_write_influxdb
 telegraf
 visualization
+grafana.md
 ```
