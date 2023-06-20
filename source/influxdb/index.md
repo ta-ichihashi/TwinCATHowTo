@@ -4,13 +4,13 @@ TF6420はTwinCAT上のデータをさまざまなデータベースに記録さ�
 
 influxDBは単にデータを収集するだけではなく、集計演算機能、異常値監視機能、期限切れデータのダウンサンプリングや自動削除機能、書き込み読み込みスループットの速さ、また次図のようなWEBアプリケーションによるダッシュボードでデータを簡単に可視化できるオープンソースの優れたデータベースです。
 
-![](image.png.png){align=center}
+![](assets/image.png.png){align=center}
 
 これにより、EtherCATにより高速周期で収集されたデータを分析・抽出し、必要なデータを永続化するまでの前処理を一気通貫で実行できます。
 
 さらにはIPCのWindows (TM) のプロセスやパフォーマンス、IPCのハードウェア状況を収集できるTelegrafというソフトウェアや、influxDB内のデータに異常値を検出した際にアラートを出したり、ETLジョブといった上位サーバが求める形のデータに整形してロードするスクリプトが書ける Kapacitor というソフトウェアと連携（TICKスタック）が可能になっています。このため、エッジ側でデータ収集、抽出、加工、ロードといった前処理までをひとつのコントローラで完結できます。
 
-![](OneController.drawio.svg){align=center}
+![](assets/OneController.drawio.svg){align=center}
 
 制御サイクルレベルの高密度データをとりあつかう場合、通常はPLCメーカが提供する専用のハードウェアやソフトウェアによるデータ処理が必要となります。ここからデータを取り出し、抽出・加工してから有用なデータをクラウドやサーバにロードするといった手間のかかる作業を自動化させることが困難です。
 
@@ -25,5 +25,6 @@ setup_tf6420_influxdb
 tf6420_write_influxdb
 telegraf
 visualization
-grafana.md
+grafana
+performance_data_collection_fb
 ```

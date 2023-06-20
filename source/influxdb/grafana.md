@@ -24,10 +24,11 @@ Grafanaは、より見やすく操作しやすいダッシュボード作成の�
 
     ```{csv-table}
     :header: 設定項目, 設定値
+    :widths: 2,8
     Query Language, Fluxを選択
     URL, Docker compose 内部のネットワークにより、Grafanaからは、`influxdb` という名称で、influxdbのホスト名にアクセスすることができます。よって、 `http://influxdb:8086` と入力します。
     Basic Auth Details, データベース管理者のユーザ、パスワードを入力します。
-    InfluxDB Details, Organization, API Token, Default Bucketを入力します。 
+    InfluxDB Details, "Organization, API Token, Default Bucketを入力します。 "
     ```
 
     ![](assets/2023-06-20-18-47-43.png){width=700px align=center}
@@ -39,7 +40,9 @@ Grafanaは、より見やすく操作しやすいダッシュボード作成の�
 
 ## ダッシュボードの作成
 
-Grafanaでダッシュボードを作成する場合は、次の手順で可視化部品をボード上に配置します。
+Grafanaでダッシュボードを作成するために、InfluxDBからデータを抽出し、ボード上に可視化グラフのパネルを配置します。
+
+まずはInfluxDBからクエリを作成し、そのFluxスクリプトによるクエリ文を取得します。これをGrafanaのダッシュボードパネルに設定することで、InfluxDBから抽出したデータを可視化グラフとして描画させることができます。
 
 1. InfluxDBのWEBから、{numref}`figure_script_editor_view` のように{ref}`figure_script_editor_view`にて目的のデータクエリを作成して確認します。
 
@@ -51,7 +54,7 @@ Grafanaでダッシュボードを作成する場合は、次の手順で可視�
 
     ![](assets/2023-06-20-19-02-21.png){width=200px align=center}
 
-3. Newボタンを押して、新しいパネルを生成します。
+3. Newボタンを押して、新しいパネルを生成します。つづく画面で`Add visualization`ボタンを押してください。
 
     ![](assets/2023-06-20-19-02-46.png){width=600px align=center}
     ![](assets/2023-06-20-19-03-46.png){width=600px align=center}
