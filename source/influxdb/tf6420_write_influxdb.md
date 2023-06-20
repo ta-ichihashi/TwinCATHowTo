@@ -10,6 +10,11 @@
 [https://github.com/Beckhoff-JP/tc_influxdb_client](https://github.com/Beckhoff-JP/tc_influxdb_client) 
 
 ```
+
+このライブラリには、TwinCATにおける様々なパフォーマンスデータを収集するファンクションブロックが内包されています。このファンクションブロックの仕様は、{ref}`section_collect_performance_data_fb` をご覧ください。
+
+本節の実装例では、このファンクションブロックから得られるさまざまなメトリクスをinfluxDBに記録します。
+
 ## ライブラリのインストール
 
 1. リポジトリから取得したソリューションを開きます。
@@ -36,7 +41,7 @@
 
 ## ライブラリを使った実装方法
 
-このライブラリでは、{numref}`figure_tsdb_library_feature` に示す通りサイクル実行中に収集されるデータと、データベース書込みを非同期で実行できるようにキューバッファによる書込み制御を行う機能を提供します。
+このライブラリでは、{ref}`figure_tsdb_library_feature` に示す通りサイクル実行中に収集されるデータと、データベース書込みを非同期で実行できるようにキューバッファによる書込み制御を行う機能を提供します。
 
 ```{figure-md} figure_tsdb_library_feature
 ![](assets/tsdb_library_feature.png){width=600px align=center}
@@ -52,7 +57,7 @@
 
 3. データベース書込みプログラム専用のタスクを作成します。このタスクで実行する、キューからデータをInfluxDBへ書込むプログラムを実装します。
 
-4. 制御タスク上にデータ収集用のプログラムを配置し、`RecordDataQueue`ファンクションブロックのインスタンスを設けます。`RecordDataQueue`ファンクションブロックでは、1レコードだけを書き込む `record_once` メソッドと、バッファに連続して書込み、一定のチャンクサイズになった時点でデータベースへ書き込む `cyclic_record` の二つのメソッドがあります。`cyclic_record` メソッド使用時のチャンクサイズの決定方法は、 `minimum_chunk_size` サイズで指定するチャンク数を下限値とし、データバッファの使用状況に応じてサイズが自動的に拡張され、データベース書込み遅延をバッファで吸収します。（ {numref}`figure_cyclic_data_buffer` ）
+4. 制御タスク上にデータ収集用のプログラムを配置し、`RecordDataQueue`ファンクションブロックのインスタンスを設けます。`RecordDataQueue`ファンクションブロックでは、1レコードだけを書き込む `record_once` メソッドと、バッファに連続して書込み、一定のチャンクサイズになった時点でデータベースへ書き込む `cyclic_record` の二つのメソッドがあります。`cyclic_record` メソッド使用時のチャンクサイズの決定方法は、 `minimum_chunk_size` サイズで指定するチャンク数を下限値とし、データバッファの使用状況に応じてサイズが自動的に拡張され、データベース書込み遅延をバッファで吸収します。（ {ref}`figure_cyclic_data_buffer` ）
 
 	```{figure-md} figure_cyclic_data_buffer
 	![](cyclic_data_buffer.png){width=400px align=center}
