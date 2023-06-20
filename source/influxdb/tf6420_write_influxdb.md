@@ -60,7 +60,7 @@
 4. 制御タスク上にデータ収集用のプログラムを配置し、`RecordDataQueue`ファンクションブロックのインスタンスを設けます。`RecordDataQueue`ファンクションブロックでは、1レコードだけを書き込む `record_once` メソッドと、バッファに連続して書込み、一定のチャンクサイズになった時点でデータベースへ書き込む `cyclic_record` の二つのメソッドがあります。`cyclic_record` メソッド使用時のチャンクサイズの決定方法は、 `minimum_chunk_size` サイズで指定するチャンク数を下限値とし、データバッファの使用状況に応じてサイズが自動的に拡張され、データベース書込み遅延をバッファで吸収します。（ {ref}`figure_cyclic_data_buffer` ）
 
 	```{figure-md} figure_cyclic_data_buffer
-	![](cyclic_data_buffer.png){width=400px align=center}
+	![](assets/cyclic_data_buffer.png){width=400px align=center}
 
 	サイクリックデータバッファの構造
 	```
