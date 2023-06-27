@@ -10,7 +10,7 @@ CSVの収集を開始するには、次の手順を実施してください。
 
 1. PLCへのログイン
 
-  TwinCAT Measurement プロジェクトと同じソリューションにあるPLCプロジェクトにおいてリモートPLCへログインします。
+   TwinCAT Measurement プロジェクトと同じソリューションにあるPLCプロジェクトにおいてリモートPLCへログインします。
 
 2. TwinCAT Measurement Projectの選択
 
@@ -18,22 +18,21 @@ CSVの収集を開始するには、次の手順を実施してください。
 
 3. Scope viewのモニタ開始操作
 
-  TwinCAT Measurement Projectの選択を選択すると、ツールバーにScope viewの操作アイコンが現れます。
-  「モニタ開始ボタン」操作を行うと監視を開始します。 ``StartRecord`` トリガにより自動的に記録を開始し、以後、 ``CSVExport`` トリガ毎にCSVファイルを出力します。
+   TwinCAT Measurement Projectの選択を選択すると、ツールバーにScope viewの操作アイコンが現れます。「モニタ開始ボタン」操作を行うと監視を開始します。 ``StartRecord`` トリガにより自動的に記録を開始し、以後、 ``CSVExport`` トリガ毎にCSVファイルを出力します。
 
-  .. figure:: image/scope_monitor_start.png
-    :align: center
-    :scale: 100%
+   .. figure:: image/scope_monitor_start.png
+     :width: 100px
+     :align: center
 
 4. Scope viewのモニタ停止操作
 
    Scope viewに記録中においても、次の操作を行う事で操作を停止できます。
 
-  .. figure:: image/scope_monitor_stop.png
-    :align: center
-    :scale: 100%
+   .. figure:: image/scope_monitor_stop.png
+     :align: center
+     :width: 100px
 
-  .. warning::
+   .. warning::
 
     * 停止後、次回モニタを再開するとCSVのファイル名の連番は ``1`` からはじまります。前回のCSVファイルが残っている場合は順次上書きされます。
     * 再開前にCSVファイルのバックアップを取ることをおすすめします。
@@ -65,41 +64,41 @@ CSVの収集を開始するには、次の手順を実施してください。
 
 このために必要な Channel trigger setは以下の通りです。
 
-``StartRecord`` に追加したchannel trigger:
+:``StartRecord`` に追加したchannel trigger:
 
-  :Release:
+   :Release:
 
-    Raising Edge
+     Raising Edge
 
-  :Threshold:
+   :Threshold:
 
-    1
+     1
 
-  :User Data:
+   :User Data:
 
-    論理軸の ``AxisState``
+     論理軸の ``AxisState``
 
-  :説明:
+   :説明:
 
-    AxisStateは、軸の動作状態を整数で表現している。1以上で動作開始していることがわかる。
+     AxisStateは、軸の動作状態を整数で表現している。1以上で動作開始していることがわかる。
 
-``CSVExport`` に追加したchannel trigger:
+:``CSVExport`` に追加したchannel trigger:
 
-  :Release:
+   :Release:
 
-    Falling Edge
+     Falling Edge
 
-  :Threshold:
+   :Threshold:
 
-    1
+     1
 
-  :User Data:
+   :User Data:
 
-    export_trigger[0]
+     export_trigger[0]
 
-  :説明:
+   :説明:
 
-    export_trigger[0] は原点位置における inPosition 信号。動作を開始するとFailとなるため、Falling Edgeにてトリガが発行される。
+     export_trigger[0] は原点位置における inPosition 信号。動作を開始するとFailとなるため、Falling Edgeにてトリガが発行される。
 
 上記設定にて記録したものは、 :numref:`sampling_view` の通りScope viewで一覧できる。この中に示された、 ``CSVExport_*`` というラベルの部分にてCSVに保存されている事がわかる。
 

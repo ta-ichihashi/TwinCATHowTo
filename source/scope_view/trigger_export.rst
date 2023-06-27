@@ -16,7 +16,7 @@
 
 .. figure:: image/trigger_setting_tree.png
     :align: center
-    :scale: 80%
+    :width: 700px
     :name: trigger_setting_tree
 
     トリガ設定のツリーの構成
@@ -30,21 +30,21 @@ Trigger Groupの作成
 
    .. figure:: image/add_trigger_group.png
     :align: center
-    :scale: 80%
+    :width: 400px
 
-2. ``Trigger`` の下に　``Trigger Group`` が出来ます。これに下記の操作を行います。
+2. ``Trigger`` の下に ``Trigger Group`` が出来ます。これに下記の操作を行います。
 
-    * 選択してF2キーを押すか、右クリックして ``Rename`` を選択し、Trigger groupから任意のアクションを示す名称へ変更する。
+   * 選択してF2キーを押すか、右クリックして ``Rename`` を選択し、Trigger groupから任意のアクションを示す名称へ変更する。
 
-      例: CSVExport, RecordStart 等
+     例: CSVExport, RecordStart 等
 
-    * 新たに現れた ``Trigger Group`` メニューを右クリックして ``Properties`` を選択。 
+   * 新たに現れた ``Trigger Group`` メニューを右クリックして ``Properties`` を選択。
 
 3. 現れた Properties ウインドウのTrigger Action項目から、アクションを選択する。
 
    .. figure:: image/choose_trigger_action.png
-        :align: center
-        :scale: 60%
+      :align: center
+      :width: 400px
 
    * ``StartRecord`` の場合は、 ``Start Record`` を選ぶ
    * ``CSVExport`` の場合は、 ``Export`` を選ぶ
@@ -59,7 +59,7 @@ CSVエクスポートの設定
 Trigger Action にて、 ``Export`` を選択した場合は、エクスポートするファイルの情報を設定する必要があります。設定個所は次の2個所です。
 
 .. figure:: image/export_property.png
-    :scale: 80%
+    :width: 400px
     :align: center
 
 Exportpath
@@ -79,25 +79,25 @@ Export Type
 .. list-table::
 
     * - .. figure:: image/csv_export1.png
-            :scale: 80%
+            :width: 400px
             :align: center
             :name: csv_export1
 
             CSVを選択
       - .. figure:: image/csv_export2.png
-            :scale: 80%
+            :width: 400px
             :align: center
             :name: csv_export2
 
             記録不要な要素を選択してExcludeで右側へ移動する
     * - .. figure:: image/csv_export3.png
-            :scale: 80%
+            :width: 400px
             :align: center
             :name: csv_export3
 
             そのまま次へ
       - .. figure:: image/csv_export3-2.png
-            :scale: 80%
+            :width: 400px
             :align: center
             :name: csv_export3-2
 
@@ -114,7 +114,7 @@ Channel trigger の追加
 これまでTrigger groupにて設定した二つのアクションを始動する条件は、Channel triggerにて設定します。 :numref:`add_channel_trigger` の様に ``Trigger group`` を右クリックして現れるメニューから、 ``New Channel Trigger Set`` を選びます。
 
 .. figure:: image/add_channel_trigger.png
-    :scale: 50%
+    :width: 450px
     :align: center
     :name: add_channel_trigger
 

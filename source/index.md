@@ -26,4 +26,5 @@
 basic.md
 develop.md
 operation.md
+faq.md
 ```
