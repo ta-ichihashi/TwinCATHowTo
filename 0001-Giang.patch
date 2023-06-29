@@ -1,0 +1,37 @@
+From 7e2707892ee112ce3c6462f16f3100194cdeb46a Mon Sep 17 00:00:00 2001
+From: Giang Doan <g.doan@beckhoff.co.jp>
+Date: Thu, 29 Jun 2023 14:09:17 +0900
+Subject: [PATCH] =?UTF-8?q?Giang=E3=81=AE=E3=83=95=E3=82=A1=E3=82=A4?=
+ =?UTF-8?q?=E3=83=AB=E8=BF=BD=E5=8A=A0?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ source/AdHo/index.md   | 1 +
+ source/Motion/index.md | 2 ++
+ 2 files changed, 3 insertions(+)
+ create mode 100644 source/AdHo/index.md
+
+diff --git a/source/AdHo/index.md b/source/AdHo/index.md
+new file mode 100644
+index 0000000..79227a0
+--- /dev/null
++++ b/source/AdHo/index.md
+@@ -0,0 +1 @@
++# Advanced Homing 
+diff --git a/source/Motion/index.md b/source/Motion/index.md
+index 1d412e1..8386743 100644
+--- a/source/Motion/index.md
++++ b/source/Motion/index.md
+@@ -34,4 +34,6 @@ TwinCATによるPCベースモーション制御システム
+ :hidden:
+ 
+ ../Make_Cam/index.md
++../AdHo/index.md
++
+ ```
+\ No newline at end of file
+-- 
+2.40.1.windows.1
+
