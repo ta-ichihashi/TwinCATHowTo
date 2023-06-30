@@ -49,7 +49,7 @@ IPC上で適用されたTF3300により各種PLCデバイスやモーション�
 
 .. figure:: image/tree_view_structure.png
     :align: center
-    :scale: 45%
+    :scale: 60%
 
     Scope view全体の設定項目
 

@@ -11,19 +11,19 @@ Scope viewプロジェクトの新規作成
 1. Solution explorerの最上位階層で右クリックし、ポップアップメニューから、 ``Add > New Project...`` を選択します。
 
    .. image:: image/add_project.png
-    :scale: 60%
+    :width: 600px
     :align: center
 
 2. YT Scope view プロジェクトを選択します。下部の ``Name`` 欄には、監視したいスコーププロジェクト名称を設定します。
 
    .. image:: image/add_YT_Scope_project.png
-    :scale: 60%
+    :width: 500px
     :align: center
 
 3. Solution explorerに、初期状態のツリーが現れます。
 
    .. image:: image/initial_scope_view_tree.png
-    :scale: 60%
+    :width: 200px
     :align: center
 
 
@@ -38,14 +38,14 @@ Scope viewプロジェクトの新規作成
 2. Propertyウィンドウに現れる ``Project folder`` CSVを保存する先にデフォルトで使用される保存先はこのプロジェクトフォルダです。（ :numref:`project_folder_setting` ）
 
 .. figure:: image/measurement_project_property.png
-    :scale: 80%
+    :width: 550px
     :align: center
     :name: measurement_project_property
 
     Measurement projectのプロパティ
 
 .. figure:: image/project_folder_setting.png
-    :scale: 60%
+    :width: 550px
     :align: center
     :name: project_folder_setting
 
@@ -58,44 +58,25 @@ YT Scopeプロジェクトの設定
 CSVファイルへ吐き出す前に、記録したデータはYT Scopeのバッファメモリ内に保存されます。このメモリの取り扱いに関する設定を変更します。
 
 .. figure:: image/ytscope_project_property.png
-    :scale: 80%
+    :width: 550px
     :align: center
     :name: ytscope_project_property
 
     YT scope projectのプロパティ
 
 .. figure:: image/buffer_setting.png
-    :scale: 60%
+    :width: 400px
     :align: center
     :name: buffer_setting
 
     バッファ設定の変更個所
 
-``Record`` / ``Ringbuffer`` :
+.. csv-table::
+    :header: 項目, 変更前, 変更後, 説明
+    :widths: 3,1,2,4
 
-    変更前:
-
-      False
-
-    変更後:
-
-      True
-
-   False設定のままだと後述の ``Record Time`` 設定時間が経過すると自動的に記録が停止します。Trueにすることで、 ``Record Time`` を過ぎても古いデータから順次消去する動作となります。
-
-
-``Record Mode`` / ``Record Time`` :
-
-    変更前:
-
-      ``00:00:10:00`` （10分）
-
-    変更後:
-
-      軸の動作を監視する制御サイクルの間隔の1.5倍以上の時間
-
-    バッファする記録時間を設定します。リングバッファにより古いものから順次消去されるため、CSVファイルへ記録するまでに十分なデータが残っているための時間設定が必要です。
-
+    ``Record`` / ``Ringbuffer``, False, True, False設定のままだと後述の ``Record Time`` 設定時間が経過すると自動的に記録が停止します。Trueにすることで、 ``Record Time`` を過ぎても古いデータから順次消去する動作となります。
+    ``Record Mode`` / ``Record Time``, ``00:00:10:00`` （10分）, 軸の動作を監視する制御サイクルの間隔の1.5倍以上の時間, バッファする記録時間を設定します。リングバッファにより古いものから順次消去されるため、CSVファイルへ記録するまでに十分なデータが残っているための時間設定が必要です。
 
 
 変数登録とビュー作成
@@ -150,7 +131,7 @@ Trueとなるフラグ ``export_triger[]`` を作成しています。後ほど�
 
    .. figure:: image/chose_target_browser.png
         :align: center
-        :scale: 60%
+        :width: 400px
         :name: chose_target_browser
 
         ターゲットブラウザを出現
@@ -162,25 +143,25 @@ Trueとなるフラグ ``export_triger[]`` を作成しています。後ほど�
    モーションコントローラのデバイスを監視したい場合は、 :numref:`motion_device_collection` の通り、ADSポート501から始まる名称のモジュール名を選択してください。
    また、PLCデバイスを監視したい場合は、 :numref:`plc_device_collection` の通り、ADSポート851から始まる名称のモジュール名を選択
 
-    .. figure:: image/target_browser_motion.png
+   .. figure:: image/target_browser_motion.png
         :scale: 60%
         :align: center
         :name: motion_device_collection
 
         モーションコントローラのデータを監視する場合
 
-    .. figure:: image/target_browser_plc.png
+   .. figure:: image/target_browser_plc.png
         :scale: 60%
         :align: center
         :name: plc_device_collection
 
         PLCのデバイスを監視する場合
-            
+
 4. DataPoolへの追加
 
    右側のツリーから目的のデバイス変数が見つかりましたら、選択してダブルクリックしてください。これにより ``DataPool`` メニュー上に追加されます。（ :numref:`add_to_data_pool` ）
 
-    .. figure:: image/add_to_data_pool.png
+   .. figure:: image/add_to_data_pool.png
         :scale: 80%
         :align: center
         :name: add_to_data_pool
@@ -204,14 +185,14 @@ YT Chart ビューには、次のデータの階層構造を持っています�
 モーションの監視を行う場合は、YT Chart毎に軸を分け、同じ単位系か、座標を分けて見たい単位でビューを作成するのがよいでしょう。
 
 .. figure:: image/stacked_axes_view.png
-        :scale: 80%
+        :width: 900px
         :align: center
         :name: stacked_axes_view
 
         ツリーとグラフビューの関係（Stacked axes ビュー）
 
 .. figure:: image/unstacked_axes_view.png
-        :scale: 80%
+        :width: 700px
         :align: center
         :name: unstacked_axes_view
 
@@ -223,7 +204,7 @@ YT Chartの追加
 YT Chart タブを追加したい場合は、 :numref:`add_ytproj` の通りYT Scope Projectの階層で右クリックしたメニューから、 ``New YT Chart`` を選んでください。
 
 .. figure:: image/add_ytproj.png
-        :scale: 40%
+        :width: 400px
         :align: center
         :name: add_ytproj
 
@@ -235,7 +216,7 @@ Axisの追加
 Axis を追加したい場合は、 :numref:`add_axis` の通りYT Chartの階層で右クリックしたメニューから、 ``New Axis`` を選んでください。
 
 .. figure:: image/add_axis.png
-    :scale: 60%
+    :width: 400px
     :align: center
     :name: add_axis
 
@@ -247,7 +228,7 @@ Axis上への表示データの登録
 DataPoolに登録された変数のデータを任意のYT ChartのAxisに表示させるためには、 :numref:`reg_data_to_view` の様に該当の変数をAxisへドラッグアンドドロップします。
 
 .. figure:: image/reg_data_to_view.png
-    :scale: 50%
+    :width: 300px
     :align: center
     :name: reg_data_to_view
 
