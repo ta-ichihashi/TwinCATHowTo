@@ -34,4 +34,6 @@ TwinCATによるPCベースモーション制御システム
 :hidden:
 
 ../Make_Cam/index.md
+../AdHo/index.md
+
 ```
