@@ -1,5 +1,5 @@
 # Advanced Homing 
-###機能紹介
+### 機能紹介
  通常に使用されているMC_Homeの動作はあらかじめ駆動の仕様が定義されて、その仕様を編集することはできない。このため、Advanced HomingライブラリのFBが用意されて、アプリケーションやユーザーの要望により、異な駆動を組見合わせて原点復帰を実行できる。
 ### システム条件
 - Advanced Homingライブラリを使用のためTC3.1 4024.1以降が必要
@@ -8,7 +8,7 @@
   - AX5xxx
   - AX8xxx
 
-###定義されたファンクションブロックの概要
+### 定義されたファンクションブロックの概要
 - 以下の表では、原点復帰**駆動系**と**完了系**に分類している
 
 |   　駆動系　|  　完了系　 |
@@ -18,7 +18,7 @@
 |  MC_StepBlock/ MC_StepBlockDetection/ MC_StepBlockLagBased /MC_StepBlockLagBasedDetection|MC_AbortHoming|
 |MC_StepReferencePulse/ MC_StepReferencePulseDetection|  　|
 
-####駆動系
+#### 駆動系
 - 参照の信号を検出するため、原点復帰シーケンスを開始する。参照信号の種類により下記のFBが用意される：
   - MC_StepAbsoluteSwitch:アブソリュートスイッチやリミットスイッチを検出する原点復帰
   - MC_StepLimitSwitch:リミットスイッチを検出する
@@ -35,14 +35,14 @@
 ③：物理のブロック→Z相信号検出
 ④：リミットスイッチ→ブロック→C相信号の順番で検出する
 
-####完了系
+#### 完了系
 - 完了系のFBを実行すると原点復帰が完了される。軸は元のステータスに戻る。完了する前にオプションとして駆動の追加ができる
   - MC_HomeDirect:現在位置を強制に設定する
   - MC_FinishHoming:追加でRelative移動できる
   - MC_AbortHoming
 
-###環境準備
-####ライブラリの追加
+### 環境準備
+#### ライブラリの追加
 TwinCATの場合、AdvancedHomingのライブラリの名称はTc3_MC2_AdvancedHoming
 ![](assets/2.png)
 ①Project-Referencesタブを右クリック→Add library...を選択
