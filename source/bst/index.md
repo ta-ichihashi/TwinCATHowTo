@@ -9,4 +9,4 @@ BSTから産業用PCを起動すると同時に、BSTが起動します。産業
 
 下記からPDFのマニュアルをダウンロードいただけますので、精々ご利用ください。
 
-[https://download.beckhoff.com/download/document/ipc/industrial-pc/Beckhoff-Service-Tool_BST_ja.pdf](https://download.beckhoff.com/download/document/ipc/industrial-pc/Beckhoff-Service-Tool_BST_ja.pdf)
+[https://download.beckhoff.com/download/Document/ipc/industrial-pc/Beckhoff-Service-Tool_BST_ja.pdf](https://download.beckhoff.com/download/Document/ipc/industrial-pc/Beckhoff-Service-Tool_BST_ja.pdf)

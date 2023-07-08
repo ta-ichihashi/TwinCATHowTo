@@ -19,7 +19,7 @@
     [https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf](https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf)
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 4
 :numbered: 3
 :caption: 目次
 

@@ -18,7 +18,16 @@
     * 結合テスト（負荷を含めたアプリケーションとしてのテスト）の自動化
     * 自動デプロイシステム
 
-## FAエンジニアリングもクラウドベースへ - TwinCAT Cloud Engineeringのご紹介
+```{toctree}
+:maxdepth: 3
+:caption: 目次
+
+../version_control/index.md
+../library/index.md
+```
+
+```{admonition} FAエンジニアリングもクラウドベースへ - TwinCAT Cloud Engineeringのご紹介
+:class: note
 
 TwinCAT Cloud Engineeringは、2020年に発表されたクラウド上でXAEとユーザモードXARを動作させるコンテナ技術です。
 
@@ -31,12 +40,4 @@ TwinCAT Cloud Engineeringは、2020年に発表されたクラウド上でXAEと
 [![](assets/2023-06-05-15-02-59.png)](https://www.beckhoff.com/ja-jp/products/automation/cloud-engineering/)
 
 このような、ITの世界で取り入れられているフレームワークを制御コンピューティング環境でお使いいただけるのも、PC制御であるTwinCATの強みとなります。本章でご説明する機能群はその中核を成すものですので、ぜひとも未来に向けて触れていただければ幸いです。
-
-```{toctree}
-:maxdepth: 2
-:caption: 目次
-
-../version_control/index.md
-../library/index.md
 ```
-

@@ -30,10 +30,42 @@ TwinCATによるPCベースモーション制御システム
 
 この章では、これらのシステムを実現するTwinCATのモーション機能に関するさまざまな手法をご紹介します。
 
+
 ```{toctree}
 :hidden:
 
 ../Make_Cam/index.md
 ../AdHo/index.md
+
+```
+```{admonition} C++ / MATLABライセンスをご検討中の方はご注意ください
+:class: warning
+
+TwinCATには、C++による制御やMatlab / Simlink連携をご利用される場合以下のコアライセンスが用意されています。このライセンスはPLC機能を必要とせずC++ やMatlab/Simlinkのみで制御ロジックを構築されたいお客様向けのライセンスとなっています。
+
+* TC 1300 TwinCAT 3 C++
+* TC 1320 TwinCAT 3 C++/Matlab
+
+このコアパッケージを用いて、本章で説明するモーションコントロールロジックを構築頂く事はもちろん可能ですが、PLCOpenのMotion Control FBの機能を提供する、NC PTP, NC I, CNCなどのパッケージはご利用いただけません。これらは必ずPLC機能を必要としますので、以下のライセンスをご指定頂く必要があります。
+
+* TC 1200 TwinCAT 3 PLC
+* TC 1210 TwinCAT 3 PLC/C++
+* TC 1220 TwinCAT 3 PLC/C++/Matlab
+
+また、これらのそれぞれのライセンスは併用できません。例えばTC1300を先にご購入いただいた後にPLC機能やMatlab機能を追加したい場合、それぞれ単体の機能ライセンスというものは存在せず、TC1210やTC1220ライセンスを再度購入し直しいただき、TC1300は使われないライセンスとなります。短期間の間にこの乗り換えを行いますと、コスト上の無駄となりえます。
+
+よって初回にシステム導入ご検討の際に、どの機能までご利用いただくか十分にご検討の上ライセンスご購入をお願いいたします。
+
+![](assets/2023-07-08-11-12-51.png){align=center}
+
+```
+
+```{admonition} YoutubeによるNC PTP トレーニングビデオのご紹介
+
+PLCとNC PTPを用いた単軸モーション制御の構築例を[シリーズ化したYouTubeトレーニングビデオ](https://youtube.com/playlist?list=PL7gRjakiitMw_uBCA4oYiApkCIVI797kY)をご案内しています。
+
+```{youtube} 9ZpAuE6JpWc
+:align: center
+```
 
 ```
