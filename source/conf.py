@@ -29,7 +29,7 @@ class Author(Enum):
 
 # -- Project information -----------------------------------------------------
 
-titles = ['TwinCAT HowTo']
+titles = ['TwinCATテクニカルノート']
 
 project = ' '.join(titles)
 copyright = '2023, ベッコフオートメーション株式会社'
@@ -50,7 +50,8 @@ extensions = [
     'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag',
     'sphinxcontrib.actdiag',
-    'sphinxcontrib.nwdiag'
+    'sphinxcontrib.nwdiag',
+    'sphinxcontrib.youtube'
     ]
 
 source_suffix = {

@@ -25,18 +25,18 @@
     Company, ライブラリを開発する組織名を入力します。
     Title, ライブラリ名称を記述します。`Placeholder`を未定義にすると、この名称がPlaceholderとしても設定されます。バージョンの連続性を担保するためにも、途中からこの名称を変更しないようにご注意ください。
     Version, ライブラリバージョンを定義します。必ず4桁のピリオド区切りで定義してください。
-    Released, {numref}`section_about_released_flag` をご覧ください。
-    Library Categories, {numref}`section_library_category` をご覧ください。
+    Released, {ref}`section_about_released_flag` をご覧ください。
+    Library Categories, {ref}`section_library_category` をご覧ください。
     Default namespace, 読み出す側とライブラリ内の変数名やファンクションブロック名が被らないように、該当ライブラリ内のリソースの頭に付ける接頭語を定義します。
     Placeholder, 作成したライブラリを読み込むと、デフォルトでは`Title`に示したPlaceholderが自動作成されて、これにライブラリが紐づきます。任意のPlaceholderを指定したい場合はこの欄で指定します。派生版のライブラリを作成される場合のブランチ名として利用されると良いでしょう。
     Author, 開発者名を記入します。
     Description, 説明を記入します。
     Global version structure, "ボタンを押すと読み込んだライブラリに関するバージョン情報をプログラムから参照する事ができるようにグローバル変数を自動生成します。`Version` 欄に指定したピリオドで区切られた4つのバージョンの値を順に、`iMajor`, `iMinor`, `iBuild`, `iRevision` で取り出す事ができ、`Released`フラグの有無を `nFlags` で取り出す事ができます。"
     POUs for property access, "ライブラリのメタ情報を取り出すファンクションを自動生成します。読みだしたライブラリ側では、本画面で設定する、`Compay`, `Title`, `Version` がそれぞれ取り出せます。"
-    Document format, 開発ドキュメントの記述方式を選択します。{numref}`chapter_documentation`章のドキュメント記述方式を有効にするため、必ず`reStructuredText`を選択してください。
+    Document format, 開発ドキュメントの記述方式を選択します。{ref}`chapter_documentation`章のドキュメント記述方式を有効にするため、必ず`reStructuredText`を選択してください。
     ```
 
-    設定内容については、 {numref}`prject_detail_setting` で詳しく説明します。
+    設定内容については、 {ref}`prject_detail_setting` で詳しく説明します。
 
     ```{image} assets/Properties_Common.png
     :width: 300px
@@ -53,7 +53,7 @@
    ```
 
    ```{note}
-   `Save as library` だけを行った場合、お使いの環境のXAEへのライブラリのインストールは行われません。{numref}`install_library` 節で説明するインストール手順を別途実施する必要があります。
+   `Save as library` だけを行った場合、お使いの環境のXAEへのライブラリのインストールは行われません。{ref}`install_library` 節で説明するインストール手順を別途実施する必要があります。
    ```
 
 4. ライブラリを保存する。 
@@ -81,7 +81,7 @@
 
 Placeholderとは、ひとことでいうとライブラリに対するショートカットです。それぞれのプログラムやライブラリが直接ライブラリと関連付けられるのではなく、仮想化されたショートカットと紐づく事で、設定によって参照するライブラリの実体を柔軟に切り替える事が可能になります。
 
-{numref}`import_library`節で説明するライブラリ追加手順では、暗黙的にライブラリ名と同名のPlaceholderが作成され、このPlaceholderを経由してライブラリ読み込みされます。{numref}`placeholder_overview` の図に示される赤下線で引かれた部分にある`=`の左辺にある文字がPlaceholderです。この`=`の右辺にあるものが実際のライブラリを示していて、`ライブラリ名, バージョン番号（組織名）`という書式になっています。デフォルトでは、バージョン番号部分は`*`となっていて、常に最新のライブラリバージョンと紐づく仕様となっています。
+{ref}`import_library`節で説明するライブラリ追加手順では、暗黙的にライブラリ名と同名のPlaceholderが作成され、このPlaceholderを経由してライブラリ読み込みされます。{ref}`placeholder_overview` の図に示される赤下線で引かれた部分にある`=`の左辺にある文字がPlaceholderです。この`=`の右辺にあるものが実際のライブラリを示していて、`ライブラリ名, バージョン番号（組織名）`という書式になっています。デフォルトでは、バージョン番号部分は`*`となっていて、常に最新のライブラリバージョンと紐づく仕様となっています。
 
 ```{figure} assets/2023-03-02-16-05-14.png
 :width: 400px
@@ -95,7 +95,7 @@ Placeholderとは、ひとことでいうとライブラリに対するショー
 Placeholderを経ずに直接ライブラリを読み込む事は可能ですが、ここでは説明しません。
 ```
 
-Placeholderにリンクするライブラリバージョンを切り替える方法は、{numref}`update_library`節で示す手順同様、Propertiesの`Resolution`項目で選択します。（{numref}`placeholder_change_resolution` 図参照）
+Placeholderにリンクするライブラリバージョンを切り替える方法は、{ref}`update_library`節で示す手順同様、Propertiesの`Resolution`項目で選択します。（{numref}`placeholder_change_resolution` 図参照）
 
 次からPlaceholderを活用する方法に代表的な2例に基づいて操作手順を示します。
 
@@ -131,7 +131,7 @@ Placeholder名は、デフォルトでライブラリ名と同一のものが自
 
 まずは、「IPC Performance to influxDB via TF6420」ライブラリで別名のPlaceholderで`Tc-Module`ライブラリを追加する手順を示します。
 
-1. {numref}`import_library`に示す手順の`Add library`ウィンドウにて左下の`Advanced...` ボタンを押します。
+1. {ref}`import_library`に示す手順の`Add library`ウィンドウにて左下の`Advanced...` ボタンを押します。
 
     ```{image} assets/2023-03-02-18-04-27.png
     :width: 300px
@@ -278,7 +278,7 @@ Released チェックのPLCプロジェクトに変更を与えようとした�
 3. `*.libcat.xml` というファイル名で、UTF-8エンコードしたテキストファイルで保存します。（`*`部分は任意の名前）
 
 4. 保存したファイルを読み込むには{numref}`add_category_procedure`の図の通り次の手順を実施します。
-    1. {numref}`library_making_basic`で示したProperty設定にて、`Library Categories` 設定項目右端にあるボタンを押します。
+    1. {ref}`library_making_basic`で示したProperty設定にて、`Library Categories` 設定項目右端にあるボタンを押します。
     2. `Library Category` ウィンドウが現れます。右側の `Add >` ボタンを押して現れるメニューから`From Decription File...`ボタンを押します。エクスプローラが現れますので、先ほど保存した*.libcat.xmlファイルを選択して読み込みます。
     3. {numref}`add_category_procedure`の図の下部ウィンドウに示す通り、XMLに定義されたカテゴリーツリーが一覧されます。初期状態では全てにチェックが入っていますので、一度`None`を押して全てチェックを外します。
     4. 現在のPLCプロジェクトの提供する機能が含まれる末端のカテゴリだけにチェックを入れます。
@@ -299,7 +299,7 @@ Released チェックのPLCプロジェクトに変更を与えようとした�
     :align: center
     ```
 
-6. {numref}`install_library`節に示す手順を実施する際にライブラリをインストールすると、{numref}`install_library_with_category`図の通りのカテゴリに一覧された状態で配置されます。複数個所に一覧されますが実態は同じです。
+6. {ref}`install_library`節に示す手順を実施する際にライブラリをインストールすると、{numref}`install_library_with_category`図の通りのカテゴリに一覧された状態で配置されます。複数個所に一覧されますが実態は同じです。
 
     ```{figure} assets/2023-02-28-11-47-23.png
     :width: 450px
@@ -320,7 +320,7 @@ Released チェックのPLCプロジェクトに変更を与えようとした�
 
 ただし、手間を惜しまないのであれば、出来る限り単一の機能にライブラリを分割するのが望ましいです。プログラムの同士の機能の独立性が低いことで、一部の機能の修正により関係ない機能まで影響を受ける事となり、品質面への影響やテスト工数などの管理面での副次的なコストが大きくなるためです。
 
-とはいえ、動作実績のあるプログラムをそのままライブラリ化する事にも価値があります。なにより既存のPLCプロジェクトをそのままライブラリ化すれば良いだけなので手間がほどんど要りません。また、{numref}`chapter_documentation`章に示すreStructuredTextによるライブラリドキュメント機能を活用することでプログラム実装例の参考にも大いに役立ち、早期に開発者間での技術情報共有が可能になります。
+とはいえ、動作実績のあるプログラムをそのままライブラリ化する事にも価値があります。なにより既存のPLCプロジェクトをそのままライブラリ化すれば良いだけなので手間がほどんど要りません。また、{ref}`chapter_documentation`に示すreStructuredTextによるライブラリドキュメント機能を活用することでプログラム実装例の参考にも大いに役立ち、早期に開発者間での技術情報共有が可能になります。
 
 長期的にはライブラリを単一機能まで分割する「リファクタリング」は欠かせません。しかしこの過渡状態でも流用したいモジュールは多分にあります。そういった場面においてカテゴリやPlaceholderで区別するなどの工夫により、より柔軟な運用が可能になるでしょう。
 

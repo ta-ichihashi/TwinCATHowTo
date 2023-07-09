@@ -1,4 +1,9 @@
-# GitのセットアップとTwinCATの設定
+(section_install_git)=
+# ソースコントロール機能
+
+[InfoSys サイトリンク](https://infosys.beckhoff.com/content/1033/tc3_sourcecontrol/index.html?id=6468228250695776754)
+
+## Git for windows のインストールと初期設定
 
 Gitおよび、TortoiseGitのインストールを行います。[GitのWindows向けのインストーラ](https://gitforwindows.org/)が用意されていますが、ここではscoopと呼ばれるWindows向けのパッケージマネージャを用いてインストールします。
 
@@ -11,8 +16,6 @@ scoopパッケージマネージャを使うメリットは、インストール
 * コミットログエディタをvscodeにする
 
 次の手順にしたがってインストールを行ってください。
-
-## Git for windows のインストールと初期設定
 
 ```{admonition} 実施するまえに
 :class: warning
@@ -58,3 +61,9 @@ Gitをインストールしただけですと、原則CUI（コマンドユー�
 
     ![](assets/2023-05-23-23-17-46.png){width=600px align=center}
 
+```{toctree}
+:maxdepth: 2
+:hidden:
+
+working_source_control
+```
