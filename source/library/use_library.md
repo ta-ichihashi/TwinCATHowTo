@@ -65,7 +65,7 @@ XAEにインストールしたライブラリをプロジェクトへ追加す�
 
    * Library Manager から `Add library` ボタンを押す
     
-        ```{image} assets/LibraryManager_AddLibrary.png
+        ```{image} assets/LibraryManager_Addlibrary.png
         :width: 500px
         :align: center
         :name: LibraryManager_AddLibrary
