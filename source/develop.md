@@ -4,6 +4,7 @@
 :maxdepth: 2
 :caption: 目次
 
+debug_support/index.md
 devops/index.md
 iot/index.md
 Motion/index.md
