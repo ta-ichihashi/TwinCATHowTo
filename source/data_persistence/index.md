@@ -9,5 +9,10 @@ PERSISTENT変数
 REATIN変数
     : NovRAMと呼ばれる不揮発性メモリ内にリアルタイムに保持される変数。突然の電源断が発生した場合でも保存される。ただし、NovRAMを搭載可能な機種、および、NovRAMを別途オプション設置する必要がある。
 
+という永続化の為の仕組みが用意されています。一般的にはNovRAMが搭載できるIPCは、CX70xx, CX9020, CX20x0, CX20x2, CX20x3に限られることからも、
+
+
+https://www.youtube.com/watch?v=aJ8DqD4CRug
+
 ![](assets/2023-06-21-22-15-20.png)
 
