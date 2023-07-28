@@ -21,15 +21,41 @@
 
 4. Windowsネットワーク設定において、EtherCATマスターのネットワークカード設定を行います。EtherCATマスターを接続したI/Fカードのアダプタ設定のプロパティを開き、`TCP/IP V4` 設定を開きます。ここでは、EtherCATマスタのホストアドレスを`192.168.1.10/24`と設定する例を示します。
 
-    ```{warning}
-    CXなどの組み込み型PCに付属したE-busでは、EtherCATマスタのEthernetカードのアダプタが現われませんが、EL6601を認識した場合に限り、EL6601が`PREOP`以上の状態になることで{numref}`figure_virtual_network_card`のようにVirtual network portが現われます。ネットワークアダプタが現われない場合は、EtherCATのスレーブ状態が`PREOP`, `SAFEOP`, `OP`のいずれかになっていることをご確認ください。
-    ```
-
     ```{figure-md} figure_virtual_network_card
     ![](assets/networksetting.png){align=center}
 
     CXにおけるWindowsのバーチャルネットワークカード
     ```
+
+
+    ```{admonition} CXなどの組み込み型PCのE-busにEL6601, EL6614を取り付けた場合の既知の問題と対処方法
+    :class: warning
+
+    CXのE-busは、汎用的なイーサネットアダプターではなくEPCの内部FPGA上に作成された論理的なイーサネットポートです。このため、EL6601が`PREOP`、`OP`の状態になったときのみ {numref}`figure_virtual_network_card` のようなBeckhoff virtual ethernet adapterが現われるような、専用のTwinCATのドライバが別途存在します。
+
+    このドライバは、TwinCATのバージョン毎に差し替えが必要ですが、工場出荷時のCXに対して後からインストーラでTwinCATをバージョンアップすると、ドライバの上書きに失敗する問題があります。このためドライバファイルは古いTwinCATバージョンのままとなってしまい、整合しないドライバのため、EL6601やEL6614が`OP`状態になってもBeckhoff virtual ethernet adapterが現われない問題が生じます。
+
+    この問題の対処方法として、次の手順を実施し、手動でバージョンが整合していないドライバファイルを一旦削除してから再度TwinCAT XARをインストールして適合するドライバに差し替えてください。
+
+    1. `C:\Windows\System32\Drivers` 以下の次の2ファイルを削除する。
+    
+        Windowsにより使用されている場合は削除できませんので、一旦リネームしてWindowsを再起動してから削除してください。
+        ```{code}
+        C:\Windows\System32\Drivers
+         TcVirtualMP.sys
+         TcVirtualMPBus.sys
+        ```
+    
+    2. 一旦Windowsを再起動し、上記ファイルが確実に削除されていることを確認する。
+
+    3. 目的のバージョンのTwinCAT XARを再インストールする。
+    
+    4. 上記ファイル（`TcVirtualMP.sys`, `TcVirtualMPBus.sys`）が存在することを確認する。
+    
+    5. 本手順書に基づいてEL6601, EL6614を適切に設定し、`OP`または`PREOP`状態にすると、{numref}`figure_virtual_network_card` のようにBeckhoff Virtual Ethernet Adapterが現われることを確認する。
+    ```
+
+
 
 5. 起動時にRUNモードへ移行する設定を行う
 
