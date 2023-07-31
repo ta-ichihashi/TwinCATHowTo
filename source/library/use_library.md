@@ -23,7 +23,7 @@
 2. `Library repository`ボタンを押してください。
 
     ```{image} assets/LibraryManager_Main.png
-    :width: 600px
+    :width: 800px
     :align: center
     :name: LibraryManager_Main
     ```
@@ -49,7 +49,7 @@
 5. 再度プロジェクトを開いてライブラリマネージャの Library repositoryを開くと、インストールしたライブラリが一覧されていることが確認できます。
 
     ```{figure} assets/LibraryRepository_InstalledLibrary.png
-    :width: 500px
+    :width: 700px
     :align: center
     :name: LibraryRepository_InstalledLibrary
 
@@ -66,7 +66,7 @@ XAEにインストールしたライブラリをプロジェクトへ追加す�
    * Library Manager から `Add library` ボタンを押す
     
         ```{image} assets/LibraryManager_Addlibrary.png
-        :width: 500px
+        :width: 800px
         :align: center
         :name: LibraryManager_AddLibrary
         ```
@@ -76,7 +76,7 @@ XAEにインストールしたライブラリをプロジェクトへ追加す�
 3. 登録したライブラリを追加します。
 
     ```{image} assets/AddLibrary_UseLibrary.png
-    :width: 500px
+    :width: 700px
     :align: center
     :name: AddLibrary_UseLibrary
     ```
@@ -84,8 +84,9 @@ XAEにインストールしたライブラリをプロジェクトへ追加す�
 4. 登録したライブラリが References に追加されることを確認します。
 
     ```{image} assets/Solution_References.png
-    :width: 150px
+    :width: 250px
     :align: center
+    :class: with-shadow
     :name: Solution_References
     ```
 
@@ -101,7 +102,7 @@ XAEにインストールしたライブラリをプロジェクトへ追加す�
 常に最新バージョンを使う設定にする場合は、ライブラリ名の後がバージョン番号ではなくアスタリスク `*` のものを選択してください。
 
 ```{figure} assets/2023-03-02-16-13-13.png
-:width: 800px
+:width: 1000px
 :align: center
 :name: placeholder_change_resolution
 
