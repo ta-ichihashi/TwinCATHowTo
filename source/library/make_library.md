@@ -11,7 +11,7 @@
 1. PLC $>$ Project で右クリックして、 `Properties` を選択する。
 
     ```{image} assets/Solution_ProjectProperties.png
-    :width: 300px
+    :width: 500px
     :align: center
     :name: Solution_ProjectProperties
     ```
@@ -39,7 +39,7 @@
     設定内容については、 {ref}`prject_detail_setting` で詳しく説明します。
 
     ```{image} assets/Properties_Common.png
-    :width: 300px
+    :width: 500px
     :align: center
     :name: Properties_Common
     ```
@@ -47,7 +47,7 @@
 3. PLC $>$ Project で右クリックして、 `Save as library and install ...` を選択する。  
 
    ```{image} assets/Solution_SaveLibrary.png
-   :width: 350px
+   :width: 500px
    :align: center
    :name: Solution_SaveLibrary
    ```
@@ -69,7 +69,7 @@
       コンパイル済みのプログラムイメージ。ライブラリのソースコードを閲覧する事はできません。
 
    ```{image} assets/2023-02-28-08-55-34.png
-   :width: 400px
+   :width: 600px
    :align: center
    :name: Dialog_SaveLibrary
    ```
@@ -84,7 +84,7 @@ Placeholderとは、ひとことでいうとライブラリに対するショー
 {ref}`import_library`節で説明するライブラリ追加手順では、暗黙的にライブラリ名と同名のPlaceholderが作成され、このPlaceholderを経由してライブラリ読み込みされます。{ref}`placeholder_overview` の図に示される赤下線で引かれた部分にある`=`の左辺にある文字がPlaceholderです。この`=`の右辺にあるものが実際のライブラリを示していて、`ライブラリ名, バージョン番号（組織名）`という書式になっています。デフォルトでは、バージョン番号部分は`*`となっていて、常に最新のライブラリバージョンと紐づく仕様となっています。
 
 ```{figure} assets/2023-03-02-16-05-14.png
-:width: 400px
+:width: 800px
 :align: center
 :name: placeholder_overview
 
@@ -104,7 +104,7 @@ Placeholderにリンクするライブラリバージョンを切り替える方
 複数のライブラリやライブラリを読み込むプログラムで使われているライブラリが共有されるケースがあります。例えば、{numref}`placeholder_tc3_module_recent_version` に示す通り、どのライブラリやプログラムもTc3_Moduleという名前のPlaceholderを使用しており、デフォルトで最新版を使う設定となっています。
 
 ```{figure} assets/2023-03-02-17-03-24.png
-:width: 700px
+:width: 1000px
 :align: center
 :name: placeholder_tc3_module_recent_version
 
@@ -114,7 +114,7 @@ Tc3_Module 最新版を使う設定
 このPlaceholderを{numref}`placeholder_tc3_module_fixed_version`のように、PropertyのResolutionで特定バージョンを使う様に設定を変えると、関連するライブラリやプログラム全てが指定したバージョンのものに固定されます。
 
 ```{figure} assets/2023-03-02-17-16-54.png
-:width: 700px
+:width: 1000px
 :align: center
 :name: placeholder_tc3_module_fixed_version
 
@@ -134,7 +134,7 @@ Placeholder名は、デフォルトでライブラリ名と同一のものが自
 1. {ref}`import_library`に示す手順の`Add library`ウィンドウにて左下の`Advanced...` ボタンを押します。
 
     ```{image} assets/2023-03-02-18-04-27.png
-    :width: 300px
+    :width: 500px
     :align: center
     ```
 2. `Placeholders`タブを開き、`Placeholder name` のフィールドに新たに命名したい名前を入力します。
@@ -142,27 +142,27 @@ Placeholder名は、デフォルトでライブラリ名と同一のものが自
     この例として`Tc3-Module`に対する別名であることがわかるように`Tc3-Module-fixed-version`と入力しています。
 
     ```{image} assets/2023-03-02-18-11-37.png
-    :width: 300px
+    :width: 500px
     :align: center
     ```
 
 3. 何等かの文字を入力した時点でXAEにインストールされたライブラリが一覧されます。ここから`Placeholder`に関連付けるライブラリを選択します。
 
     ```{image} assets/2023-03-02-18-05-38.png
-    :width: 300px
+    :width: 500px
     :align: center
     ```
 4. 追加されたライブラリが、`Tc3-Module`ではなく、指定した名前`Tc3-Module-fixed-version`で追加された事がわかります。
 
     ```{image} assets/2023-03-02-18-25-31.png
-    :width: 500px
+    :width: 800px
     :align: center
     ```
 
 上記の手順で作成されたユーザライブラリを追加したPLCプロジェクトのライブラリ構成は、{numref}`another_placeholder_for_user_library`の通りとなります。`Tc3_Module`ライブラリが複数使われていますが、"IPC Performance to influxDB via TF6420" のユーザライブラリで使われている`Tc3_Mdoules`ライブラリだけは、バージョンが固定された状態となっています。
 
 ```{figure} assets/2023-03-02-18-37-55.png
-:width: 500px
+:width: 700px
 :align: center
 :name: another_placeholder_for_user_library
 
@@ -194,7 +194,7 @@ Default namespaceには、ライブラリで使用されるさまざまなリソ
 
 
 ```{figure} assets/2023-03-02-17-31-59.png
-:width: 300px
+:width: 400px
 :align: center
 :name: released_flag_warning
 
@@ -285,7 +285,7 @@ Released チェックのPLCプロジェクトに変更を与えようとした�
     5. OKボタンを押します。 
 
     ```{figure} assets/2023-02-28-11-41-44.png
-    :width: 600px
+    :width: 800px
     :align: center
     :name: add_category_procedure
 
@@ -295,14 +295,14 @@ Released チェックのPLCプロジェクトに変更を与えようとした�
 5. 選択されたカテゴリが一覧されたのを確認し、OKボタンを押してください。
 
     ```{image} assets/2023-02-28-11-43-30.png
-    :width: 400px
+    :width: 500px
     :align: center
     ```
 
 6. {ref}`install_library`節に示す手順を実施する際にライブラリをインストールすると、{numref}`install_library_with_category`図の通りのカテゴリに一覧された状態で配置されます。複数個所に一覧されますが実態は同じです。
 
     ```{figure} assets/2023-02-28-11-47-23.png
-    :width: 450px
+    :width: 500px
     :align: center
     :name: install_library_with_category
 
