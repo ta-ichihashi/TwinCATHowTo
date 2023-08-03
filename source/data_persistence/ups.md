@@ -10,16 +10,22 @@ IPCに搭載可能なUPSには次の2タイプがあり、それぞれ実装方�
 
 [1 second UPS](https://infosys.beckhoff.com/content/1033/tcplclib_tc2_sups/index.html?id=2087920595982685749)
 
-    : 大容量キャパシタによる組み込み電源保持機構です。専用のファンクションブロック`FB_S_UPS_****`が用意され、RUN中は常時実行し続けることで、選択したモードにより不意の停電発生時には自動的にPERSISTENT変数の値をファイルへ永続化することができます。またPERSISTENTデータへの保存が完了したあと、`FB_NT_QuickShutdown` によりWindowsのシャットダウン処理を行う事ができます。
+    : CXと呼ばれる組み込み型IPCに搭載される大容量キャパシタによる組み込み電源保持機構です。cFastメモリという特別な書き込み速度の速いストレージに変数を保持し、多くの機種でその最大容量は1Mbyteとなります。専用のファンクションブロック`FB_S_UPS_****`が用意され、RUN中は常時実行し続けることで、選択したモードにより不意の停電発生時には自動的にPERSISTENT変数の値をファイルへ永続化することができます。またPERSISTENTデータへの保存が完了したあと、`FB_NT_QuickShutdown` によりWindowsのシャットダウン処理を行う事ができます。
 
 [UPS Software Components（汎用UPS）](https://infosys.beckhoff.com/content/1033/tcupsshellext/html/overview.htm?id=1892807518135003723)
 
-    : IPCのWindows側に接続したUPSをマネジメントするソフトウェアです。UPSの残量やバッテリのみの駆動時間により自動的にWindowsシャットダウンを実施するところまでマネジメントしてくれるソフトウェアとなっています。PLCでは`FB_GetUPSStatus`によりUPSの稼働状態がモニタリングできますので、これにより `WritePersistentData` ファンクションブロックを実行し、PERSISTENT変数を永続化します。その後は、マネジメントソフトが自動的にシャットダウン処理まで行いますので、PLCからのシャットダウン処理は必要ありません。
+    : 1 second UPSの搭載が無いIPCに電源保護を行う場合は外付けUPSの設置が必要です。UPS Software Componentsは、この汎用UPSをWindowsでマネジメントするユーティリティソフトウェアです。UPSの残量やバッテリのみの駆動時間により自動的にWindowsシャットダウンを実施するところまで管理してくれるソフトウェアとなっています。PLCでは`FB_GetUPSStatus`によりUPSの稼働状態がモニタリングできますので、これにより `WritePersistentData` ファンクションブロックを実行し、PERSISTENT変数を永続化します。その後は、マネジメントソフトが自動的にシャットダウン処理まで行いますので、PLCからのシャットダウン処理は必要ありません。
+    対応しているUPSはベッコフ製、APC製などがあります。ベッコフ製の場合はIPCとの間で電源線と通信線を共用するOCT（One Cable Technology）が採用されていますので、別途USBやシリアル通信ケーブルの設置が不要になります。次の通り容量別にラインナップされたコンパクトなUPSをご検討ください。
+        * [CU8110-0060（0.3Wh）](https://www.beckhoff.com/ja-jp/products/ipc/embedded-pcs/accessories/cu8110-0060.html) 
+        * [CU8110-0120（0.9Wh）](https://www.beckhoff.com/ja-jp/products/ipc/embedded-pcs/accessories/cu8110-0120.html?)
+        * [CU8130-0120（15Wh）](https://www.beckhoff.com/ja-jp/products/ipc/embedded-pcs/accessories/cu8130-0120.html)
+        * [CU8130-0240（30Wh）](https://www.beckhoff.com/ja-jp/products/ipc/embedded-pcs/accessories/cu8130-0240.html)
+    
+
+
 
 ```{note}
-参考サイト一覧
-
-* [YouTube](https://infosys.beckhoff.com/content/1033/tcupsshellext/html/overview.htm?id=1892807518135003723)
+参考InfoSysサイト一覧
 
 * [1 second UPS](https://infosys.beckhoff.com/content/1033/tcplclib_tc2_sups/index.html?id=2087920595982685749)
 
@@ -74,15 +80,14 @@ fbShutdown(fbUPS := fbUPS);
 
 ### 必要ライブラリ
 
-* 1 second UPS向けライブラリ
+* UPS向けライブラリ
 
-    各種`FB_S_UPS****`はTc2_SUPSに含まれます。
-    Libraryから`Tc2_SUPS`を追加します。
+    1 second UPSライブラリ `FB_S_UPS****` は`Tc2_SUPS`に含まれます。また、`FB_GetUpsStatus` は `Tc2_IoFunctions` に含まれます。
+
     ![](assets/2023-07-31-11-52-47.png){align=center width=500px}
 
-* UPS Software Components向けライブラリ
+* `FB_WritePersistentData`は、`Tc2_Utilities` に含まれます。
 
-    `FB_GetUpsStatus` はTc2_IoFunctions に含まれます。
     ![](assets/2023-08-02-14-21-23.png){align=center width=500px}
 
 
@@ -214,7 +219,7 @@ END_VAR
 PROPERTY UPSState : E_UPSState
 
 GET:
-    eUPSState := UPSState;
+    UPSState := eUPSState;
 SET:
 
 ```
@@ -269,5 +274,5 @@ METHOD shutdown : BOOL
 ```
 
 ```{note}
-実際のBekchoff製UPSや1second UPSについては、実機にて動作確認を行った上での実装サンプルコードを掲載予定です。現時点ではSTUBまででご了承ください。
+実際のBeckhoff製UPSや1second UPSについては、実機にて動作確認を行った上での実装サンプルコードを掲載予定です。現時点ではSTUBまででご了承ください。
 ```
