@@ -43,7 +43,43 @@ UPSのタイプ別PERSISTENT変数データの永続化フロー
 
 ## PLCプログラム実装
 
-以上に示したパターンのUPSに対応するため、{numref}`UPS_persistent_class` の制御モジュールによりUPSの制御とPERSISTENT変数の永続化を管理します。1 second UPSは、多様なドライバが個々に存在し、インターフェース化されていませんので、`FB_SUPS_BASE` という基底クラスである程度共通制御プログラムを実装し、ドライバに応じたサブクラスを作成します。UPS Software componentsで制御しているシステムについては、`FB_GenericUPS` を実装して制御を行います。
+次の機能仕様で全てのパターンのUPSに対応したモジュールを作成します。
+
+* UPSに対する電源供給を失うとPERSISTENT属性のデータを保存し、再起動時にそのデータを再現するユースケース
+
+    UPS一次電源を失った瞬間は必ずその時点のでPERSISTENTデータを保存する。その後はUPSのタイプにより次の通りふるまう。
+
+    * 1 second UPS
+
+        原則として短時間での保持を前提とするUPSシステムであるため、初回の保存時のみで以後は保存動作を行わない。
+
+    * 汎用UPS
+
+        `shutdown_delay` プロパティ設定時間周期毎にPERSISTENTデータの保持を行う。
+
+* UPSに対する電源供給を失った後、指定時間以内に電源が復活すると運転を継続できるユースケース
+
+    * 1 second UPS
+
+        `shutdown_delay` プロパティ設定時間以内ではシャットダウンを行わず継続運転を可能とする。ただしバッテリーが劣化して継続できない場合は除く。
+
+    * 汎用UPS
+
+        WindowsのUPS Software Componentにて設定した時間、またはUPSのCritical alarm発生するまでは継続運転を可能とする。
+
+* UPSに対する電源供給を失って初回のPERSISTENTデータ保持後、設定した時間内は稼働を継続し、その後にシャットダウンを開始するユースケース
+
+    * 1 second UPS
+
+        `shutdown_delay` プロパティ設定時間継続してUPSに対する電源供給が失われた場合は、ただちにシャットダウンを開始する。
+
+    * 汎用PC
+
+        WindowsのUPS Software Componentにて設定した時間、またはUPSのCritical alarm発生すると、UPS Software ComponentによってIPCのシャットダウンを開始する。
+
+### クラスモジュール設計
+
+{numref}`UPS_persistent_class` のモジュール構成でUPSの制御とPERSISTENT変数の永続化を管理します。1 second UPSは、多様なドライバが個々に存在し、インターフェース化されていませんので、`FB_SUPS_BASE` という基底クラスである程度共通制御プログラムを実装し、ドライバに応じたサブクラスを作成します。UPS Software componentsで制御しているシステムについては、`FB_GenericUPS` を実装して制御を行います。
 
 また、実際のUPSが無い場合に挙動を確認するための、`FB_UPS_STUB` を用意しています。
 
@@ -75,6 +111,7 @@ VAR
 
 END_VAR
 
+fbUPS.shutdown_delay := T#3S;
 fbShutdown(fbUPS := fbUPS);
 ```
 
@@ -134,17 +171,31 @@ END_TYPE
 Interface `iUPS` を追加します。
 
 ```{csv-table}
-:header: 種別, 名称, 説明, 引数, 戻り値
+:header: 種別, 名称, 説明, 引数, 初期値 ,戻り値
 
-プロパティ, UPSState, UPSの状態を取得する, なし ,E_UPSState
-メソッド, watch_status, UPSの状態を更新する, なし ,BOOL
-メソッド, persist_data, 永続化変数を保存します, なし ,BOOL
-メソッド, shutdown, IPCのシャットダウン処理を行います, なし ,BOOL
+プロパティ, UPSState, GETのみ。UPSの状態を取得する, なし,E_UPSState.init ,E_UPSState
+プロパティ, shutdown_delay, 一次電源を失ってからシャットダウンを開始するまでの遅延時間, なし , T#1S ,TIME
+メソッド, watch_status, UPSの状態を更新する, なし , なし ,BOOL
+メソッド, persist_data, 永続化変数を保存します, なし , なし ,BOOL
+メソッド, shutdown, IPCのシャットダウン処理を行います, なし , なし ,BOOL
 ```
 
-### シャットダウン制御ファンクションブロックの実装
+### FB_ShutDownファンクションブロック
 
-シャットダウンシーケンスは、インターフェースを実装したUPSの状態に応じてファンクションブロックのメソッドを実行します。
+インターフェースを実装したUPSオブジェクトを使ってUPSの状態を監視し、シャットダウン制御を行います。
+シャットダウン制御には次の状態マシンを使います。
+
+```{csv-table}
+:header: 順序, 状態, 説明
+:widths: 1,2,7
+
+1, E_ShutdownMode.init, UPSに1次電源が供給されている初期状態。
+2, E_ShutdownMode.persistent_data, UPSのバッテリのみで操作する状態で、保持変数を保存し、1次電源の復活を待っている状態。`iUPS.persist_data()`メソッドを実行する。
+3, E_ShutdownMode.shutting_down, UPSのバッテリ残量が継続運転できないエラーを発した、または、設定したバッテリ駆動時間を超過したことによりシャットダウンを実行する状態。`iUPS.shutdown()`メソッドを実行する。
+
+```
+
+12行目の`iUPS.watch_tstaus()`が毎サイクル実行される事により、実装されたUPSオブジェクトは`E_UPSState`の状態を更新します。この状態によりシャットダウン状態マシンを制御します。
 
 ```{code-block} pascal
 :caption: シャットダウンシーケンス制御FB
@@ -153,16 +204,16 @@ Interface `iUPS` を追加します。
 
 FUNCTION_BLOCK FB_ShutDown
 VAR_INPUT
-	fbUPS			:iUPS;				// UPS interface	
+	fbUPS			:iUPS; // UPS object	
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	eShutdownMode	:E_ShutdownMode;	// State machine when shutting down
+	eShutdownMode	:E_ShutdownMode; // State machine when shutting down
 END_VAR
 
 // watch power fail
-fbUPS.watch_status();
+fbUPS.watch_tstaus();
 
 CASE fbUPS.UPSState OF 
 	E_UPSState.on_battery:
@@ -186,93 +237,4 @@ END_CASE
 
 ### UPS制御ファンクションブロックの実装
 
-様々なUPSタイプに応じてファンクションブロックを実装します。
-
-#### FB_UPS_STUBの実装例
-
-変数定義部
-
-```{code-block} pascal
-:caption: 変数定義部
-:name: fb_ups_declearation
-:linenos:
-
-FUNCTION_BLOCK FB_UPS_STUB IMPLEMENTS iUPS
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
-VAR
-    eUPSState :E_UPSState;
-    test_timer :Tc2_Standard.TON;
-    shutdown_timer : Tc2_Standard.TON;
-END_VAR
-```
-
-
-```{code-block} pascal
-:caption: UPSStateプロパティの実装
-:name: fb_ups_state_property
-:linenos:
-
-{warning 'add property implementation'}
-PROPERTY UPSState : E_UPSState
-
-GET:
-    UPSState := eUPSState;
-SET:
-
-```
-
-```{code-block} pascal
-:caption: watch_statusメソッドの実装
-:name: fb_ups_watch_status
-:linenos:
-
-{warning 'add method implementation '}
-METHOD watch_status : BOOL
-
-// 15秒経つごとにUPS電源ONを確認、一次電源断、バッテリ低下からのシャットダウンへの状態遷移を行う。
-test_timer(IN := NOT test_timer.Q, PT := T#15S);
-IF test_timer.Q THEN
-    CASE eUPSState OF
-        E_UPSState.init:
-            eUPSState := E_UPSState.on_power;
-        E_UPSState.on_power:
-            eUPSState := E_UPSState.on_battery;
-        E_UPSState.critical_error:
-            eUPSState := E_UPSState.init;
-    END_CASE
-END_IF
-```
-```{code-block} pascal
-:caption: persist_dataメソッドの実装
-:name: fb_ups_persist_data
-:linenos:
-
-{warning 'add method implementation '}
-METHOD persist_data : BOOL
-
-// 一次電源断から5秒後にUPS容量低下またはタイムアップによるシャットダウン状態に移行するだけ。実際は、GenericUPSの場合は、WritePersistentDataを数秒おきに実施するとよい。
-shutdown_timer(IN:=TRUE, PT:=T#5S);
-
-IF shutdown_timer.Q THEN
-	eUPSState := E_UPSState.critical_error;
-	shutdown_timer(IN:=FALSE);
-END_IF
-```
-
-```{code-block} pascal
-:caption: shutdownメソッドの実装
-:name: fb_ups_shutdown
-:linenos:
-
-{warning 'add method implementation '}
-METHOD shutdown : BOOL
-
-// stubやGenericUPSとしては処理未定義。1 second UPSの場合のみ、WritePersistentDataが完了したら、FB_NT_QuickShutdownを行う。
-```
-
-```{note}
-実際のBeckhoff製UPSや1second UPSについては、実機にて動作確認を行った上での実装サンプルコードを掲載予定です。現時点ではSTUBまででご了承ください。
-```
+次のページよりタイプ別UPSプログラムを紹介します。
