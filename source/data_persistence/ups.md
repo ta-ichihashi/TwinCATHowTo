@@ -77,6 +77,13 @@ UPSのタイプ別PERSISTENT変数データの永続化フロー
 
         WindowsのUPS Software Componentにて設定した時間、またはUPSのCritical alarm発生すると、UPS Software ComponentによってIPCのシャットダウンを開始する。
 
+### サンプルコードプロジェクトの置き場所
+
+本フレームワークのサンプルコードは以下のgithubリポジトリから取得いただけます。
+
+[https://github.com/Beckhoff-JP/UPSPersistentData](https://github.com/Beckhoff-JP/UPSPersistentData)
+
+
 ### クラスモジュール設計
 
 {numref}`UPS_persistent_class` のモジュール構成でUPSの制御とPERSISTENT変数の永続化を管理します。1 second UPSは、多様なドライバが個々に存在し、インターフェース化されていませんので、`FB_SUPS_BASE` という基底クラスである程度共通制御プログラムを実装し、ドライバに応じたサブクラスを作成します。UPS Software componentsで制御しているシステムについては、`FB_GenericUPS` を実装して制御を行います。
