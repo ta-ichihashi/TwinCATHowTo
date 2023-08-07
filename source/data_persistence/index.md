@@ -42,6 +42,7 @@ RESET ORIGIN操作, 初期化される, 初期化される, 初期化される
 :hidden:
 
 ups
+sups_cx51x0
 ```
 
 ```{youtube} aJ8DqD4CRug
