@@ -10,7 +10,7 @@ TF6420はXARが稼働しているIPC上にインストールしてください�
 1. 以下のサイトからTF6420をダウンロードし、ターゲットIPCに TF6420 をインストールしてください。
 
     TF6420のダウンロード先
-    : [https://www.beckhoff.com/ja-jp/products/automation/twincat/tfxxxx-twincat-3-functions/tf6xxx-tc3-connectivity/tf6420.html](https://www.beckhoff.com/ja-jp/products/automation/twincat/tfxxxx-twincat-3-functions/tf6xxx-tc3-connectivity/tf6420.html)
+    : [https://www.beckhoff.com/ja-jp/products/automation/twincat/tfxxxx-twincat-3-functions/tf6xxx-connectivity/tf6420.html](https://www.beckhoff.com/ja-jp/products/automation/twincat/tfxxxx-twincat-3-functions/tf6xxx-connectivity/tf6420.html)
 
 
 
