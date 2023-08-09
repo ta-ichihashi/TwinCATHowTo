@@ -13,6 +13,20 @@ PLCプロジェクトにおいて永続化したいデータは、`PERSISTENT` �
 
 そこで、バリエーションを持つ可能性のある初期値を設定する仕組みとしてTwinCATにはRecipe機能があります。この使い方をついてご紹介します。
 
+## TwinCATにおけるRecipeのアーキテクチャ
+
+レシピに関する操作、および、データの構造は{numref}`figure_recipe_architecture`のとおりです。初回にTwinCATの開発環境でRecipe Managerを作成します。そこに、一定の目的毎にグループ化された管理対象の変数セットを定義した`Recipe definition`を作成し、その変数セットの値のバリエーションパターンを`Recipe`として作成します。このスキーマに従った値のデータは、Recipe毎に独立したファイルとしてターゲットIPCのWindows上のファイルシステムに作成されます。
+
+また、このレシピファイルはTwinCAT XAEを通して保存、読み込みが可能となっています。
+
+```{figure-md} figure_recipe_architecture
+![](./assets/recipe_architecture.png){align=center}
+
+レシピアーキテクチャ
+```
+
+本章では、これらの操作方法について説明します。
+
 ```{toctree}
 :hidden:
 
