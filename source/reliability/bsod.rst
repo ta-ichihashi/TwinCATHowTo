@@ -3,13 +3,13 @@ BSoD対策
 
 BSoDが発生した際には、下記の3つのレベルに応じたメモリダンプファイルへ出力することが可能です。原因調査にはこれらのファイルが必要となります。
 
-:最小ダンプ: 
+:最小ダンプ:
     2MByte程度のページングファイルを用いて意図せずWindowsが終了した際のログを記録します。
 
-:自動ダンプ: 
+:自動ダンプ:
     150～2GByteのページングファイルを用いて、意図せずWindowsが終了した際のログを記録します。カーネルプログラムの問題追跡に役立ちます。ページングするメモリサイズによっては完全には記録されなくなります。
 
-:完全ダンプ: 
+:完全ダンプ:
     カーネルプログラムだけではなく、ユーザプログラムの異常も記録します。全物理メモリファイルに加えて400Mbyteのページングファイルを用意する必要があります。
 
 
@@ -54,7 +54,7 @@ BSoDが発生した際には、下記の3つのレベルに応じたメモリダ
       - .. image:: image/new_dedicated_dump_file.png
             :align: center
             :scale: 50%
-    * - ダブルクリックして値を保存先に設定  
+    * - ダブルクリックして値を保存先に設定
          例とえば、Dドライブが外付けUSBストレージでその直下に ``dedicateddumpfile.sys`` という名前で仮想メモリファイルを作る場合は右図の通り設定する、
       - .. image:: image/path_dedicated_dump_file.png
             :align: center
@@ -68,22 +68,22 @@ BSoDが発生した際には、下記の3つのレベルに応じたメモリダ
 
 1. ``DWORD (32bit) Value`` 型のエントリを新規作成
 
-  .. image:: image/crash_control_new_dword.png
+   .. image:: image/crash_control_new_dword.png
      :align: center
      :scale: 50%
 
 2. エントリー名を ``DumpFileSize`` に設定
 
-  .. image:: image/new_dump_file_size.png
+   .. image:: image/new_dump_file_size.png
      :align: center
      :scale: 50%
 
-3. ダブルクリックして値を設定  
+3. ダブルクリックして値を設定
 
-  値の基数を10進数 ``Decimal`` に設定し、メモリ容量 + 400 MByteの整数値をMByteの単位で設定する。計算方法としては メインメモリが :math:`M` GByte とすると :math:`1024M + 400` となる。
-  例えば 8 Gbyteの場合は右図の通り設定する。
+   値の基数を10進数 ``Decimal`` に設定し、メモリ容量 + 400 MByteの整数値をMByteの単位で設定する。計算方法としては メインメモリが :math:`M` GByte とすると :math:`1024M + 400` となる。
+   例えば 8 Gbyteの場合は右図の通り設定する。
 
-  .. image:: image/value_dump_file_size.png
+   .. image:: image/value_dump_file_size.png
      :align: center
      :scale: 50%
 
@@ -93,37 +93,32 @@ BSoDが発生した際には、下記の3つのレベルに応じたメモリダ
 
 1. スタートメニューから ``Search`` を選択
 
-  .. image:: image/start-search.png
+   .. image:: image/start-search.png
     :align: center
     :scale: 80%
 
 2. ``SystemPropertiesAdvanced`` と入力してEnterキーを押します。
 
-  .. image:: image/systempropertiesadvanced.png
+   .. image:: image/systempropertiesadvanced.png
     :align: center
     :scale: 60%
 
 3. ``Advanced`` タブが開いている事を確認し、 ``Startup and Recovery`` 内の ``Settings...`` ボタンをクリックします。
 
-  .. image:: image/startup_and_recovery.png
+   .. image:: image/startup_and_recovery.png
     :align: center
     :scale: 80%
 
 4. 次の3点を変更します。
 
-  Write debugging information
-  
-    Automatic memory dump > Complete memory dump
+   .. csv-table::
+    :header: 項目, 設定方法
 
-  Dump file
+    Write debugging information, Automatic memory dump > Complete memory dump
+    Dump file, 外付けストレージ内に保存するダンプファイル名
+    Disable automatic deletion of memory dumps when disk space is low,OFF > ON
 
-    外付けストレージ内に保存するダンプファイル名
-
-  Disable automatic deletion of memory dumps when disk space is low
-  
-    OFF > ON
-
- .. image:: image/complete_memory_dump.png
+   .. image:: image/complete_memory_dump.png
     :align: center
     :scale: 60%
 
@@ -154,12 +149,12 @@ https://learn.microsoft.com/ja-JP/troubleshoot/windows-client/performance/genera
    https://learn.microsoft.com/ja-jp/windows-hardware/drivers/debugger/debugger-download-tools
 
 2. インストールが終了したら管理者権限で WinDbg を起動します。
-   
+
 3. シンボルサーバの設定
 
-  最初に、ファイルメニューから ``Symbol file path ...`` を選択し、現れたウィンドウに次の文字をコピーペーストしてOKボタンを押します。
+   最初に、ファイルメニューから ``Symbol file path ...`` を選択し、現れたウィンドウに次の文字をコピーペーストしてOKボタンを押します。
 
-  .. code-block:: powershell
+   .. code-block:: powershell
 
     Srv*c:\symbols*\\mainserver\symbols*https://msdl.microsoft.com/download/symbols
 
@@ -169,7 +164,7 @@ https://learn.microsoft.com/ja-JP/troubleshoot/windows-client/performance/genera
 
 5. シンボル解析が終了すると、下記の通り現れます。最後の ``!analyze -v`` の部分のリンクをクリックする事で、ダンプファイルの解析を始めます。
 
-  .. code-block:: powershell
+   .. code-block:: powershell
 
     Loading User Symbols
     .............................
@@ -180,25 +175,25 @@ https://learn.microsoft.com/ja-JP/troubleshoot/windows-client/performance/genera
 6. 解析が終了するとレポートが出力されます。下記に抜粋した部分の最下部にある様に、 ``PROCESS_NAME`` を記載されている項目に、問題のあったプログラムが明示されます。
 
    .. code-block:: powershell
-    
-    FILE_IN_CAB:  MEMORY.DMP
 
-    BUGCHECK_CODE:  d1
+      FILE_IN_CAB:  MEMORY.DMP
 
-    BUGCHECK_P1: ffffdb88c69df720
+      BUGCHECK_CODE:  d1
 
-    BUGCHECK_P2: 2
+      BUGCHECK_P1: ffffdb88c69df720
 
-    BUGCHECK_P3: 0
+      BUGCHECK_P2: 2
 
-    BUGCHECK_P4: fffff801995b12d0
+      BUGCHECK_P3: 0
 
-    READ_ADDRESS:  ffffdb88c69df720 Paged pool
+      BUGCHECK_P4: fffff801995b12d0
 
-    BLACKBOXBSD: 1 (!blackboxbsd)
+      READ_ADDRESS:  ffffdb88c69df720 Paged pool
 
-
-    BLACKBOXPNP: 1 (!blackboxpnp)
+      BLACKBOXBSD: 1 (!blackboxbsd)
 
 
-    PROCESS_NAME:  notmyfault64.exe
+      BLACKBOXPNP: 1 (!blackboxpnp)
+
+
+      PROCESS_NAME:  notmyfault64.exe
