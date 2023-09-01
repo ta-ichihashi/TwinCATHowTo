@@ -41,6 +41,15 @@ TwinCATのシステム、および、プロジェクト固有の設定変更を�
 
 ![](https://infosys.beckhoff.com/content/1033/tc3_security_management/Images/png/3985772555__Web.png){align=center width=500px}
 
+```{admonition} 未ログインのユーザに権限を与えるには
+Guestユーザは、未ログイン状態を示すシステムユーザです。このユーザに権限を与えるには、`GRP_Guests`に権限を与えてください。
+
+例えば、TwinCATプロジェクトをただ開くだけであれば、未ログインユーザにも許可したい場合は、`Decrypt Project Files` のRights項目に、`GRP_Guests` を加えます。
+
+![](assets/2023-09-01-17-38-53.png){align=center}
+
+```
+
 ### オブジェクトユニット（POU）へのアクセス権限
 
 プログラムやファンクションブロックなど、POUの権限を制御するには、次の2段階での定義が必要となります。
