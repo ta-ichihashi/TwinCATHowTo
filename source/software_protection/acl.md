@@ -41,14 +41,6 @@ TwinCATのシステム、および、プロジェクト固有の設定変更を�
 
 ![](https://infosys.beckhoff.com/content/1033/tc3_security_management/Images/png/3985772555__Web.png){align=center width=500px}
 
-```{admonition} 未ログインのユーザに権限を与えるには
-Guestユーザは、未ログイン状態を示すシステムユーザです。このユーザに権限を与えるには、`GRP_Guests`に権限を与えてください。
-
-例えば、TwinCATプロジェクトをただ開くだけであれば、未ログインユーザにも許可したい場合は、`Decrypt Project Files` のRights項目に、`GRP_Guests` を加えます。
-
-![](assets/2023-09-01-17-38-53.png){align=center}
-
-```
 
 ### オブジェクトユニット（POU）へのアクセス権限
 
@@ -84,3 +76,34 @@ Guestユーザは、未ログイン状態を示すシステムユーザです。
     最初にプロジェクト単位で暗号化、署名、およびObject Protection Levelを設定すると、子要素全てに継承されますが、特定のPOUを選択して同様の設定を行うことで、個別のObject Protection Level等を割り当てることができます。
 
     ![](https://infosys.beckhoff.com/content/1033/tc3_security_management/Images/png/1917401739__Web.png){align=center width=750px}
+
+
+
+```{admonition} 未ログインのユーザに権限を与えるには
+Guestユーザは、未ログイン状態を示すシステムユーザです。このユーザに権限を与えるには、`GRP_Guests`に権限を与えてください。
+
+例えば、TwinCATプロジェクトをただ開くだけであれば、未ログインユーザにも許可したい場合は、`Decrypt Project Files` のRights項目に、`GRP_Guests` を加えます。
+
+![](assets/2023-09-01-17-38-53.png){align=center}
+
+また、Object Protectionに対しても一工夫必要です。PLCプロジェクトを開くには、最低でもViewとModifyの権限が与えられている必要があります。よって、次の通り設定します。
+
+1. Guest権限にもViewとModifyが与えられた`public`の権限レベルを作成する。
+
+    ![](assets/2023-09-04-10-27-11.png){align=center}
+
+2. 既存の`OPL_OEMDev`の権限レベルから`GRP_Guests`を取り除く。
+
+    ![](assets/2023-09-04-10-28-45.png){align=center}
+
+3. PLCのトップレベルプロジェクトには、`public`権限レベルを設定する。
+
+    ![](assets/2023-09-04-10-29-29.png){align=center}
+
+4. 個別のPOU等に対してInheritedを解除し、`OPL_OEMDev`を設定する。
+
+    ![](assets/2023-09-04-10-30-27.png){align=center}
+
+以上により、Guest権限でも最低限PLCプロジェクトを開く事はできるが、個別のPOUにアクセスするにはGRP_OEMDev, GRP_Administratorsなどのグループユーザにログインしなければならない設定となります。
+
+```
