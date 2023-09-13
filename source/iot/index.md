@@ -8,7 +8,7 @@
 
 overview.md
 ../scope_view/index.rst
-../influxdb/index.md
+../database/index.md
 ../tf6311/index.md
 ../el_ethernet/index.md
 ```
