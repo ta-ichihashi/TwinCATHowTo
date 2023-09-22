@@ -3,7 +3,7 @@
 %   You can adapt this file completely to your liking, but it should at least
 %   contain the root `toctree` directive.
 
-# XAE無しにプロジェクトを展開する
+# XAE無しデプロイ
 
 
 このドキュメントは、TwinCAT3のPLCプロジェクト、およびC/C++プロジェクトの実行ファイルをTwinCAT3開発環境(以下、XAE)無しに展開する方法について説明します。開発用のモデルマシンにて作成したプログラムイメージは、この手順に従って他の同一ハードウェア構成のマシンへ展開する事ができます。

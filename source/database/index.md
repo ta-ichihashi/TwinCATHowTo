@@ -17,7 +17,7 @@ NoSQLデータベース
         : InfluxDB に着目し、制御周期（50 $\mu s$ ～100$ms$）の高密度サイクルの時系列データを記録させる方法について説明します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ../sql/index.md
 ../influxdb/index.md

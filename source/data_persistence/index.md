@@ -1,5 +1,5 @@
 (chapter_data_persistance)=
-# データの永続化と管理
+# データ永続化
 
 TwinCATには、データを永続化する方法にPERSISTENT変数と、RETAIN変数の二つが用意されています。それぞれ次のとおり機能します。
 
