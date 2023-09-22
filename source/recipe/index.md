@@ -3,7 +3,7 @@
 %   You can adapt this file completely to your liking, but it should at least
 %   contain the root `toctree` directive.
 
-# レシピ機能による外部からの値設定
+# レシピ機能
 
 PLCプロジェクトにおいて永続化したいデータは、`PERSISTENT` 属性の変数定義を行うとシャットダウンするたびにファイルに保存され、再起動時にその値が復活される仕組みが行われます。この機能については、{numref}`chapter_data_persistance` をご参照ください。
 

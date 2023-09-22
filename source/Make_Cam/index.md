@@ -3,7 +3,7 @@ aliases:
 created: 2023-06-12
 updated: 2023-06-20
 ---
-## Camを作成する
+# 電子カム
 
 TwinCAT XAEのCam Design Toolを使用してCamを作成することができます。
 
@@ -14,6 +14,8 @@ TwinCAT XAEのCam Design Toolを使用してCamを作成することができま
 ```{warning}
 TE1510のライセンスがない場合、新規作成は可能ですが、編集することができませんのでご注意ください。
 ```
+
+## 前準備
 
 ### NC Task を追加する
 

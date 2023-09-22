@@ -19,7 +19,6 @@
     * 自動デプロイシステム
 
 ```{toctree}
-:maxdepth: 3
 :caption: 目次
 
 ../version_control/index.md

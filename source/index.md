@@ -19,12 +19,15 @@
     [https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf](https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf)
 
 ```{toctree}
-:maxdepth: 4
-:numbered: 3
+:maxdepth: 2
+:numbered: 2
 :caption: 目次
 
 basic.md
-develop.md
+develop_environment.md
+develop_security.md
+develop_motion.md
+develop_information.md
 operation.md
 faq.md
 ```
