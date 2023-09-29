@@ -7,7 +7,7 @@ Beckhoffのモーション機能は主要な特徴の一つです。一般的に
 このように、モーション制御部とサーボドライブ間は高速周期、且つ、各軸を同期して制御させる必要があるため、一般的なモーションシステムでは、モーション以外のI/O制御とは異なる、高い同期性能を持った専用のフィールドバスが使われることが多いです。
 
 ```{figure-md} figure_motion_system_role
-![](assets/2023-06-23-09-02-15.png){width=500px align=center}
+![](motion/assets/2023-06-23-09-02-15.png){width=500px align=center}
 
 モーションシステム例
 ```
@@ -17,13 +17,13 @@ Beckhoffのモーション機能は主要な特徴の一つです。一般的に
 つまり、多軸の同期モーション制御・安全回路・一般I/O制御をPCと一本のEthernetケーブルだけで実現できる極めてシンプルな構成を実現できるのです。
 
 ```{figure-md} figure_legacy_motion_system
-![](assets/2023-06-23-09-00-04.png){align=center width=700px}
+![](motion/assets/2023-06-23-09-00-04.png){align=center width=700px}
 
 従来のモーション制御システム例
 ```
 
 ```{figure-md} figure_twincat_motion_system
-![](assets/2023-06-23-09-01-09.png){align=center width=700px}
+![](motion/assets/2023-06-23-09-01-09.png){align=center width=700px}
 
 TwinCATによるPCベースモーション制御システム
 ```
@@ -52,7 +52,7 @@ TwinCATには、C++による制御やMatlab / Simlink連携をご利用される
 * TC 1210 TwinCAT 3 PLC/C++
 * TC 1220 TwinCAT 3 PLC/C++/Matlab
 
-![](assets/2023-07-08-11-12-51.png){align=center}
+![](motion/assets/2023-07-08-11-12-51.png){align=center}
 
 ```
 
