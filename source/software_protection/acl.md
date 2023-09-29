@@ -2,9 +2,9 @@
 
 ここでは、実際にユーザデータベースに対して、ユーザ（User）、および役割（Group）を設定し、役割毎に紐づいたオブジェクト保護、および、システム・プロジェクト権限を設定する方法を説明します。
 
-まずは、{numref}`protection_menu` メニューを選択し、Software Protectionウィンドウを開いてください。
+まずは、{numref}`protection_menu2` メニューを選択し、Software Protectionウィンドウを開いてください。
 
-:::{figure-md} protection_menu
+:::{figure-md} protection_menu2
 ![](assets/2023-05-15-13-38-59.png){align=center width=350px}
 
 TwinCATメニューのSoftware Protection

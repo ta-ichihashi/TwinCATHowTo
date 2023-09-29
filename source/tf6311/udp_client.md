@@ -125,6 +125,17 @@ DUTs以下に次の構造体を定義します。
    END_VAR
    ```
 
+* FB_UdpReceiverのプログラム部の変更
+
+   下記の一行を追加します。
+   
+   ```{code-block} pascal
+   IF ipUdp <> 0 THEN
+      receive_complete := FALSE;   // 追加
+      ipUdp.CheckReceived();
+   END_IF
+   ```
+
 * ReceiveDataメソッドの変更
 
    変数宣言部は変更無しで、プログラム部を以下のとおり変更する。
@@ -186,6 +197,7 @@ DUTs以下に次の構造体を定義します。
    ```{code-block} pascal
    :caption: ListenPort プロパティ
    nUdpPort := ListenPort;
+   FB_reinit();
    ```
 
 ### MAINプログラムの実装
