@@ -196,8 +196,11 @@ DUTs以下に次の構造体を定義します。
 
    ```{code-block} pascal
    :caption: ListenPort プロパティ
-   nUdpPort := ListenPort;
-   FB_reinit();
+   // Close default port and open renew port.
+   IF SUCCEEDED(ipUdp.UnregisterReceiver(nUdpPort)) THEN
+      nUdpPort := ListenPort;
+      FB_reinit();
+   END_IF
    ```
 
 ### MAINプログラムの実装
@@ -215,13 +218,18 @@ VAR
    target_host		: ARRAY [0..3] OF BYTE := [2, 2, 168, 192]; // IP Address of server
    target_port		: UINT := 9998;								// Port number of server listening
    cycle_count		: UINT;
+   initialize     : BOOL;
 END_VAR
 ```
 
 ```{code-block} pascal
 :caption: MAINプログラム部
 // Set listen port
-fbUdp1.ListenPort := 9999;
+IF NOT initialize THEN
+	fbUdp1.ListenPort := 9999;
+	initialize := TRUE;
+END_IF
+
 
 // Prepare send data
 send_data.command := 'SCOM';
