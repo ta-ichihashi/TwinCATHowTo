@@ -83,7 +83,7 @@ END_VAR
 fbLocalTime();
 fbGetTimeZoneInformation();
 fbTzSpecificLocalTimeToSystemTime(in := fbLocalTime.systemTime, tzInfo := fbGetTimeZoneInformation.tzInfo);
-sPrintf(sFormat := '%04d-%02d-%02d %02d:%02d:%02d.%03d',
+sPrintf(sFormat := '%.4d-%.2d-%.2d %.2d:%.2d:%.2d.%.3d',
         arg1 := F_WORD(fbTzSpecificLocalTimeToSystemTime.out.wYear),
         arg2 := F_WORD(fbTzSpecificLocalTimeToSystemTime.out.wMonth),
         arg3 := F_WORD(fbTzSpecificLocalTimeToSystemTime.out.wDay),
