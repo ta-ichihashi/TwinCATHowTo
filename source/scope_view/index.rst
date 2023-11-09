@@ -27,3 +27,4 @@ TwinCAT上で制御するモーションデバイスの稼働状態を監視す�
    scope_view
    trigger_export
    watching
+   control_by_functionblock.md
