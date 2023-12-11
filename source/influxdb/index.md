@@ -21,8 +21,8 @@ setup_influxdb_windows
 setup_docker
 setup_tf6420_influxdb
 tf6420_write_influxdb
-telegraf
 visualization
 grafana
-performance_data_collection_fb
+query_pattern
+telegraf
 ```
