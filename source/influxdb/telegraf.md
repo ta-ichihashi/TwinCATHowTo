@@ -1,6 +1,10 @@
-# Telegraf を用いたIPCのWindowsメトリクス計測
+# 付録：Telegraf を用いたIPCのWindowsメトリクス計測
 
-Telegrafは、さまざまなデータ収集するデータハブエージェントです。このエージェントにはさまざまなデータを収集する機能がありますが、このうちWindowsのパフォーマンスデータを収集する機能を使って、InfluxDBへ記録する方法について説明します。
+Windowsのパフォーマンスを計測するには、Performance monitorがありますが、基本的にWindowsのGUIアプリケーションや.NETのAPIなどを通じてデータ活用する必要があります。
+
+InfluxDBには姉妹品としてTelegrafと呼ばれるエージェントがあり、Performance monitorで計測できるさまざまなカウンタ値をInfluxDBへ記録できます。
+
+この節では、Windowsの診断情報をInfluxDBへ記録する方法について説明します。
 
 # IPCへのTelegrafのインストール
 
