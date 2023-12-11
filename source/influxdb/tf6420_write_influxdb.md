@@ -294,7 +294,7 @@ PROGRAM MAIN
 VAR
 	// 現在データ登録用変数
 	motion_activities 	: MotionActivityData := (module_name := 'XTS1');
-	// 記録データ構造体型（PerformanceData）型の配列（連続データを記録するバッファ）
+	// データバッファの配列
 	motion_activity_data_buffer	: ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OF MotionActivityData;
 	// ビジネスロジック用ファンクションブロック
 	fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
@@ -337,7 +337,7 @@ VAR
 END_VAR
 ```
 
-しかし、計測部のサイクルタイムが一意でない場合は、別途バッファサイズをカスタマイズする必要があります。この方法について示します。
+しかし、計測部が複数あり、それぞれのタスクサイクルタイムが一意でない場合は、それぞれに適したバッファサイズを指定する必要があります。この方法について示します。
 
 バッファ配列の初期化
 	: 0..バッファサイズ - 1
@@ -367,7 +367,7 @@ END_VAR
 VAR
 	// 現在データ登録用変数
 	motion_activities 	: MotionActivityData := (module_name := 'XTS1');
-	// 記録データ構造体型（PerformanceData）型の配列（連続データを記録するバッファ）
+	// データバッファの配列（バッファサイズの違いに注意）
 	motion_activity_data_buffer	: ARRAY [0..LOG_BUFFER_SIZE_LOW - 1] OF MotionActivityData;
 	// ビジネスロジック用ファンクションブロック
 	fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
