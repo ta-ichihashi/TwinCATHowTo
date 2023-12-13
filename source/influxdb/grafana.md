@@ -1,5 +1,5 @@
 (section_grafana_dashoboard)=
-# Grafanaを用いたデータ可視化
+# Grafanaでダッシュボード作成
 
 Grafanaは、より見やすく操作しやすいダッシュボード作成のための豊富な機能を備えた可視化WEBアプリケーションです。
 

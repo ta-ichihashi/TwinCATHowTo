@@ -23,6 +23,7 @@ setup_tf6420_influxdb
 tf6420_write_influxdb
 visualization
 grafana
+embed_grafana_HMI
 query_pattern
 telegraf
 ```

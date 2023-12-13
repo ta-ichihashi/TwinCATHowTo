@@ -1,4 +1,4 @@
-# InfluxDBのセットアップ（手動インストール）
+# InfluxDBとGrafanaの手動インストール
 
 この章では、influxDBのみを手動でインストールする方法について説明します。IPCのWindows領域へインストールする際などは、この方法をご利用ください。
 
@@ -171,3 +171,22 @@
    [https://docs.influxdata.com/influxdb/v2.6/reference/internals/shards/#shard-group-duration](https://docs.influxdata.com/influxdb/v2.6/reference/internals/shards/#shard-group-duration)
 
    ```
+
+## Grafanaのセットアップ
+
+下記のサイトからWindows用インストーラをダウンロードします。
+
+```{admonition} バージョン
+:class: warning
+
+2023年12月時点では、Ver10.2.2が最新ですが、後述するHMIへの埋め込みができない不具合があります。よって、Versionの選択から、`10.1.5`を選択してください。
+```
+
+[https://grafana.com/grafana/download?platform=windows](https://grafana.com/grafana/download?platform=windows)
+
+Download the installerリンクからインストールを行ってください。自動的にサービス登録され、起動時にGrafanaがサービス起動します。
+
+インストール、サービス起動後は初回パスワード設定画面が現われます。任意の`admin`パスワードを設定してください。
+
+設定後は、ユーザ名`admin`で設定したパスワードでログインできます。
+
