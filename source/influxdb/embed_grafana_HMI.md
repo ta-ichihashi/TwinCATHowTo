@@ -100,5 +100,8 @@ URL設定時のオプション
 
 ![](assets/main.png){align=center}
 
-
 ![](assets/power_monitoring.png){align=center}
+
+![](assets/alarm_log.png){align=center}
+
+![](assets/xts_log.png){align=center}

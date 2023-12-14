@@ -1,3 +1,4 @@
+(section_influxdb_plc_library)=
 # PLCプログラム
 
 以下ライブラリを用いた実装方法について説明します。
