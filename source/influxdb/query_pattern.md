@@ -86,7 +86,6 @@ from(bucket: "machine_monitoring")
   |> aggregateWindow(column: "diff", every: v.windowPeriod, fn: mean, createEmpty: false)
 ```
 
-
 ```{csv-table}
 :header: _time, diff
 
