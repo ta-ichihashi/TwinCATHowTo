@@ -55,7 +55,7 @@ DUTs以下に次の構造体を定義します。
 
    送信データを格納するための構造体と、デモサーバからの応答データを格納する構造体をそれぞれ定義します。いずれも pack_modeを0に設定し、メモリ上の配置をバイト単位に切り詰めた（バイトストリームデータのまま）データ形式として定義します。
 
-   ```{code-block} pascal
+   ```{code-block} iecst
    :caption: 送信データフォーマット用構造体
    {attribute 'pack_mode' := '0'}
    TYPE send_data_format :
@@ -67,7 +67,7 @@ DUTs以下に次の構造体を定義します。
    END_TYPE
    ```
 
-   ```{code-block} pascal
+   ```{code-block} iecst
    :caption: 受信データフォーマット用構造体
    {attribute 'pack_mode' := '0'}
    TYPE receive_data_format :
@@ -97,7 +97,7 @@ DUTs以下に次の構造体を定義します。
 
    IPアドレスをバイト型の整数の配列で指定するとDUINTでアクセスできるように、次の通り共用体を定義します。
 
-   ```{code-block} pascal
+   ```{code-block} iecst
    :caption: IPアドレス定義共用体定義
    TYPE U_IpAdr :
    UNION
@@ -117,7 +117,7 @@ DUTs以下に次の構造体を定義します。
 
 受信イベント、および、受信データのジェネリクス型変数を出力変数として登録します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: FB_UdpReceiver ファンクションブロック変数宣言部
 VAR_OUTPUT
    receive_complete	:BOOL;
@@ -132,7 +132,7 @@ END_VAR
 宣言部
    : `nListenPort` の入力変数を追加
 
-```{code-block} pascal
+```{code-block} iecst
 {attribute 'conditionalshow'}
 METHOD FB_init : BOOL
 VAR_INPUT
@@ -145,7 +145,7 @@ END_VAR
 プログラム部
    : 以下コメントに記載した3行を追加
 
-```{code-block} pascal
+```{code-block} iecst
 IF NOT bInCopyCode THEN // no online change
 	IF ipUdp = 0 AND oid <> 0 THEN
 		IF nListenPort <> 0 THEN		// END_IFまで追加
@@ -173,7 +173,7 @@ END_IF
 
 下記の一行を追加します。
 
-```{code-block} pascal
+```{code-block} iecst
 IF ipUdp <> 0 THEN
    receive_complete := FALSE;   // 追加
    ipUdp.CheckReceived();
@@ -184,7 +184,7 @@ END_IF
 
 変数宣言部は変更無しで、プログラム部を以下のとおり変更する。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: ReceiveDataメソッド変更前
 nReceivedPakets := nReceivedPakets+1;
 uLastReceivedIP.ipAdrInternal := ipAddr;
@@ -194,7 +194,7 @@ IF ipUdp <> 0 THEN
 END_IF
 ```
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: ReceiveDataメソッド変更後
 nReceivedPakets := nReceivedPakets+1;
 uLastReceivedIP.ipAdrInternal := ipAddr;
@@ -210,7 +210,7 @@ END_IF
 
 以下のメソッドを追加します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: SendDataメソッド宣言部
 METHOD PUBLIC SendData : HRESULT
 VAR_INPUT
@@ -224,7 +224,7 @@ VAR
 END_VAR
 ```
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: SendDataメソッドプログラム部
 uTargetHostIP.ipAdr := dest;
 hrSend := ipUdp.SendData(uTargetHostIP.ipAdrInternal, nTargetPort, nUdpPort, data.cbLen, data.pData, TRUE, 0); // send data back
@@ -238,7 +238,7 @@ hrSend := ipUdp.SendData(uTargetHostIP.ipAdrInternal, nTargetPort, nUdpPort, dat
 
 作成された `ListenPort` の`Set`のプログラム部に以下のとおり記述します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: ListenPort プロパティ
 IF nUdpPort = ListenPort THEN
    RETURN;
@@ -254,7 +254,7 @@ END_IF
 
 Pythonで実装したサーバが稼動するホストアドレスは、192.168.2.2 として掲載しています。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: MAINプログラム宣言部
 PROGRAM MAIN
 
@@ -269,7 +269,7 @@ VAR
 END_VAR
 ```
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: MAINプログラム部
 // 運転中に待ち受けポートを変更したい場合ListenPortプロパティを使って変更する。
 // ListenPortプロパティ側で変更を検出したらポート再オープン処理する。

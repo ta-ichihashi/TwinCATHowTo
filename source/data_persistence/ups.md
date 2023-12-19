@@ -100,7 +100,7 @@ UPSによるデータ永続化制御プログラムクラス図
 
 それぞれに応じたUPS実装ファンクションブロックを`fbUPS`入力変数にセットした`FB_ShutDown`を毎サイクル実行することで、UPSを常時監視し、一次電源ダウンを検出すると{numref}`UPS_persistent_flow`に示すフローによりPERSISTENTデータを永続化しながらシャットダウンを行うプログラムを実現します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: 本モジュールのうち`FB_UPS_STUB`を用いた実装例
 :name: main_inplementation_program
 :linenos:
@@ -139,7 +139,7 @@ fbShutdown(fbUPS := fbUPS);
 
 DUTsに、UPSの状態（{numref}`def_ups_state` ）、および、シャットダウンまでの状態定義（{numref}`def_shutdown_state` ）を定義します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: UPS状態定義
 :name: def_ups_state
 :linenos:
@@ -157,7 +157,7 @@ TYPE E_UPSState :
 END_TYPE
 ```
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: シャットダウンまでの状態定義
 :name: def_shutdown_state
 :linenos:
@@ -204,7 +204,7 @@ Interface `iUPS` を追加します。
 
 12行目の`iUPS.watch_tstaus()`が毎サイクル実行される事により、実装されたUPSオブジェクトは`E_UPSState`の状態を更新します。この状態によりシャットダウン状態マシンを制御します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: シャットダウンシーケンス制御FB
 :name: fb_shutdown
 :linenos:
