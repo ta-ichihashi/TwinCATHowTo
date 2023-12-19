@@ -15,12 +15,29 @@ TF6420 データベースサーバを通じた時系列データベースへの�
 
 # 実装方法
 
-{ref}`chapter_influxdb` をお読みの上、`tc_influxdb_client` ライブラリを読み込んでください。
+{ref}`chapter_influxdb` 章の実装に従い、次の通り実装を行います。
+
+1. データベース記録用のタスクと実制御タスクに分けます。
+2. グローバル変数にてデータベース接続FBインスタンスを作成します。
+3. データベース記録用タスクのプログラムにて、2で作成したデータベース接続FBインスタンスを実行します。
+
+	```{note} 
+	ここまでは{ref}`chapter_influxdb` 章で紹介する時系列データ記録用の接続FBの作成方法と同一です。他の時系列データと併せて、このグローバル変数で定義したデータベース接続FBインスタンスを共用します。
+	```
+
+4. データベース接続FBインスタンスを、コンストラクタ引数に与えた`FB_AlarmDBExporter`インスタンスを作成します。
+
+5. `FB_AlarmDBExporter`インスタンスにデータベース記録時に判別できる装置名称をセットします。
+
+6. アラーム集計用のFB`FB_AlarmCalculator`のexporterプロパティを使って、`FB_AlarmDBExporter`インスタンスをセットします。
+
+7. アラーム集計用のFB`FB_AlarmCalculator`の実行時に、登録したアラームの発生、解除イベントの記録がデータベースに対して行われます。
+
 
 ```{code-block} pascal
-:caption: 定義部
+:caption: グローバル変数リスト`GVL`へデータベース接続FBを定義
 
-PROGRAM MAIN
+{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
 	// Database ID
 	TARGET_DBID : UINT := 1;
@@ -28,21 +45,35 @@ END_VAR
 VAR
 	(* For IoT *)
 	// Cycle record data
-	fbInfluxDBRecorder	:RecordInfluxDB(DBID := TARGET_DBID);
-	// For database export from event logger
-	data_buffer		: ARRAY [0..AlarmEventParam.EVENT_LOG_BUFFER_SIZE - 1] OF EventActivityFields;
-	queue_controller	: BufferedRecord(ADR(data_buffer), fbInfluxDBRecorder);		// record controller
-	alarm_db_exporter		: FB_AlarmDBExporter(ADR(queue_controller));
+	fbInfluxDBRecorder	:RecordInfluxDB(DBID := GVL.TARGET_DBID); // データベースコネクタFBインスタンス。他の
 END_VAR
 ```
 
+専用タスクにてデータベース接続FBのインスタンスを実行します。接続先データベースにつき一つだけ実行します。
+
 ```{code-block} pascal
-:caption: プログラム部
+:caption: 専用タスクにてデータベース接続FBの実行
 
 // Database driver by TF6420
-fbInfluxDBRecorder();
+GVL.fbInfluxDBRecorder();
+```
+
+実制御タスクにおいて作成したアラーム集計FBに、データベースエクスポートFBインスタンスをセットします。
+
+```{code-block} pascal
+:caption: 実制御タスク内でのアラーム集計部
+
+PROGRAM MAIN
+VAR
+	// Alarm calculation function block
+	alarm_calculator    : FB_AlarmCalculator;	// アラーム集計FB
+	alarm_db_exporter   : FB_AlarmDBExporter(GVL.fbInfluxDBRecorder); // DBエクスポートFBインスタンス
+END_VAR
 
 // Initialize alarm event calculatror and IoT service
-alarm_db_exporter.machine_name := 'Roll Dice demo';
-alarm_calculator.p_exporter := alarm_db_exporter;
+alarm_db_exporter.machine_name := 'Machine-1'; // データベース記録時の装置名を定義
+alarm_calculator.exporter := alarm_db_exporter; // DBエクスポートFBインスタンスを集計FBに登録
+  :
+  :
+alarm_calculator(); // アラーム集計用のFBインスタンス実行
 ```

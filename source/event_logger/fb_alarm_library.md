@@ -110,17 +110,19 @@ is_unconfirmed
 
 (* 変数定義した各アラームFBを実装 *)
 fbTestAlarm1(
-	bEvt := error_condition_1, // Activate event by alarm condition.
-	bLatch := FALSE,   // Event will be stay active state after "bEvt" is fall down.
-	bConfirm := confirm_button_input, // Confirmation operation.
-	bReset := reset_button_input // Reset operation.
+    bEvt := error_condition_1, // Activate event by alarm condition.
+    module_name := 'General', //module_name
+    bLatch := FALSE,   // Event will be stay active state after "bEvt" is fall down.
+    bConfirm := confirm_button_input, // Confirmation operation.
+    bReset := reset_button_input // Reset operation.
 );
 
 fbTestAlarm2(
-	bEvt := error_condition_2, // Activate event by alarm condition.
-	bLatch := FALSE,   // Event will be stay active state after "bEvt" is fall down.
-	bConfirm := confirm_button_input, // Confirmation operation.
-	bReset := reset_button_input // Reset operation.
+    bEvt := error_condition_2, // Activate event by alarm condition.
+    module_name := 'Loading module', //module_name
+    bLatch := FALSE,   // Event will be stay active state after "bEvt" is fall down.
+    bConfirm := confirm_button_input, // Confirmation operation.
+    bReset := reset_button_input // Reset operation.
 );
 
 // 引数の設定
