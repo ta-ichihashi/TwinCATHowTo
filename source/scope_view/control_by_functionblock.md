@@ -8,7 +8,7 @@ Scopeサーバをファンクションブロックからリモート制御でき
 
 ## メインプログラム
 
-``` pascal
+``` iecst
 
 VAR
 	fbScopeController      :FB_ScopeController;
@@ -28,7 +28,7 @@ fbScopeController(
 
 ## ファンクションブロック
 
-``` pascal
+``` iecst
 
 FUNCTION_BLOCK FB_ScopeController
 VAR_INPUT
@@ -55,7 +55,7 @@ END_VAR
 
 
 
-``` pascal
+``` iecst
 
 // for 'datetime' value
 // Get local time as timestruct type > output formatted string

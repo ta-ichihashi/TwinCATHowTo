@@ -79,7 +79,7 @@ TwinCATが提供するファンクションブロックでは、保持変数保�
 
 次の通り、iUPSのインターフェースからFB_SUPS_CX51x0を実装します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: 変数定義部
 :name: fb_ups_declearation
 :linenos:
@@ -99,7 +99,7 @@ END_VAR
 ```
 
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: UPSStateプロパティの実装
 :name: fb_ups_state_property
 :linenos:
@@ -112,7 +112,7 @@ GET:
 
 ```
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: シャットダウン遅延時間プロパティ実装
 :name: fb_ups_shutdown_delay_property
 :linenos:
@@ -135,7 +135,7 @@ SET:
 
 その前に1次電源が復活すると`FB_S_UPS_CX51x0.bPowerFailDetect`はFailとなるためタイマをリセットします。その後、`FB_S_UPS_CX51x0.tRecoverTime`の設定時間に達すると、`FB_S_UPS_CX51x0.eState`の状態は`E_S_UPS_State.eSUPS_PowerOK`に戻ります。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: watch_statusメソッドの実装
 :name: fb_ups_watch_status
 :linenos:
@@ -167,7 +167,7 @@ CASE fbS_UPS_CX51x0.eState OF
 END_CASE
 
 ```
-```{code-block} pascal
+```{code-block} iecst
 :caption: persist_dataメソッドの実装
 :name: fb_ups_persist_data
 :linenos:
@@ -182,7 +182,7 @@ END_IF
 
 {numref}`fb_ups_shutdown` が実行されるとEPCはただちにシャットダウンを開始します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: shutdownメソッドの実装
 :name: fb_ups_shutdown
 :linenos:

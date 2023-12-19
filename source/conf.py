@@ -10,11 +10,17 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
 import sys
+import os
 sys.path.insert(0, os.path.abspath('.'))
 
+
+from sphinx.highlighting import lexers
+from iecst import IecstLexer
 from enum import Enum
+
+
+lexers['iecst'] = IecstLexer()
 
 
 class Author(Enum):
@@ -23,7 +29,7 @@ class Author(Enum):
     author_en: str = 'Takashi Ichihashi'
 
     @classmethod
-    def get_strings(cls, delimiter = ' '):
+    def get_strings(cls, delimiter=' '):
         return delimiter.join([e.value for e in cls])
 
 
@@ -53,7 +59,7 @@ extensions = [
     'sphinxcontrib.actdiag',
     'sphinxcontrib.nwdiag',
     'sphinxcontrib.youtube'
-    ]
+]
 
 source_suffix = {
     '.rst': 'restructuredtext',
@@ -67,12 +73,13 @@ exclude_patterns = []
 
 language = 'ja'
 
-#### Config for plugins
+
+# Config for plugins
 
 numfig = True
 
 # Fontpath for blockdiag (truetype font)
-#blockdiag_fontpath = 'C:/Windows/fonts/YuGothM.ttc'
+# blockdiag_fontpath = 'C:/Windows/fonts/YuGothM.ttc'
 # Fontpath for blockdiag (truetype font)
 blockdiag_fontpath = './source/assets/ipaexg.ttf'
 actdiag_fontpath = './source/assets/ipaexg.ttf'
@@ -82,7 +89,7 @@ nwdiag_fontpath = './source/assets/ipaexg.ttf'
 # -- Options for revealjs output -------------------------------------------------
 revealjs_style_theme = 'sky'
 # 普通のHTMLと同じものを使えるので、簡単な設定として指定
-#revealjs_static_path = html_static_path
+# revealjs_static_path = html_static_path
 # Reveal.jsプレゼンテーションで使うCSSファイルを指定
 # revealjs_static_pathで指定したフォルダからのパス
 revealjs_css_files = [
@@ -113,8 +120,8 @@ myst_enable_extensions = [
     "fieldlist",
     "html_admonition",
     "html_image",
-    #"inv_link",
-    #"linkify",
+    # "inv_link",
+    # "linkify",
     "replacements",
     "smartquotes",
     "strikethrough",
@@ -123,7 +130,8 @@ myst_enable_extensions = [
 ]
 
 docx_documents = [
-  ('index', 'BeckhoffTechnologyDocuments.docx', { 'title': 'Beckhoff Technology documents', 'creator': 'Beckhoff Automation K.K.', 'subject': 'A technical documents for TwinCAT system', }, True),
+    ('index', 'BeckhoffTechnologyDocuments.docx', {'title': 'Beckhoff Technology documents',
+     'creator': 'Beckhoff Automation K.K.', 'subject': 'A technical documents for TwinCAT system', }, True),
 ]
 
 docx_style = '_templates/beckhoff_document_template.docx'
@@ -132,14 +140,14 @@ docx_coverpage = True
 docx_pagebreak_before_section = 1
 docx_pagebreak_after_table_of_contents = 0
 docx_table_options = {
-  'landscape_columns': 6,      #
-  'in_single_page': True,      #
-  'row_splittable': True,      #
-  'header_in_all_page': True,  #
+    'landscape_columns': 6,      #
+    'in_single_page': True,      #
+    'row_splittable': True,      #
+    'header_in_all_page': True,  #
 }
 
 
-#latex_docclass = {'manual': 'jsbook'}
+# latex_docclass = {'manual': 'jsbook'}
 
 latex_elements = {
     # Latex figure (float) alignment
@@ -244,6 +252,6 @@ epub_author = author
 epub_basename = 'twincat_howto'
 epub_language = 'ja'
 epub_publisher = author
-#epub_identifier = u'http://ascii.asciimw.jp/books/books/detail/978-4-04-868629-7.shtml'
+# epub_identifier = u'http://ascii.asciimw.jp/books/books/detail/978-4-04-868629-7.shtml'
 epub_scheme = 'URL'
 epub_tocdepth = 3

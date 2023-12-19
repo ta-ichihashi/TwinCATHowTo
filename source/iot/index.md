@@ -38,7 +38,7 @@ Scope viewで記録するデータストリームを、MQTTと呼ばれる汎用
 
    まず各設備制御用のエッジIPCからは、[TF3500 Analytics logger](https://www.beckhoff.com/ja-jp/products/automation/twincat/tfxxxx-twincat-3-functions/tf3xxx-measurement/tf3500.html) というソフトウェアによりMQTTメッセージブローカへパブリッシュする事ができます。公開方法は極めて簡単です。PLCのプログラムにおいて変数宣言した個所に`{attribute 'TcAnalytics'}`を付加します。
 
-   ```{code-block} pascal
+   ```{code-block} iecst
    {attribute ‘TcAnalytics’}
    変数名 	: 型名
    ```

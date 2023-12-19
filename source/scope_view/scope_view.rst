@@ -89,7 +89,7 @@ CSV保存条件プログラム作成
 
 PLCにより、CSVへ出力するトリガとなるフラグ ``export_trigger`` を制御するプログラムを紹介します。
 
-.. code-block:: pascal
+.. code-block:: iecst
 
     VAR
         axes            :ARRAY [0..2] OF AXIS_REF;
@@ -227,7 +227,7 @@ Axis を追加したい場合は、 :numref:`add_axis` の通りYT Chartの階�
 Axis上への表示データの登録
 --------------------------
 
-DataPoolに登録された変数のデータを任意のYT ChartのAxisに表示させるためには、 :numref:`reg_data_to_view` の様に該当の変数をAxisへドラッグアンドドロップします。
+DataPoolに登録された変数のデータを任意のYT ChartのAxisに表示させるためには、 :ref:`reg_data_to_view` の様に該当の変数をAxisへドラッグアンドドロップします。
 
 .. figure:: image/reg_data_to_view.png
     :width: 300px
@@ -236,7 +236,7 @@ DataPoolに登録された変数のデータを任意のYT ChartのAxisに表示
 
     DataPoolからViewへの登録
 
-以上で、変数登録からYT Chartへのビューへの一連の流れについて説明しました。この方法で、 :numref:`section_plc_trigger` 節のプログラムの、 ``export_trigger`` をDataPoolに登録し、CSVへ出力したい各軸のデータを YT Chart上に表示するよう、設定してください。
+以上で、変数登録からYT Chartへのビューへの一連の流れについて説明しました。この方法で、 :ref:`section_plc_trigger` 節のプログラムの、 ``export_trigger`` をDataPoolに登録し、CSVへ出力したい各軸のデータを YT Chart上に表示するよう、設定してください。
 
 DataPoolに登録した ``export_trigger`` フラグの使い方は、次章のトリガの設定で説明します。
 

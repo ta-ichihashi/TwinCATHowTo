@@ -136,7 +136,7 @@ TF6420とのADS通信により、データベースのレスポンスに依存�
 
 また、TF6420のコンフィギュレータで定義したDBIDを定数定義し、`RecordInfluxDB`のコンストラクタ引数 `DBID` に指定します。
 
-```{code-block} pascal
+```{code-block} iecst
 {attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
 	TARGET_DBID : UINT := 1;
@@ -149,7 +149,7 @@ END_VAR
 
 続いて、先ほど作成したReference taskに属するプログラムを新規で作成し、以下のとおりプログラムを定義します。宣言部は何も記載する必要はありません。
 
-```pascal
+```iecst
 // DB Write
 GVL.fbInfluxDBRecorder();
 
@@ -209,7 +209,7 @@ InfluxDBの仕様により、タグに使用できるデータ型は`STRING`ま�
    この例では、弊社のリニア搬送システムXTSの位置、速度、加速度、エラーコードを記録します。
 
 タグ構造体
-```pascal
+```iecst
 TYPE DataTag :
 STRUCT
 	{attribute 'TagName' := 'machine_id'}
@@ -222,7 +222,7 @@ END_TYPE
 
 フィールド構造体
 
-```pascal
+```iecst
 TYPE MotionActivityData EXTENDS DataTag :
 STRUCT
     {attribute 'FieldName' := 'machine_mode'}
@@ -290,7 +290,7 @@ END_TYPE
 	* 前節で作成したフィールド構造体型の構造体名をセット
 	* `motion_activities`をT_Arg型（F_BIGTYPE）に変換し、`write`メソッドで処理する。
 
-``` pascal
+``` iecst
 PROGRAM MAIN
 VAR
 	// 現在データ登録用変数
@@ -332,7 +332,7 @@ fbActivityDataController.write(
 
 前節の実装例では、ライブラリパラメータ`DbLibParam.DATA_BUFFER_SIZE`が暗示的にライブラリ内部でデータバッファの制御に用いられています。前節のとおりデータバッファの実体を定義する場合も下記のとおり設定する必要がありました。
 
-``` pascal
+``` iecst
 VAR
    motion_activity_data_buffer	: ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OF MotionActivityData;
 END_VAR
@@ -360,7 +360,7 @@ BufferedRecordファンクションブロックのプロパティ
 連続記録データにおいて`minimum_chunk_size`を小さな値に設定すると、それだけ頻繁にコマンドが発行されるため、代わりにコマンドキューが圧迫される事になります。この場合、{ref}`section_library_deploy` 節に示す`COMMAND_QUEUE_BUFFER_SIZE`を十分大きな値に設定してください。
 ```
 
-``` pascal
+``` iecst
 PROGRAM MAIN
 VAR CONSTANT
 	LOG_BUFFER_SIZE_LOW	: UINT := 2500;
@@ -400,7 +400,7 @@ DirectRecordはこのために用意された機構ですが、困った事に�
 
 このケースにおいては、次の通り設定してください。
 
-``` pascal
+``` iecst
 fbActivityDataController.minimum_chunk_size := 1;
 fbActivityDataController.maximum_chunk_size := 1;
 ```
@@ -417,7 +417,7 @@ fbActivityDataController.maximum_chunk_size := 1;
 
 実装方法は以下の通りで、`BufferedRecord`の実装例と比較して、バッファ配列を取り除いただけの違いとなります。
 
-``` pascal
+``` iecst
 PROGRAM MAIN
 VAR
 	// 現在データ登録用変数
@@ -471,7 +471,7 @@ BufferedRecord,buffer_usage, 現在バッファに溜まっているデータの
 
 これらのメトリクスは、ライブラリ内にあらかじめ定義された構造体`DatabaseThroughput`にて定義されています。本ライブラリは、`tf6420`というデフォルトのネームスペースが定義されていますので、念のために`tf6420.DatabaseThroughput`という構造体名を指定してください。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: データベーススループット計測プログラム
 :name: database_throughput_monitoring
 

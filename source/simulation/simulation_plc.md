@@ -28,7 +28,7 @@
 
 PLCソフトウェアでは、I/Oを次の通り構造体で定義します。
 
-```{code-block} pascal
+```{code-block} iecst
 TYPE cylinder2IO :
 STRUCT
 	pull_sensor	AT%I*	:BOOL;
@@ -51,7 +51,7 @@ END_TYPE
     : * 3位置5ポート電磁弁の押し側の電磁弁
     : * 3位置5ポート電磁弁の引き側の電磁弁
 
-```{code-block} pascal
+```{code-block} iecst
 TYPE cylinder2IO :
 STRUCT
 	_pull_sensor	AT%Q*	:BOOL;

@@ -58,7 +58,7 @@ FB_Alarmインスタンスの定義
 
 
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: 宣言部
 
 PROGRAM MAIN
@@ -104,7 +104,7 @@ is_raised
 is_unconfirmed
     : `severity`の引数に`TcEventSeverity.<<重大度>>` を指定し、その指定した重大度以上の未確認アラームが有る場合にTrueを返す。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: プログラム部
 :name: program_event_logger_example
 

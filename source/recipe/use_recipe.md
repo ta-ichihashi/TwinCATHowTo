@@ -101,7 +101,7 @@ Mode                LastWriteTime         Length Name
 
 これまでの手順でエクスポートされたレシピファイルはテキスト形式に限り以下のような形式で保存されています。
 
-``` pascal
+``` iecst
 DbWriteInfluxDB.fbInfluxDBRecorder.nDBID:=1
 RecordData.fbPerfromanceDataCommandBuffer.min_chunk_size:=100
 RecordData.fbProcessModeBuffer.min_chunk_size:=100
@@ -113,7 +113,7 @@ RecordData.fbThroughputDataCommandBuffer.min_chunk_size:=100
 1. テキストエディタで変数の内容を編集する
 
     例として`Model1.txtrecipe`ファイルの2行目以後を全て200へ変更します。
-    ``` pascal
+    ``` iecst
     DbWriteInfluxDB.fbInfluxDBRecorder.nDBID:=1
     RecordData.fbPerfromanceDataCommandBuffer.min_chunk_size:=200
     RecordData.fbProcessModeBuffer.min_chunk_size:=200

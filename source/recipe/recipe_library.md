@@ -17,7 +17,7 @@
 * ターゲットIPCのレシピファイルを直接編集すると、その内容は次回XAEからActive configurationされた場合に上書きされてしまい、IPC上で編集した内容が失われる可能性があります。XAE上のRecipe Managerの編集値とIPC上で編集した内容との整合はお客様ご自身で管理いただきますよう、ご注意ください。
 ```
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: RecipeManCommandsファンクションブロックのメソッドの使い方
 :name: recipe_manager_library_code_sample
 :linenos:

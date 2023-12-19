@@ -62,7 +62,7 @@ TwinCATのプロジェクトツリー > IO > Device *
 
 ### コード
 
-``` pascal
+``` iecst
 FUNCTION_BLOCK PLCTaskMeasurement
 VAR_INPUT
 	ads_port_of_task: UINT  := 350;

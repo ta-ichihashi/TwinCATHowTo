@@ -77,7 +77,7 @@ Inputs/Outputsタブ
 
 プログラムオブジェクト（POUs, DUTs）毎に変数定義部を持っています。この先頭部分に複数行コメントで reStructuredText と呼ばれるマークアップ記述方式のドキュメントを定義します。
 
-```{code-block} pascal
+```{code-block} iecst
 (*
 
 このファンクションブロックは、IPCの各種パフォーマンス情報を収集する機能を持ちます。
@@ -133,7 +133,7 @@ Documentationタブ
 
 ### reStructuredTextの基本の書き方
 
-reStructuredTextの基本的な記述ルールについては、Sphinxの以下のリンクを参照いただき、{numref}`section_write_restructured_text`節に記載した通り各プログラムオブジェクトの変数宣言部の先頭の複数行コメントとして、そのプログラムの構成や機能仕様など記述してください。
+reStructuredTextの基本的な記述ルールについては、Sphinxの以下のリンクを参照いただき、{ref}`section_write_restructured_text`節に記載した通り各プログラムオブジェクトの変数宣言部の先頭の複数行コメントとして、そのプログラムの構成や機能仕様など記述してください。
 
 * トップページ
 
@@ -244,7 +244,7 @@ PLCプロジェクト内での図などのファイルの取り扱い方は少�
 
 例としてある構造体に記述したreStructuredTextドキュメントとその文書整形イメージを挙げます。
 
-```{code-block} pascal
+```{code-block} iecst
 (*
 :作成日: 2023/3/1
 :開発者: *** **
@@ -313,7 +313,7 @@ Documentationの例
     :align: center
     ``` 
 
-4. 再度 {numref}`library_making_basic` の手順のlibrary保存とインストールを行い、ドキュメントが正しく反映されたか確認します。
+4. 再度 {ref}`library_making_basic` の手順のlibrary保存とインストールを行い、ドキュメントが正しく反映されたか確認します。
 
 5. 一度編集ツールとの関連付け設定が行われたら、次からは`Open`で同じツールを使って編集する事ができるようになります。
 

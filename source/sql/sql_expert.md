@@ -10,7 +10,7 @@
 
 [`STRING` 型](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/2529410443.html?id=2168458334941937554)は単体で宣言した場合のサイズは80Byteです。最大値である255Byteを指定する必要があります。
 
-``` pascal
+``` iecst
 VAR
     sSampleString : STRING(255);
 END_VAR
@@ -18,7 +18,7 @@ END_VAR
 
 UNICODEを使う場合は、[WSTRING型](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/2529437323.html?id=7362291921204401557)を使います。
 
-``` pascal
+``` iecst
 VAR
     sSampleString : WSTRING(255);
 END_VAR
@@ -32,7 +32,7 @@ END_VAR
 エスケープ
     : SQL文の中で文字列を示すには、TwinCAT同様シングルクオートで囲う必要があります。SQL文中のシングルクオートとTwinCATの文字列範囲を示すシングルクオートを区別するためには、`$'`のように、SQL文中のシングルクオートの前に `$` を前置きする必要があります。
 
-```pascal
+```iecst
 VAR
     query_text      : STRING(255);
     sSensorName     : STRING;
@@ -69,7 +69,7 @@ DATETIME型にはタイムゾーンの情報は載りません。世界中で稼
     : C言語のsprintf関数と同じ書式のフォーマットにより、変数を埋め込んだ文字列を生成できます。変数はさまざまな型のデータを入力できるように、[T_Arg型](https://infosys.beckhoff.com/content/1033/tcplclib_tc2_utilities/35240075.html?id=8764599832541673086)で指定します。
 
 以上を用いたUTCへ変換されたDATETIME型の文字列を取得するプログラムを次に示します。
-```pascal
+```iecst
 VAR
     fbLocalTime: FB_LocalSystemTime := (bEnable:=TRUE, dwCycle:=1);     // For getting current time as local time
     fbGetTimeZoneInformation: FB_GetTimeZoneInformation := (bExecute := TRUE);      // For getting local timezone information

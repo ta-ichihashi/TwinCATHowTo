@@ -34,7 +34,7 @@ TF6420 データベースサーバを通じた時系列データベースへの�
 7. アラーム集計用のFB`FB_AlarmCalculator`の実行時に、登録したアラームの発生、解除イベントの記録がデータベースに対して行われます。
 
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: グローバル変数リスト`GVL`へデータベース接続FBを定義
 
 {attribute 'qualified_only'}
@@ -51,7 +51,7 @@ END_VAR
 
 専用タスクにてデータベース接続FBのインスタンスを実行します。接続先データベースにつき一つだけ実行します。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: 専用タスクにてデータベース接続FBの実行
 
 // Database driver by TF6420
@@ -60,7 +60,7 @@ GVL.fbInfluxDBRecorder();
 
 実制御タスクにおいて作成したアラーム集計FBに、データベースエクスポートFBインスタンスをセットします。
 
-```{code-block} pascal
+```{code-block} iecst
 :caption: 実制御タスク内でのアラーム集計部
 
 PROGRAM MAIN
