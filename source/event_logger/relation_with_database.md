@@ -3,7 +3,7 @@
 
 TF6420 データベースサーバを通じた時系列データベースへの記録機能は、{ref}`chapter_influxdb` の章でご紹介しています。ここで用いるPLCのライブラリ {ref}`section_influxdb_plc_library` と連携し、イベントの発生・解除時とその時刻、テキストをデータベースへ記録させることができます。
 
-これにより、次図の通りGrafana等のオープンソース可視化ライブラリにアラームの発生、解除の推移をバーグラフで表示したり、簡単にイベント履歴をCSVへのエクスポートをブラウザ上から操作いただくことが可能になります。
+これにより、次図の通りGrafana等のオープンソース可視化ライブラリにアラームの発生、解除の推移をバーグラフで可視化したり、イベント履歴をCSVへエクスポートするなどをブラウザ上から操作いただけます。
 
 ![](../influxdb/assets/alarm_log.png){align=center}
 
@@ -39,13 +39,13 @@ TF6420 データベースサーバを通じた時系列データベースへの�
 
 {attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-	// Database ID
-	TARGET_DBID : UINT := 1;
+    // Database ID
+    TARGET_DBID : UINT := 1;
 END_VAR
 VAR
-	(* For IoT *)
-	// Cycle record data
-	fbInfluxDBRecorder	:RecordInfluxDB(DBID := GVL.TARGET_DBID); // データベースコネクタFBインスタンス。他の
+    (* For IoT *)
+    // Cycle record data
+    fbInfluxDBRecorder	:RecordInfluxDB(DBID := GVL.TARGET_DBID); // データベースコネクタFBインスタンス。他の
 END_VAR
 ```
 
@@ -65,9 +65,9 @@ GVL.fbInfluxDBRecorder();
 
 PROGRAM MAIN
 VAR
-	// Alarm calculation function block
-	alarm_calculator    : FB_AlarmCalculator;	// アラーム集計FB
-	alarm_db_exporter   : FB_AlarmDBExporter(GVL.fbInfluxDBRecorder); // DBエクスポートFBインスタンス
+    // Alarm calculation function block
+    alarm_calculator    : FB_AlarmCalculator;	// アラーム集計FB
+    alarm_db_exporter   : FB_AlarmDBExporter(GVL.fbInfluxDBRecorder); // DBエクスポートFBインスタンス
 END_VAR
 
 // Initialize alarm event calculatror and IoT service

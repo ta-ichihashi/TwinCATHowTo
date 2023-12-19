@@ -139,11 +139,11 @@ TF6420とのADS通信により、データベースのレスポンスに依存�
 ```{code-block} iecst
 {attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-	TARGET_DBID : UINT := 1;
+    TARGET_DBID : UINT := 1;
 END_VAR
 VAR_GLOBAL
-	// Cycle record data
-	fbInfluxDBRecorder	:RecordInfluxDB(DBID := GVL.TARGET_DBID);
+    // Cycle record data
+    fbInfluxDBRecorder	:RecordInfluxDB(DBID := GVL.TARGET_DBID);
 END_VAR
 ```
 
@@ -212,9 +212,9 @@ InfluxDBの仕様により、タグに使用できるデータ型は`STRING`ま�
 ```iecst
 TYPE DataTag :
 STRUCT
-	{attribute 'TagName' := 'machine_id'}
+    {attribute 'TagName' := 'machine_id'}
     machine_id : STRING;
-	{attribute 'TagName' := 'module_name'}
+    {attribute 'TagName' := 'module_name'}
     module_name: STRING;
 END_STRUCT
 END_TYPE
@@ -227,22 +227,22 @@ TYPE MotionActivityData EXTENDS DataTag :
 STRUCT
     {attribute 'FieldName' := 'machine_mode'}
     machime_mode : INT;
-	{attribute 'FieldName' := 'activity'}
-	activity_id: INT;
-	{attribute 'FieldName' := 'position'}
+    {attribute 'FieldName' := 'activity'}
+    activity_id: INT;
+    {attribute 'FieldName' := 'position'}
     position : LREAL;
-	{attribute 'FieldName' := 'velocity'}
+    {attribute 'FieldName' := 'velocity'}
     velocity : LREAL;
-	{attribute 'FieldName' := 'acceleration'}
-	acceleration : LREAL;
-	{attribute 'FieldName' := 'set_position'}
+    {attribute 'FieldName' := 'acceleration'}
+    acceleration : LREAL;
+    {attribute 'FieldName' := 'set_position'}
     set_position : LREAL;
-	{attribute 'FieldName' := 'set_velocity'}
+    {attribute 'FieldName' := 'set_velocity'}
     set_velocity : LREAL;
-	{attribute 'FieldName' := 'set_acceleration'}
+    {attribute 'FieldName' := 'set_acceleration'}
     set_acceleration : LREAL;
-	{attribute 'FieldName' := 'axis_error_code'}
-	axis_error_code : UDINT;
+    {attribute 'FieldName' := 'axis_error_code'}
+    axis_error_code : UDINT;
 END_STRUCT
 END_TYPE
 ```
@@ -293,12 +293,12 @@ END_TYPE
 ``` iecst
 PROGRAM MAIN
 VAR
-	// 現在データ登録用変数
-	motion_activities 	: MotionActivityData := (module_name := 'XTS1');
-	// データバッファの配列
-	motion_activity_data_buffer	: ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OF MotionActivityData;
-	// ビジネスロジック用ファンクションブロック
-	fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
+    // 現在データ登録用変数
+    motion_activities 	: MotionActivityData := (module_name := 'XTS1');
+    // データバッファの配列
+    motion_activity_data_buffer	: ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OFMotionActivityData;
+    // ビジネスロジック用ファンクションブロック
+    fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
 END_VAR
 
 // データセット
@@ -319,10 +319,10 @@ fbActivityDataController.db_table_name := 'MotionActivityData'; // InfluxDBの�
 fbActivityDataController.data_def_structure_name := 'MotionActivityData'; // データ構造体名称
 
 fbActivityDataController.write(
-	input_data := F_BIGTYPE(
-		pData := ADR(motion_activities),
-		cbLen := SIZEOF(motion_activities)
-	)
+    input_data := F_BIGTYPE(
+        pData := ADR(motion_activities),
+        cbLen := SIZEOF(motion_activities)
+    )
 ); // キューへのデータ書き込み処理
 
 ```
@@ -363,15 +363,15 @@ BufferedRecordファンクションブロックのプロパティ
 ``` iecst
 PROGRAM MAIN
 VAR CONSTANT
-	LOG_BUFFER_SIZE_LOW	: UINT := 2500;
+    LOG_BUFFER_SIZE_LOW	: UINT := 2500;
 END_VAR
 VAR
-	// 現在データ登録用変数
-	motion_activities 	: MotionActivityData := (module_name := 'XTS1');
-	// データバッファの配列（バッファサイズの違いに注意）
-	motion_activity_data_buffer	: ARRAY [0..LOG_BUFFER_SIZE_LOW - 1] OF MotionActivityData;
-	// ビジネスロジック用ファンクションブロック
-	fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
+    // 現在データ登録用変数
+    motion_activities 	: MotionActivityData := (module_name := 'XTS1');
+    // データバッファの配列（バッファサイズの違いに注意）
+    motion_activity_data_buffer	: ARRAY [0..LOG_BUFFER_SIZE_LOW - 1] OF MotionActivityData;
+    // ビジネスロジック用ファンクションブロック
+    fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
 END_VAR
 
 fbActivityDataController.db_table_name := 'MotionActivityData'; // InfluxDBのメジャメント名
@@ -382,10 +382,10 @@ fbActivityDataController.maximum_chunk_size := LOG_BUFFER_SIZE_LOW - 1;
 fbActivityDataController.buffer_size := LOG_BUFFER_SIZE_LOW;
 
 fbActivityDataController.write(
-	input_data := F_BIGTYPE(
-		pData := ADR(motion_activities),
-		cbLen := SIZEOF(motion_activities)
-	)
+    input_data := F_BIGTYPE(
+        pData := ADR(motion_activities),
+        cbLen := SIZEOF(motion_activities)
+    )
 ); // キューへのデータ書き込み処理
 
 ```
@@ -420,10 +420,10 @@ fbActivityDataController.maximum_chunk_size := 1;
 ``` iecst
 PROGRAM MAIN
 VAR
-	// 現在データ登録用変数
-	motion_activities 	: MotionActivityData := (module_name := 'XTS1');
-	// ビジネスロジック用ファンクションブロック
-	fbActivityDataController	:DirectRecord(GVL.fbInfluxDBRecorder); 
+    // 現在データ登録用変数
+    motion_activities 	: MotionActivityData := (module_name := 'XTS1');
+    // ビジネスロジック用ファンクションブロック
+    fbActivityDataController	:DirectRecord(GVL.fbInfluxDBRecorder); 
 END_VAR
 
 // データセット
@@ -444,10 +444,10 @@ fbActivityDataController.db_table_name := 'MotionActivityData'; // InfluxDBの�
 fbActivityDataController.data_def_structure_name := 'MotionActivityData'; // データ構造体名称
 
 fbActivityDataController.write(
-	input_data := F_BIGTYPE(
-		pData := ADR(motion_activities),
-		cbLen := SIZEOF(motion_activities)
-	)
+    input_data := F_BIGTYPE(
+        pData := ADR(motion_activities),
+        cbLen := SIZEOF(motion_activities)
+    )
 ); // キューへのデータ書き込み処理
 
 ```
@@ -495,10 +495,10 @@ fbThroughputDataController.data_def_structure_name := 'tf6420.DatabaseThroughput
 
 // cyclic record
 fbThroughputDataController.write(
-	input_data := F_BIGTYPE(
-		pData := ADR(DatabaseThroughputRecordData), 
-		cbLen := SIZEOF(DatabaseThroughputRecordData)
-	)
+    input_data := F_BIGTYPE(
+        pData := ADR(DatabaseThroughputRecordData), 
+        cbLen := SIZEOF(DatabaseThroughputRecordData)
+    )
 );
 ```
 
