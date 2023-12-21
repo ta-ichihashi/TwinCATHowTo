@@ -60,9 +60,9 @@ DUTs以下に次の構造体を定義します。
    {attribute 'pack_mode' := '0'}
    TYPE send_data_format :
    STRUCT
-      command		: STRING(4);
-      seq_number	: UINT;
-      value		: ULINT;
+      command        : STRING(4);
+      seq_number    : UINT;
+      value        : ULINT;
    END_STRUCT
    END_TYPE
    ```
@@ -72,9 +72,9 @@ DUTs以下に次の構造体を定義します。
    {attribute 'pack_mode' := '0'}
    TYPE receive_data_format :
    STRUCT
-      command		: STRING(4);
-      seq_number	: UINT;
-      value		: REAL;
+      command        : STRING(4);
+      seq_number    : UINT;
+      value        : REAL;
    END_STRUCT
    END_TYPE
    ```
@@ -120,8 +120,8 @@ DUTs以下に次の構造体を定義します。
 ```{code-block} iecst
 :caption: FB_UdpReceiver ファンクションブロック変数宣言部
 VAR_OUTPUT
-   receive_complete	:BOOL;
-   receive_data 		:T_Arg;
+   receive_complete    :BOOL;
+   receive_data         :T_Arg;
 END_VAR
 ```
 
@@ -136,9 +136,9 @@ END_VAR
 {attribute 'conditionalshow'}
 METHOD FB_init : BOOL
 VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	nListenPort: UINT; // Receive port <--- 追加
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    nListenPort: UINT; // Receive port <--- 追加
 END_VAR
 ```
 
@@ -147,25 +147,25 @@ END_VAR
 
 ```{code-block} iecst
 IF NOT bInCopyCode THEN // no online change
-	IF ipUdp = 0 AND oid <> 0 THEN
-		IF nListenPort <> 0 THEN		// END_IFまで追加
-			nUdpPort := nListenPort;	// 追加
-		END_IF					// 追加
-		hrInit := FW_ObjMgr_GetObjectInstance(	oid:=oid, 
+    IF ipUdp = 0 AND oid <> 0 THEN
+        IF nListenPort <> 0 THEN        // END_IFまで追加
+            nUdpPort := nListenPort;    // 追加
+        END_IF                    // 追加
+        hrInit := FW_ObjMgr_GetObjectInstance(    oid:=oid, 
                         iid:=TC_GLOBAL_IID_LIST.IID_ITcIoUdpProtocol, 
                         pipUnk:=ADR(ipUdp) );
-		IF SUCCEEDED(hrInit) THEN 
-			IF  SUCCEEDED(ipUdp.RegisterReceiver(nUdpPort, THIS^)) THEN //open port
-				FB_init := TRUE;
-			ELSE 
-				FB_init := FALSE; 
-				FW_SafeRelease(ADR(ipUdp));
-			END_IF
-		END_IF
-	ELSIF oid = 0 THEN 
-		FB_init := FALSE; 
-		hrInit := ERR_INVALID_PARAM; 				
-	END_IF
+        IF SUCCEEDED(hrInit) THEN 
+            IF  SUCCEEDED(ipUdp.RegisterReceiver(nUdpPort, THIS^)) THEN //open port
+                FB_init := TRUE;
+            ELSE 
+                FB_init := FALSE; 
+                FW_SafeRelease(ADR(ipUdp));
+            END_IF
+        END_IF
+    ELSIF oid = 0 THEN 
+        FB_init := FALSE; 
+        hrInit := ERR_INVALID_PARAM;                 
+    END_IF
 END_IF
 ```
 
@@ -214,13 +214,13 @@ END_IF
 :caption: SendDataメソッド宣言部
 METHOD PUBLIC SendData : HRESULT
 VAR_INPUT
-   dest			: ARRAY [0..3] OF BYTE;
-   nTargetPort		: UINT;
-   data			: T_ARG;
+   dest            : ARRAY [0..3] OF BYTE;
+   nTargetPort        : UINT;
+   data            : T_ARG;
 END_VAR
 
 VAR
-   uTargetHostIP	: U_IpAdr;
+   uTargetHostIP    : U_IpAdr;
 END_VAR
 ```
 
@@ -260,12 +260,12 @@ PROGRAM MAIN
 
 VAR
    fbUdp1 : FB_UdpReceiver(nListenPort := 9999); // Specify default receive port instead of 10000
-   send_data		: send_data_format;				// Send message variables
-   receive_data 	: receive_data_format;				// Receive message variables
-   target_host		: ARRAY [0..3] OF BYTE := [2, 2, 168, 192]; // IP Address of server
-   target_port		: UINT := 9998;					// Port number of server listening
-   cycle_count		: UINT;
-   parameterized_port	: UINT := 9999;	// Specify receive port dynamically (e.g. by HMI)
+   send_data        : send_data_format;                // Send message variables
+   receive_data     : receive_data_format;                // Receive message variables
+   target_host        : ARRAY [0..3] OF BYTE := [2, 2, 168, 192]; // IP Address of server
+   target_port        : UINT := 9998;                    // Port number of server listening
+   cycle_count        : UINT;
+   parameterized_port    : UINT := 9999;    // Specify receive port dynamically (e.g. by HMI)
 END_VAR
 ```
 

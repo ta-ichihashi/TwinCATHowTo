@@ -34,8 +34,8 @@ TwinCATによるPCベースモーション制御システム
 ```{toctree}
 :caption: 目次
 
-../Make_Cam/index.md
-../AdHo/index.md
+Make_Cam/index.md
+AdHo/index.md
 
 ```
 ```{admonition} C++ / MATLABライセンスをご検討中の方はご注意ください

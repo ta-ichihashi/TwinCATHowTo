@@ -11,7 +11,7 @@
     タワーランプやブザー等で新規アラームが発生した事を通知したり、HMI上の表示制御を行うことができます。
 
 ```{admonition} 公開先のGithubリポジトリ
-:class: info 
+:class: tip 
 
 以下のリポジトリにて公開しています。プルリクエストをお待ちしています。
 
@@ -64,7 +64,7 @@ FB_Alarmインスタンスの定義
 PROGRAM MAIN
 VAR
    // Alarm calculation function block
-   alarm_calculator    : FB_AlarmCalculator;	
+   alarm_calculator    : FB_AlarmCalculator;    
    // each alarm instances
    fbTestAlarm1     : FB_Alarm(TC_Events.UserEventClass.test_alarm1, alarm_calculator);
    fbTestAlarm2     : FB_Alarm(TC_Events.UserEventClass.test_alarm2, alarm_calculator);

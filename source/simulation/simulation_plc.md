@@ -31,10 +31,10 @@ PLCソフトウェアでは、I/Oを次の通り構造体で定義します。
 ```{code-block} iecst
 TYPE cylinder2IO :
 STRUCT
-	pull_sensor	AT%I*	:BOOL;
-	push_sensor	AT%I*	:BOOL;
-	pull_output	AT%Q*	:BOOL;
-	push_output	AT%Q*	:BOOL;
+    pull_sensor    AT%I*    :BOOL;
+    push_sensor    AT%I*    :BOOL;
+    pull_output    AT%Q*    :BOOL;
+    push_output    AT%Q*    :BOOL;
 END_STRUCT
 END_TYPE
 ```
@@ -54,10 +54,10 @@ END_TYPE
 ```{code-block} iecst
 TYPE cylinder2IO :
 STRUCT
-	_pull_sensor	AT%Q*	:BOOL;
-	_push_sensor	AT%Q*	:BOOL;
-	_pull_output 	AT%I*	:BOOL;
-	_push_output 	AT%I*	:BOOL;
+    _pull_sensor    AT%Q*    :BOOL;
+    _push_sensor    AT%Q*    :BOOL;
+    _pull_output     AT%I*    :BOOL;
+    _push_output     AT%I*    :BOOL;
 END_STRUCT
 END_TYPE
 ```

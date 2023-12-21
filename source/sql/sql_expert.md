@@ -73,7 +73,7 @@ DATETIME型にはタイムゾーンの情報は載りません。世界中で稼
 VAR
     fbLocalTime: FB_LocalSystemTime := (bEnable:=TRUE, dwCycle:=1);     // For getting current time as local time
     fbGetTimeZoneInformation: FB_GetTimeZoneInformation := (bExecute := TRUE);      // For getting local timezone information
-    fbTzSpecificLocalTimeToSystemTime: FB_TzSpecificLocalTimeToSystemTime;          // FOr converting local time to UTC.	
+    fbTzSpecificLocalTimeToSystemTime: FB_TzSpecificLocalTimeToSystemTime;          // FOr converting local time to UTC.    
     sPrintf: Tc2_Utilities.FB_FormatString;
     _text: TEXT; // datetime type strings for SQL databse.
 END_VAR

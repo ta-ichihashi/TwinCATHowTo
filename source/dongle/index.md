@@ -13,8 +13,7 @@ IPCにインストールされたXARにはシステムIDが割り振られ、こ
 ここではUSBドングルにライセンスを付加する手順について説明します。
 
 ```{toctree}
-:maxdepth: 2
-:caption: 目次
+:hidden:
 
 dongle.md
 ```

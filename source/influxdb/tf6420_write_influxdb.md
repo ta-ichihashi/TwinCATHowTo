@@ -4,7 +4,7 @@
 以下ライブラリを用いた実装方法について説明します。
 
 ```{admonition} 公開先のGithubリポジトリ
-:class: info 
+:class: tip 
 
 以下のリポジトリにて公開しています。プルリクエストをお待ちしています。
 
@@ -74,33 +74,33 @@
 
 2. PLCプロジェクトを右クリックし、`Save as library and install...` を選択します。`database_connection.library` ファイルを保存するウィンドウが現われます。適当な場所へ保存してください。
 
-	![](assets/2023-05-23-18-33-17.png){width=500px align=center}
+    ![](assets/2023-05-23-18-33-17.png){width=500px align=center}
 
-	```{note}
-	同じXAE環境であればインストールを同時に行っていますので、保存じた `database_connection.library` ファイルは今回使用しません。他のXAEでライブラリを使いたい場合は、ライブラリマネージャからこのファイルをインストールしてください。
-	```
+    ```{note}
+    同じXAE環境であればインストールを同時に行っていますので、保存じた `database_connection.library` ファイルは今回使用しません。他のXAEでライブラリを使いたい場合は、ライブラリマネージャからこのファイルをインストールしてください。
+    ```
 
 3. ライブラリを適用したいTwinCATプロジェクトを開き、TF6420のライセンスを有効にしてください。
 
 4. 続いて、PLCプロジェクトの `References` メニューを右クリックして`Add library...` を選択します。
 
-	![](assets/2023-05-23-18-45-22.png){width=600px align=center}
+    ![](assets/2023-05-23-18-45-22.png){width=600px align=center}
 
 5. `Beckhoff-JP` > `Utility` > `Database` > `InfluxDB` > `influxdb-client` を選択してOKボタンを押します。
 
-	![](assets/2023-05-23-20-51-12.png){width=700px align=center}
+    ![](assets/2023-05-23-20-51-12.png){width=700px align=center}
 
 6. 追加後は、`influxdb-client`がライブラリに一覧されます。パラメータとして次の二つのバッファサイズを設定します。
 
-	```{csv-table}
-	:header: パラメータ, 初期値, 説明
-	:widths: 1,1,8
+    ```{csv-table}
+    :header: パラメータ, 初期値, 説明
+    :widths: 1,1,8
 
-	COMMAND_QUEUE_BUFFER_SIZE, 64, データベースサーバへ書込みを行うコマンドのキューバッファです。特に理由が無い限り変更は必要ありません。
-	DATA_BUFFER_SIZE, 2500, "計測側のサンプリングタイムに応じたサイズのバッファを用意する必要があります。目安としてデフォルト値では1～10msのサイクルタイムであれば2,500、50μsであれば50,000程度となりますが、データ構造体のサイズや、他のチャンネル数次第で変動します。{ref}`section_adjust_influxdb_data_queue_buffer_size` の明示的な指定を行わない場合、この指定サイズが適用されます。したがって、{ref}`section_buffered_record_program_example` の実装例のようにデータバッファの実体を作成する際、その配列サイズに`DbLibParam.DATA_BUFFER_SIZE`を指定する必要があります。"
-	```
+    COMMAND_QUEUE_BUFFER_SIZE, 64, データベースサーバへ書込みを行うコマンドのキューバッファです。特に理由が無い限り変更は必要ありません。
+    DATA_BUFFER_SIZE, 2500, "計測側のサンプリングタイムに応じたサイズのバッファを用意する必要があります。目安としてデフォルト値では1～10msのサイクルタイムであれば2,500、50μsであれば50,000程度となりますが、データ構造体のサイズや、他のチャンネル数次第で変動します。{ref}`section_adjust_influxdb_data_queue_buffer_size` の明示的な指定を行わない場合、この指定サイズが適用されます。したがって、{ref}`section_buffered_record_program_example` の実装例のようにデータバッファの実体を作成する際、その配列サイズに`DbLibParam.DATA_BUFFER_SIZE`を指定する必要があります。"
+    ```
 
-	![](assets/2023-12-10-10-20-34.png){align=center}
+    ![](assets/2023-12-10-10-20-34.png){align=center}
 
 
 ## データベース書込み専用のタスクとプログラム作成
@@ -143,7 +143,7 @@ VAR_GLOBAL CONSTANT
 END_VAR
 VAR_GLOBAL
     // Cycle record data
-    fbInfluxDBRecorder	:RecordInfluxDB(DBID := GVL.TARGET_DBID);
+    fbInfluxDBRecorder    :RecordInfluxDB(DBID := GVL.TARGET_DBID);
 END_VAR
 ```
 
@@ -161,11 +161,11 @@ GVL.fbInfluxDBRecorder();
 
 * `{attribute 'TagName' := 'タグ名称'}`
 
-	タグ（インデックス）となるデータ行の上部に宣言します。
+    タグ（インデックス）となるデータ行の上部に宣言します。
 
 * `{attribute 'FieldName' := 'フィールド名称'}`
 
-	フィールドとなるデータ行の上部に宣言します。
+    フィールドとなるデータ行の上部に宣言します。
 
 
 下記の通り、タグとフィールドの構造体を分けて定義し、フィールド定義構造体では、タグ定義構造体を継承して定義すると良いでしょう。これにより、 Measurement 毎に共通のタグセットを定義する事ができます。
@@ -185,13 +185,13 @@ InfluxDBの仕様により、タグに使用できるデータ型は`STRING`ま�
 
 * 見積可能な有限の種類のデータであること
 
-	短期間に毎回異なる値がセットされるようなデータにはタグを割り当てず、フィールドに割り当ててください。
-	
-	リテンションポリシーのデータの保存期間において予測可能なデータの種類の数が、許容できるメモリ消費量に収まっていることが求められます。
+    短期間に毎回異なる値がセットされるようなデータにはタグを割り当てず、フィールドに割り当ててください。
+    
+    リテンションポリシーのデータの保存期間において予測可能なデータの種類の数が、許容できるメモリ消費量に収まっていることが求められます。
 
 * データの種類が増える頻度とタイミングが一定で予測可能であること
 
-	イベントデータ等で、予測不可能なタイミングでデータ書き込みが行われ、都度その値が変化するようなものをタグとして登録すると、イベントが集中することで意図せずカーディナリティが上昇し、メモリを圧迫する恐れがあります。
+    イベントデータ等で、予測不可能なタイミングでデータ書き込みが行われ、都度その値が変化するようなものをタグとして登録すると、イベントが集中することで意図せずカーディナリティが上昇し、メモリを圧迫する恐れがあります。
 
 ```
 
@@ -274,31 +274,31 @@ END_TYPE
 
 * 宣言部にて以下の変数を定義
 
-	* 前節で作成したフィールド構造体型のデータバッファ配列を定義する
-	
-		データバッファサイズは、ライブラリ内で`DbLibParam.DATA_BUFFER_SIZE`が初期値として使用されているため、これに準じる場合はこのサイズの配列を作成します。任意のサイズを指定したい場合は{ref}`section_adjust_influxdb_data_queue_buffer_size`をご覧ください。
+    * 前節で作成したフィールド構造体型のデータバッファ配列を定義する
+    
+        データバッファサイズは、ライブラリ内で`DbLibParam.DATA_BUFFER_SIZE`が初期値として使用されているため、これに準じる場合はこのサイズの配列を作成します。任意のサイズを指定したい場合は{ref}`section_adjust_influxdb_data_queue_buffer_size`をご覧ください。
 
-	* `BufferedRecord`インスタンスを作成し、コンストラクタ引数に以下を指定する
+    * `BufferedRecord`インスタンスを作成し、コンストラクタ引数に以下を指定する
 
-		* 前項で作成したデータバッファのポインタを第一引数に渡す
-		* グローバル変数として定義したデータベース書込みファンクションブロック`RecordInfluxDB`のインスタンスを第二引数に渡す
+        * 前項で作成したデータバッファのポインタを第一引数に渡す
+        * グローバル変数として定義したデータベース書込みファンクションブロック`RecordInfluxDB`のインスタンスを第二引数に渡す
 
 * プログラム部に以下を実装
 
-	* 前節で作成したフィールド構造体型のインスタンス変数（下記実装例では`motion_activities`）を作成し、各フィールド要素に値をセット
-	* 記録するデータのInfluxDBのメジャメント名をセット
-	* 前節で作成したフィールド構造体型の構造体名をセット
-	* `motion_activities`をT_Arg型（F_BIGTYPE）に変換し、`write`メソッドで処理する。
+    * 前節で作成したフィールド構造体型のインスタンス変数（下記実装例では`motion_activities`）を作成し、各フィールド要素に値をセット
+    * 記録するデータのInfluxDBのメジャメント名をセット
+    * 前節で作成したフィールド構造体型の構造体名をセット
+    * `motion_activities`をT_Arg型（F_BIGTYPE）に変換し、`write`メソッドで処理する。
 
 ``` iecst
 PROGRAM MAIN
 VAR
     // 現在データ登録用変数
-    motion_activities 	: MotionActivityData := (module_name := 'XTS1');
+    motion_activities     : MotionActivityData := (module_name := 'XTS1');
     // データバッファの配列
-    motion_activity_data_buffer	: ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OFMotionActivityData;
+    motion_activity_data_buffer    : ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OFMotionActivityData;
     // ビジネスロジック用ファンクションブロック
-    fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
+    fbActivityDataController    :BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
 END_VAR
 
 // データセット
@@ -334,23 +334,23 @@ fbActivityDataController.write(
 
 ``` iecst
 VAR
-   motion_activity_data_buffer	: ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OF MotionActivityData;
+   motion_activity_data_buffer    : ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OF MotionActivityData;
 END_VAR
 ```
 
 しかし、計測部が複数あり、それぞれのタスクサイクルタイムが一意でない場合は、それぞれに適したバッファサイズを指定する必要があります。この方法について示します。
 
 バッファ配列の初期化
-	: 0..バッファサイズ - 1
-		: バッファの最大インデックスを0始まりの配列でインデックス指定できる配列を作成してください。 
+    : 0..バッファサイズ - 1
+        : バッファの最大インデックスを0始まりの配列でインデックス指定できる配列を作成してください。 
 
 BufferedRecordファンクションブロックのプロパティ
-	: minimum_chunk_size
-		: デフォルトでは、ライブラリパラメータで指定するバッファサイズの20%が設定されています。任意の値を設定してください。
-	: maximum_chunk_size
-		: バッファサイズ - 1 が最大インデックスとなるように設定してください。
-	: buffer_size
-		: 任意のバッファサイズを設定してください。
+    : minimum_chunk_size
+        : デフォルトでは、ライブラリパラメータで指定するバッファサイズの20%が設定されています。任意の値を設定してください。
+    : maximum_chunk_size
+        : バッファサイズ - 1 が最大インデックスとなるように設定してください。
+    : buffer_size
+        : 任意のバッファサイズを設定してください。
 
 次にバッファサイズとして定数 `LOG_BUFFER_SIZE_LOW` を定義した実装例を示します。
 
@@ -363,15 +363,15 @@ BufferedRecordファンクションブロックのプロパティ
 ``` iecst
 PROGRAM MAIN
 VAR CONSTANT
-    LOG_BUFFER_SIZE_LOW	: UINT := 2500;
+    LOG_BUFFER_SIZE_LOW    : UINT := 2500;
 END_VAR
 VAR
     // 現在データ登録用変数
-    motion_activities 	: MotionActivityData := (module_name := 'XTS1');
+    motion_activities     : MotionActivityData := (module_name := 'XTS1');
     // データバッファの配列（バッファサイズの違いに注意）
-    motion_activity_data_buffer	: ARRAY [0..LOG_BUFFER_SIZE_LOW - 1] OF MotionActivityData;
+    motion_activity_data_buffer    : ARRAY [0..LOG_BUFFER_SIZE_LOW - 1] OF MotionActivityData;
     // ビジネスロジック用ファンクションブロック
-    fbActivityDataController	:BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
+    fbActivityDataController    :BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
 END_VAR
 
 fbActivityDataController.db_table_name := 'MotionActivityData'; // InfluxDBのメジャメント名
@@ -421,9 +421,9 @@ fbActivityDataController.maximum_chunk_size := 1;
 PROGRAM MAIN
 VAR
     // 現在データ登録用変数
-    motion_activities 	: MotionActivityData := (module_name := 'XTS1');
+    motion_activities     : MotionActivityData := (module_name := 'XTS1');
     // ビジネスロジック用ファンクションブロック
-    fbActivityDataController	:DirectRecord(GVL.fbInfluxDBRecorder); 
+    fbActivityDataController    :DirectRecord(GVL.fbInfluxDBRecorder); 
 END_VAR
 
 // データセット

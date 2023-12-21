@@ -1,7 +1,7 @@
 ## TF6420 のセットアップ
 
 ```{admonition} 注意
-:class: info
+:class: tip
 
 TF6420はXARが稼働しているIPC上にインストールしてください。
 ```

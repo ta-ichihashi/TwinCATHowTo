@@ -11,7 +11,7 @@ Scopeサーバをファンクションブロックからリモート制御でき
 ``` iecst
 
 VAR
-	fbScopeController      :FB_ScopeController;
+    fbScopeController      :FB_ScopeController;
     bReset                 :BOOL;
 END_VAR
 
@@ -108,7 +108,7 @@ SCOPE_SERVER_DISCONNECT:
         eRequestedState := SCOPE_SERVER_CONNECT;
         IF fbScopeServerControl.eReqState = eRequestedState AND NOT fbScopeServerControl.bBusy AND NOT bError  THEN
             eCurrentState := eRequestedState;
-        END_IF		
+        END_IF        
     END_IF
 SCOPE_SERVER_RESET:
     eRequestedState := SCOPE_SERVER_IDLE;

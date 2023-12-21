@@ -24,37 +24,37 @@
 
 PROGRAM RecipeManager
 VAR
-	recipe_manager	:RecipeManCommands; // Function block instance
-	load_command	:BOOL;
-	create_command	:BOOL;
-	save_command	:BOOL;
+    recipe_manager    :RecipeManCommands; // Function block instance
+    load_command    :BOOL;
+    create_command    :BOOL;
+    save_command    :BOOL;
 END_VAR
 
 // load_command が Trueになると、Model2レシピのファイルに定義されたデータを変数へ展開する。
 IF load_command THEN
-	recipe_manager.LoadAndWriteRecipe(
-		'MachineConfiguration',
-		'Model2'
-	);
-		
-	load_command := FALSE;
+    recipe_manager.LoadAndWriteRecipe(
+        'MachineConfiguration',
+        'Model2'
+    );
+        
+    load_command := FALSE;
 END_IF
 
 // create_command が Trueになると、Incident1という名前のレシピのファイルが生成され、現在値が保存されます。
 IF create_command THEN
-	recipe_manager.CreateRecipe(
-		'MachineConfiguration',
-		'Incident1'
-	);
-	create_command := FALSE;
+    recipe_manager.CreateRecipe(
+        'MachineConfiguration',
+        'Incident1'
+    );
+    create_command := FALSE;
 END_IF
 
 // save_command が Trueになると、Incident1レシピ、およびそのファイルへ現在値が上書き保存されます。
 IF save_command THEN
-	recipe_manager.ReadAndSaveRecipe(
-		'MachineConfiguration',
-		'Incident1'
-	);
-	save_command := FALSE;
+    recipe_manager.ReadAndSaveRecipe(
+        'MachineConfiguration',
+        'Incident1'
+    );
+    save_command := FALSE;
 END_IF
 ```

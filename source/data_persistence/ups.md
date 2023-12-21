@@ -107,8 +107,8 @@ UPSによるデータ永続化制御プログラムクラス図
 
 PROGRAM MAIN
 VAR
-	fbShutdown	:FB_ShutDown; // Safely shutdown feature
-	fbUPS		:FB_UPS_STUB; // UPS type for test use
+    fbShutdown    :FB_ShutDown; // Safely shutdown feature
+    fbUPS        :FB_UPS_STUB; // UPS type for test use
     //fbUPS       :FB_GenericUPS; //UPS type based on Windows driver
     //fbUPS       :FB_SUPS; // UPS type for 1sec UPS on CX50x0
     //fbUPS       :FB_SUPS_CB3011; // UPS type for 1sec UPS on CB3011 board
@@ -148,11 +148,11 @@ DUTsに、UPSの状態（{numref}`def_ups_state` ）、および、シャット�
 {attribute 'strict'}
 TYPE E_UPSState :
 (
-    init := 0,		// UPS not working
-    on_power,		// power supplied normally
-    on_battery,		// continue working on battery
-    critical_error,	// system shutdown
-    facility_error	// UPC failure
+    init := 0,        // UPS not working
+    on_power,        // power supplied normally
+    on_battery,        // continue working on battery
+    critical_error,    // system shutdown
+    facility_error    // UPC failure
 );
 END_TYPE
 ```
@@ -166,9 +166,9 @@ END_TYPE
 {attribute 'strict'}
 TYPE E_ShutdownMode :
 (
-    init := 0,			// system is working
-    persistent_data,	// persist data
-    shutting_down		// system shutting down
+    init := 0,            // system is working
+    persistent_data,    // persist data
+    shutting_down        // system shutting down
 );
 END_TYPE
 ```
@@ -211,34 +211,34 @@ Interface `iUPS` を追加します。
 
 FUNCTION_BLOCK FB_ShutDown
 VAR_INPUT
-	fbUPS			:iUPS; // UPS object	
+    fbUPS            :iUPS; // UPS object    
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	eShutdownMode	:E_ShutdownMode; // State machine when shutting down
+    eShutdownMode    :E_ShutdownMode; // State machine when shutting down
 END_VAR
 
 // watch power fail
 fbUPS.watch_tstaus();
 
 CASE fbUPS.UPSState OF 
-	E_UPSState.on_battery:
-		eShutdownMode := E_ShutdownMode.persistent_data;
-	E_UPSState.critical_error:
-		eShutdownMode := E_ShutdownMode.shutting_down;
-	ELSE
-		eShutdownMode := E_ShutdownMode.init;
+    E_UPSState.on_battery:
+        eShutdownMode := E_ShutdownMode.persistent_data;
+    E_UPSState.critical_error:
+        eShutdownMode := E_ShutdownMode.shutting_down;
+    ELSE
+        eShutdownMode := E_ShutdownMode.init;
 END_CASE
 
 CASE eShutdownMode OF 
-	E_ShutdownMode.persistent_data:
-		fbUPS.persist_data();
-		IF fbUPS.UPSState = E_UPSState.facility_error THEN
-			eShutdownMode := E_ShutdownMode.shutting_down;
-		END_IF
-	E_ShutdownMode.shutting_down:
-		fbUPS.shutdown();
+    E_ShutdownMode.persistent_data:
+        fbUPS.persist_data();
+        IF fbUPS.UPSState = E_UPSState.facility_error THEN
+            eShutdownMode := E_ShutdownMode.shutting_down;
+        END_IF
+    E_ShutdownMode.shutting_down:
+        fbUPS.shutdown();
 END_CASE
 ```
 

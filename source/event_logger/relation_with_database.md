@@ -21,9 +21,9 @@ TF6420 データベースサーバを通じた時系列データベースへの�
 2. グローバル変数にてデータベース接続FBインスタンスを作成します。
 3. データベース記録用タスクのプログラムにて、2で作成したデータベース接続FBインスタンスを実行します。
 
-	```{note} 
-	ここまでは{ref}`chapter_influxdb` 章で紹介する時系列データ記録用の接続FBの作成方法と同一です。他の時系列データと併せて、このグローバル変数で定義したデータベース接続FBインスタンスを共用します。
-	```
+    ```{note} 
+    ここまでは{ref}`chapter_influxdb` 章で紹介する時系列データ記録用の接続FBの作成方法と同一です。他の時系列データと併せて、このグローバル変数で定義したデータベース接続FBインスタンスを共用します。
+    ```
 
 4. データベース接続FBインスタンスを、コンストラクタ引数に与えた`FB_AlarmDBExporter`インスタンスを作成します。
 
@@ -45,7 +45,7 @@ END_VAR
 VAR
     (* For IoT *)
     // Cycle record data
-    fbInfluxDBRecorder	:RecordInfluxDB(DBID := GVL.TARGET_DBID); // データベースコネクタFBインスタンス。他の
+    fbInfluxDBRecorder    :RecordInfluxDB(DBID := GVL.TARGET_DBID); // データベースコネクタFBインスタンス。他の
 END_VAR
 ```
 
@@ -66,7 +66,7 @@ GVL.fbInfluxDBRecorder();
 PROGRAM MAIN
 VAR
     // Alarm calculation function block
-    alarm_calculator    : FB_AlarmCalculator;	// アラーム集計FB
+    alarm_calculator    : FB_AlarmCalculator;    // アラーム集計FB
     alarm_db_exporter   : FB_AlarmDBExporter(GVL.fbInfluxDBRecorder); // DBエクスポートFBインスタンス
 END_VAR
 

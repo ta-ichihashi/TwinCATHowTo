@@ -65,7 +65,7 @@ TwinCATのプロジェクトツリー > IO > Device *
 ``` iecst
 FUNCTION_BLOCK PLCTaskMeasurement
 VAR_INPUT
-	ads_port_of_task: UINT  := 350;
+    ads_port_of_task: UINT  := 350;
     ec_master_netid: T_AmsNetId;
 END_VAR
 VAR_OUTPUT
