@@ -269,3 +269,80 @@ influxDBでは、`_time` 列に時刻が、 `_field` 列にフィールドが、
 次の通り表示されます。
 
 ![](assets/2023-12-21-17-11-29.png)
+
+## 警告ラベル
+
+警告ラベルを入れるには、次の記述を行います。
+
+```` markdown
+```{admonition} タイトル
+:class: <<重要度キーワードの定義>>
+
+<<注釈の内容を記述>>
+```
+````
+
+例えば下記の通り記述すると、
+
+```` markdown
+```{admonition} 危険
+:class: danger
+
+本手順は、装置稼働中に絶対に行わないでください。装置が確実に停止している状態(TwinCAT3ランタイム(以下、XAR)がコンフィグレーションモード)で作業を行ってください。稼働中に実施することにより制御対象の装置が安全に停止できなくなる可能性があり、重大な事故につながる可能性があります。
+
+```
+````
+
+下記の通り出力されます。
+
+![](assets/2023-12-21-17-41-03.png)
+
+重要度キーワード `:class:` には、下記のURLで示す、Admonition typeを指定してください。このアイコンと枠色で表示されます。
+
+[https://myst-parser.readthedocs.io/en/latest/syntax/admonitions.html#admonition-types](https://myst-parser.readthedocs.io/en/latest/syntax/admonitions.html#admonition-types)
+
+## プログラムコードの挿入
+
+プログラムコードを挿入する場合は、次の通り記述します。
+
+```` markdown
+```{code-block} <<プログラム言語キーワード>>
+:caption: <<キャプション（タイトル）>>
+:name: <<相互参照用のキーワード>>
+:linenos:
+
+<<プログラムコード>>
+````
+
+`:lineos:` 
+    : 行番号が付加されます。不要であれば無くても構いません。
+
+`:name:`
+    : 図や表同様、{numref}`<<相互参照用のキーワード>>` で参照先へのリンクが張られます。不要であれば無くても構いません。
+
+`:caption:`
+    : プログラム例にキャプションが付けられます。不要であれば無くても構いません。
+
+プログラム言語については、様々な言語に対応していますが、TwinCATのST言語を掲載する場合は、`iecst`を定義してください。
+
+例として次の記述と出力をご紹介します。
+
+```` markdown
+```{code-block} iecst
+:caption: シャットダウンまでの状態定義
+:name: def_shutdown_state
+:linenos:
+
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_ShutdownMode :
+(
+    init := 0,          // system is working
+    persistent_data,    // persist data
+    shutting_down       // system shutting down
+);
+END_TYPE
+```
+````
+
+![](assets/2023-12-21-17-58-23.png)

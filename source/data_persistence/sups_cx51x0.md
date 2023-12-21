@@ -90,11 +90,11 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	eUPSState 		:E_UPSState;
-	tShutdownDelay	: TIME := T#1S;
-	fbShutdownTimer	:Tc2_Standard.TON;
-	fbS_UPS_CX51x0	:Tc2_SUPS.FB_S_UPS_CX51x0;
-	fbShutdown		:FB_NT_QuickShutdown;
+    eUPSState         :E_UPSState;
+    tShutdownDelay    : TIME := T#1S;
+    fbShutdownTimer    :Tc2_Standard.TON;
+    fbS_UPS_CX51x0    :Tc2_SUPS.FB_S_UPS_CX51x0;
+    fbShutdown        :FB_NT_QuickShutdown;
 END_VAR
 ```
 
@@ -146,24 +146,24 @@ METHOD watch_status : BOOL
 fbS_UPS_CX51x0(eUpsMode := Tc2_SUPS.E_S_UPS_Mode.eSUPS_WrPersistData_NoShutdown);
 
 CASE fbS_UPS_CX51x0.eState OF
-	Tc2_SUPS.E_S_UPS_State.eSUPS_PowerOK:
-		eUPSState := E_UPSState.on_power;
-	Tc2_SUPS.E_S_UPS_State.eSUPS_PowerFailure:
-		eUPSState := E_UPSState.on_battery;
-	Tc2_SUPS.E_S_UPS_State.eSUPS_WritePersistentData:
-		eUPSState := E_UPSState.on_battery;
-	Tc2_SUPS.E_S_UPS_State.eSUPS_WaitForRecover:
-		IF fbShutdownTimer.Q THEN
-			eUPSState := E_UPSState.critical_error;
-		ELSE
-			eUPSState := E_UPSState.on_battery;
-		END_IF
-	Tc2_SUPS.E_S_UPS_State.eSUPS_WaitForPowerOFF:
-		eUPSState := E_UPSState.critical_error;
-	Tc2_SUPS.E_S_UPS_State.eSUPS_QuickShutdown:
-		eUPSState := E_UPSState.critical_error;
-	ELSE
-		eUPSState := E_UPSState.init;
+    Tc2_SUPS.E_S_UPS_State.eSUPS_PowerOK:
+        eUPSState := E_UPSState.on_power;
+    Tc2_SUPS.E_S_UPS_State.eSUPS_PowerFailure:
+        eUPSState := E_UPSState.on_battery;
+    Tc2_SUPS.E_S_UPS_State.eSUPS_WritePersistentData:
+        eUPSState := E_UPSState.on_battery;
+    Tc2_SUPS.E_S_UPS_State.eSUPS_WaitForRecover:
+        IF fbShutdownTimer.Q THEN
+            eUPSState := E_UPSState.critical_error;
+        ELSE
+            eUPSState := E_UPSState.on_battery;
+        END_IF
+    Tc2_SUPS.E_S_UPS_State.eSUPS_WaitForPowerOFF:
+        eUPSState := E_UPSState.critical_error;
+    Tc2_SUPS.E_S_UPS_State.eSUPS_QuickShutdown:
+        eUPSState := E_UPSState.critical_error;
+    ELSE
+        eUPSState := E_UPSState.init;
 END_CASE
 
 ```
@@ -176,7 +176,7 @@ METHOD persist_data : BOOL
 
 
 IF fbS_UPS_CX51x0.eState = Tc2_SUPS.E_S_UPS_State.eSUPS_WaitForRecover THEN
-	fbShutdownTimer(IN:=fbS_UPS_CX51x0.bPowerFailDetect, PT:=tShutdownDelay);
+    fbShutdownTimer(IN:=fbS_UPS_CX51x0.bPowerFailDetect, PT:=tShutdownDelay);
 END_IF
 ```
 

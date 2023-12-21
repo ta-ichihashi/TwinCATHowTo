@@ -81,11 +81,11 @@ Inputs/Outputsタブ
 (*
 
 このファンクションブロックは、IPCの各種パフォーマンス情報を収集する機能を持ちます。
-	  
+      
 .. csv-table::
-	:header: Rev., Date,Description
-	
-	0, 2023-02-27,Initial edition
+    :header: Rev., Date,Description
+    
+    0, 2023-02-27,Initial edition
 
 Overview
 =====================
@@ -93,19 +93,19 @@ Overview
 このファンクションブロックは、RealTimeのOnlineタブで表示しているCPU占有率やレイテンシ、および、PlcTaskのOnlineタブで表示しているタスク実行時間、Exceedカウンタをまとめて収集します。
 
 .. figure:: ../../LibraryBundle/real_time_online.png
-	:width: 500px
-	:align: center
+    :width: 500px
+    :align: center
 
 .. figure:: ../../LibraryBundle/plc_task_online.png
-	:width: 500px
-	:align: center
+    :width: 500px
+    :align: center
 
-	
+    
 *)
 FUNCTION_BLOCK PLCTaskMeasurement
 VAR_INPUT
-	ads_port_of_task: UINT  := 350;
-	ec_master_netid: T_AmsNetId;
+    ads_port_of_task: UINT  := 350;
+    ec_master_netid: T_AmsNetId;
 END_VAR
   :
   :

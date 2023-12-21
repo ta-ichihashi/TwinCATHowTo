@@ -1,8 +1,8 @@
---- C:/Users/Takashii/Documents/manual/TwinCATHowTo/source/influxdb/assets/telegraf.conf.org	Tue Jun 20 17:44:29 2023
-+++ C:/Users/Takashii/Documents/manual/TwinCATHowTo/source/influxdb/assets/telegraf.conf	Tue Jun 20 17:45:52 2023
+--- C:/Users/Takashii/Documents/manual/TwinCATHowTo/source/influxdb/assets/telegraf.conf.org    Tue Jun 20 17:44:29 2023
++++ C:/Users/Takashii/Documents/manual/TwinCATHowTo/source/influxdb/assets/telegraf.conf    Tue Jun 20 17:45:52 2023
 @@ -275,22 +275,22 @@
- 
- 
+
+
  # # Configuration for sending metrics to InfluxDB 2.0
 -# [[outputs.influxdb_v2]]
 +[[outputs.influxdb_v2]]
@@ -30,8 +30,8 @@
  #   ## tag is not set the 'bucket' option is used as the default.
 @@ -3786,95 +3786,95 @@
  ###############################################################################
- 
- 
+
+
 -# Read metrics about cpu usage
 -[[inputs.cpu]]
 -  ## Whether to report per-cpu stats or not
@@ -214,7 +214,7 @@
  # [[inputs.activemq]]
  #   ## ActiveMQ WebConsole URL
 @@ -8511,141 +8511,149 @@
- 
+
  # # # Input plugin to counterPath Performance Counters on Windows operating systems
  # # # This plugin ONLY supports Windows
 -# # [[inputs.win_perf_counters]]
@@ -495,13 +495,13 @@
 +      Instances = ["TcSysUI", "TCATSysSrv", "TcNcI", "TcHmiSrv", "TF6420Server"]
 +      Measurement = "win_proc"
 +      #IncludeTotal=false #Set to true to include _Total instance when querying for all (*).
- 
- 
+
+
  # # Input plugin to report Windows services info.
 @@ -8660,20 +8668,21 @@
  #   excluded_service_names = ['WinRM'] # optional, list of service names to exclude
- 
- 
+
+
 -# # Input plugin to query Windows Management Instrumentation
 -# # This plugin ONLY supports Windows
 -# [[inputs.win_wmi]]
@@ -531,6 +531,6 @@
 +    # WMI class properties which should be considered tags instead of fields
 +    tag_properties = ["Name"]
 +
- 
- 
+
+
  # # Collect Wireguard server interface and peer statistics
