@@ -61,56 +61,87 @@ loading translations [ja]... done
 [I 230413 09:57:11 handlers:62] Start watching changes
 [I 230413 09:57:11 handlers:64] Start detecting changes
 ```
-### 文書の編集
+
+## 文書構成
 
 Markdownのソースは、 `source` ディレクトリ内にあります。以下の構成になっていますので、適時新規作成、編集を行ってください。
 
 ```
 └─source
-    │  basic.md      <- 基礎編のカテゴリタイトルページ
+    │  basic.md      <- 基礎編の章のカテゴリタイトルページ
     │  conf.py       <- 文書の設定ファイルです
-    │  develop.md    <- 開発編のカテゴリタイトルページ
+    │  develop_***.md  <- 開発編の章のカテゴリタイトルページ
     │  index.md      <- 全文書へのタイトルページ
-    │  operation.md  <- 運用編のカテゴリタイトルページ
+    │  operation.md  <- 運用編の章のカテゴリタイトルページ
+    │  faq.md        <- よくある質問と回答の章のページ
     │
     ├─<<トピック毎のサブフォルダ>>
     │  │  index.md   <- 章のタイトル
     │  │  <<本文>>.md
 ```
 
-#### 目次系（タイトルページ）のMarkdownの書き方
+### 章の作り方
 
-次の通りの例の通りです。まず `#` に続いてタイトルを記載します。複数行空けてから、`{toctree}` ブロックを定義します。最初の2行（`:maxdepth: 2`, `:caption: 目次`）はお約束なのでそのままとしてください。続いて1行空けてから、本文となるMarkdownのページへのパスを記載します。複数の章がある場合は続けて複数行パスを記載してください。
-
-以下に「基礎編」のカテゴリタイトルである `basic.md` の例を挙げます。
+まず、source以下に任意の章名が分かるmarkdownファイルを作成します。このファイル名を、`source/index.md`上に登録します。
 
 ````markdown
-# 基礎編
+   :
+   :
+* Beckhoff 製品カタログ
+
+    [https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf](https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf)
 
 ```{toctree}
 :maxdepth: 2
+:numbered: 2
 :caption: 目次
 
-TwinCATConfiguration/index.md
+basic.md
+develop_environment.md
+develop_security.md
+develop_motion.md
+develop_information.md
+operation.md
+faq.md
+<<任意の行にmarkdownファイル名を追加>>
+ :
+ :
+```
+
+````
+
+次に、作成した章のmarkdownファイルを編集し、以下の通り記述します。
+
+````markdown
+# 章のタイトル
+
+<<章の概要と説明>>
+
+```{toctree}
+:caption: 目次
+
+<<節1のサブディレクトリ名>>/index.md
+<<節2のサブディレクトリ名>>/index.md
  :
 ```
 ````
 
-カテゴリタイトルからは、章毎にサブフォルダを作成し、サブフォルダ毎にタイトルページ `index.md` を作成してそこへ`{toctree}`のリンクを張ってください。同様に `index.md` 内においても、実際の本文が記載されたMarkdownファイルへのリンクを `toctree` で定義します。
+カテゴリタイトルからは、章以下に節を示すサブフォルダを作成し、サブフォルダ毎にタイトルページ `index.md` を作成します。
 
-章のタイトルページ `index.md` では、タイトルとリンクだけではなく、なるべく概要まで記載してください。
+そこへ`{toctree}`のリンクを張ってください。章レベルでは、`:caption:`に「目次」を指定します。
+
+章のタイトルページ `index.md` では、タイトルと節へのリンクだけではなく、なるべく概要まで記載してください。下記に例を示します。
 
 ````markdown
-# TwinCAT プロジェクトのConfiguration
+# 開発編（開発環境）
 
-この章ではTwinCATの制御対象となるハードウェアの構成設定や診断方法について説明します。
+TwinCATはVisual Studioの優れた開発環境をベースとしています。また、PLCエディアとしてさまざまな便利な機能がありますので、こられの機能と使い方についてご紹介します。
 
 ```{toctree}
-:maxdepth: 2
 :caption: 目次
 
-scan.md
-slave_version.md
+debug_support/index.md
+devops/index.md
 ```
 ````
 
@@ -118,21 +149,49 @@ slave_version.md
 
 ![](assets/2023-04-13-10-42-20.png)
 
-```{note}
-本例では章ごとに目次が付加されていますが、章ごとの目次が不要な場合は次のとおり`:hidden:`を定義してください。
+#### 節のタイトル
 
-```{code-block} markdown
+各節のサブディレクトリ内には、それぞれ`index.md`を作成し、章の書式と同様、タイトル、概要を記載してから`{toctree}`にて小節に対するリンクを記載します。`{toctree}`は単なる小節への順次リンクとして機能させ、目次などは作成しません。よって、`:hidden:`を付加します。
+
+````markdown
+# 節のタイトル
+
+<<節の説明など>>
+
 ```{toctree}
 :hidden:
 
-scan.md
-slave_version.md
+<<小節（ページ）毎のmarkdownファイル名>>
+ :
+ :
 ```
-```
+````
 
+例えば、前項の章の例で紹介した、`debug_support` の節の`index.md`では以下のとおりとなります。
+
+````markdown
+# 便利なデバッグ補助機能
+
+デバッグ時に有効な様々な機能が、`Extensions` > `PLC` > `Windows` 以下にあります。この章ではこれら機能についてご説明します。
+
+![](assets/2023-07-14-15-36-01.png){align=center}
+
+```{toctree}
+:hidden:
+
+watch_window
+cross_reference
 ```
+````
+
+この出力は次の通りとなります。
+
+![](assets/2023-12-21-16-52-23.png)
+
 
 ## vscodeによる編集テクニック
+
+本スクリプトを使うと、vscodeおよび、markdownのプレビューア、図のプラグインなどが自動的にインストールされます。以下にその使い方を説明します。
 
 ### プレビュー
 
@@ -148,16 +207,10 @@ slave_version.md
 ![](assets/2023-04-13-10-46-03.png)
 ```
 
-図の幅、配置場所などを指定する場合は、次の通り別途追加定義してください。
+図の配置場所を指定する場合は、次の通り別途追加定義してください。
 
 ```markdown
-![](assets/2023-04-13-10-46-03.png){align=center w=300px}
-```
-
-あるいは高さを指定する場合は、
-
-```markdown
-![](assets/2023-04-13-10-46-03.png){align=center h=500px}
+![](assets/2023-04-13-10-46-03.png){align=center}
 ```
 
 相互参照を使いたい場合は、次の通りブロック方式の図の定義が必要となります。
@@ -166,13 +219,53 @@ slave_version.md
 一定のサイズになるまでバッファにデータが蓄積されたら、これを一つのチャンクとしてデータベースに書込みコマンドを発行します。チャンクサイズの決定方法は最小値を設定した上で、データベースの負荷やネットワークの影響により発生した遅延時間に比例して動的に増加させています。（{numref}`figure_cyclic_data_buffer`）
 
 ```{figure} cyclic_data_buffer.png
-:width: 400px
 :align: center
 :name: figure_cyclic_data_buffer
 
 サイクリックデータバッファの構造
 ```
 ````
+
 `:name:` タグで定義された参照キーに対して、本文中に ``{numref}`参照キー` ``を記述すると、下図の通り相互参照が可能となります。
 
 ![](assets/2023-04-13-10-54-26.png)
+
+### 表の書き方
+
+最も簡単な表の書き方は、`csv-table`を用いることです。
+
+```` markdown
+
+表の外で、表の番号を参照するには、{numref}`<<相互参照のキー文字列>>` と記述します。
+
+```{csv-table} 表のキャプションの名称
+:header: 列1タイトル, 列2タイトル, 列3タイトル,...
+:name: <<相互参照のキー文字列>>
+:widths: 列1の比率,列2の比率,列3の比率,...
+
+行1列1の内容, 行1列2の内容, 行1列3の内容,...
+行2列1の内容, 行2列2の内容, 行2列3の内容,...
+ :
+ :
+```
+````
+
+下記の例の表記述を例として挙げます。
+
+```` markdown
+influxDBでは、`_time` 列に時刻が、 `_field` 列にフィールドが、 `_value` にその値が格納された縦持ちリストとなっています。（{numref}`table_default_influxdb_query`）
+
+```{csv-table} influxDBの抽出結果
+:header: _time, module_name, _field, _value
+:name: table_default_influxdb_query
+:widths: 3,2,3,2
+
+2023-12-08 10:00:00.000, XTS1, position, 122.99843
+2023-12-08 10:00:00.000, XTS1, set_position, 123.0000
+:
+```
+````
+
+次の通り表示されます。
+
+![](assets/2023-12-21-17-11-29.png)

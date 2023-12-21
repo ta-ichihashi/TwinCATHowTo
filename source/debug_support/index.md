@@ -5,7 +5,7 @@
 ![](assets/2023-07-14-15-36-01.png){align=center}
 
 ```{toctree}
-:caption: 目次
+:hidden:
 
 watch_window
 cross_reference

@@ -18,10 +18,12 @@ from(bucket: "machine_monitoring")
 
 ![](assets/2023-12-14-13-30-36.png){align=center}
 
-influxDBでは、`_time` 列に時刻が、 `_field` 列にフィールドが、 `_value` にその値が格納された縦持ちリストとなっています。
+influxDBでは、`_time` 列に時刻が、 `_field` 列にフィールドが、 `_value` にその値が格納された縦持ちリストとなっています。（{numref}`table_default_influxdb_query`）
 
-```{csv-table}
+```{csv-table} influxDBの抽出結果
 :header: _time, module_name, _field, _value
+:name: table_default_influxdb_query
+:widths: 3,2,3,2
 
 2023-12-08 10:00:00.000, XTS1, position, 122.99843
 2023-12-08 10:00:00.000, XTS1, set_position, 123.0000

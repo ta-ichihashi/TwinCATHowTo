@@ -12,8 +12,8 @@ TwinCAT上で様々な機能を実現する際には、そのコントローラ�
 ```{toctree}
 :caption: 目次
 
-../software_protection/index.md
-../data_persistence/index.md
-../recipe/index.md
-../event_logger/index.md
+software_protection/index.md
+data_persistence/index.md
+recipe/index.md
+event_logger/index.md
 ```
