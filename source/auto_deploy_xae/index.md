@@ -1,12 +1,12 @@
-# XAE無しにプロジェクトを更新する（XAEリモート操作Powershell編）
+# Automation Interfaceを使ったプロジェクト更新の自動化（Powershell編）
 
-{ref}`section_auto_deploy` 節では、ターゲットIPC内のWindowsのファイルシステム内（Bootフォルダ）に対してイメージを直接書き込む方法でした。この節では、ファイル操作ではなくTwinCAT XAEを使ってプロジェクトを自動更新する方法を説明します。
+{ref}`section_auto_deploy` 節では、ターゲットIPC内のWindowsのファイルシステム内（Bootフォルダ）に対してイメージを直接書き込む方法でした。この節では、ファイル操作ではなくTwinCAT XAEとその操作を自動化する [TwinCAT Automation Interface](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/2426813557874918667.html?id=2356474432064536078)機能があります。 の機能を使ってプロジェクトを自動更新する方法を説明します。
 
-TwinCATには、.NETフレームワークを用いて、TwinCAT XAEをプログラムから操作する [TwinCAT Automation Interface](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/2426813557874918667.html?id=2356474432064536078)機能があります。
+[TwinCAT Automation Interface](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/2426813557874918667.html?id=2356474432064536078)には.NETを用いてさまざまな言語からTwnCAT XAEを操作する仕組みです。
 
 ![](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/Images/png/242959243__en-US__Web.png){align=center}
 
-本節では、Posershellを用いる方法でTwinCATプロジェクトを、XAEの操作無しに設備へ展開する方法をご紹介します。
+本節では、このうちPosershellを用いる方法でTwinCATプロジェクトを、XAEの操作無しに設備へ展開する方法をご紹介します。
 
 ## サンプルスクリプトの機能仕様
 
