@@ -4,8 +4,7 @@
 %   contain the root `toctree` directive.
 
 (section_auto_deploy)=
-# XAE無しにプロジェクトを更新する（Bootフォルダ編）
-
+# プロジェクト更新をTwinCAT XAEを使わず行う
 
 このドキュメントは、TwinCAT3のPLCプロジェクト、およびC/C++プロジェクトの実行ファイルをTwinCAT3開発環境(以下、XAE)無しに展開する方法について説明します。開発用のモデルマシンにて作成したプログラムイメージは、この手順に従って他の同一ハードウェア構成のマシンへ展開する事ができます。
 
