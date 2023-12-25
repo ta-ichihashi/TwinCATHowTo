@@ -14,7 +14,7 @@ TwinCATには、.NETフレームワークを用いて、TwinCAT XAEをプログ�
 
 * バックアップ取得後、更新するプログラムをIPCに書き込み、RUNモードへ移行し、プログラムスタートします。
 
-```{admonition} Visual Studioの言語設定のご注意
+````{admonition} Visual Studioの言語設定のご注意
 :class: warning
 
 本スクリプトでは、ターゲットIPCからのバックアップ取得の際、Visual Studioのメニューコマンドをリモートで操作する`ExecuteCommand`を用いています。このコマンドは、Visual Studioの言語設定により変化します。
@@ -23,10 +23,16 @@ TwinCATには、.NETフレームワークを用いて、TwinCAT XAEをプログ�
 
 紹介するスクリプトは、この設定が英語であることを前提としています。その他の言語に切り替えてお使いいただいている方は、バックアップが正しく機能しませんのでご注意ください。
 
-なお、コマンド名は、下記の通りツールバーの`Tools` > `Options...`メニューの`Environment` > `Keyboard` により設定しています。動作検証はできていませんが、言語設定に対応したコマンドに適宜変更いただければその他の言語にも対応する可能性があります。
+なお、スクリプト中での使用箇所は次のとおりです。
+
+```powershell
+$dte.ExecuteCommand("File.OpenProjectFromTarget", $targetName + " " + $backupDir + " " + $prjName);
+```
+
+コマンド名`File.OpenProjectFromTarget`は、下記の通りツールバーの`Tools` > `Options...`メニューの`Environment` > `Keyboard` にて参照可能です。このコマンド名が言語設定により変化します。動作検証はできていませんが、言語設定に対応したコマンドに適宜変更いただければその他の言語にも対応する可能性があります。
 
 ![](assets/2023-12-25-17-03-21.png){align=center}
-```
+````
 
 ```{admonition} ターゲットにソースファイルを含める設定を行ってください。
 :class: warning
@@ -63,7 +69,7 @@ PLCプロジェクトの`Settings`タブを開いて、`Project Source`および
 
 2. Powershellの準備
 
-    スクリプト中の先頭にある各行を適切に設定します。
+    {numref}`code_auto_dploy_powershell`に示すスクリプトをテキストファイルを編集し、`****.ps1`という拡張子を付けて保存します。この際、スクリプト先頭にある次の各行を適切に設定します。
 
     $prjDir
         : プロジェクトの配置するディレクトリのパスを指定します。スクリプト実行場所は、`$PSScriptRoot` で指定できるため、そこからの相対パスを指定する方法でも構いません。
@@ -89,12 +95,14 @@ PLCプロジェクトの`Settings`タブを開いて、`Project Source`および
     ```
 
     $dte
-        : 開発環境がどのバージョンを使っているかにより、Visual Studio の Program IDを設定する必要があります。[Visual StudioのProgram ID](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307)を参照してください。下記例では、TwinCAT XAEシェル版の開発環境を実行する例です。
+        : 開発環境がどのバージョンを使っているかにより、Visual Studio の Program IDを設定する必要があります。[Visual StudioのProgram ID](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307)を参照してください。{numref}`code_auto_dploy_powershell`例では、TwinCAT XAEシェル版の開発環境を用いています。
 
     上記をカスタマイズした次のPowershellスクリプトを準備します。
 
-    ```powershell
+    ```{code-block} powershell
+    :name: code_auto_dploy_powershell
     :caption: バックアップと更新を自動化するPowershellスクリプト
+    :linenos:
 
     $prjDir = $PSScriptRoot + "\sample_project" # 元となるプロジェクトが格納されたフォルダパス
     $backupBaseDir = $PSScriptRoot + "\backup" # バックアップを保存する親フォルダパス
@@ -163,5 +171,5 @@ PLCプロジェクトの`Settings`タブを開いて、`Project Source`および
            :              :            :                               :
         ```
 
-    2. `$prjDir`のプロジェクトファイルのターゲットIPCへの書き込みと新しいプロジェクトにて自動スタートします。
+    2. `$prjDir`に格納したプロジェクトをターゲットIPCへの書き込み、その後自動スタートします。
 
