@@ -1,8 +1,8 @@
 # Automation Interfaceを使ったプロジェクト更新の自動化（Powershell編）
 
-{ref}`section_auto_deploy` 節では、ターゲットIPC内のWindowsのファイルシステム内（Bootフォルダ）に対してイメージを直接書き込む方法でした。この節では、ファイル操作ではなくTwinCAT XAEとその操作を自動化する [TwinCAT Automation Interface](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/2426813557874918667.html?id=2356474432064536078)機能があります。 の機能を使ってプロジェクトを自動更新する方法を説明します。
+{ref}`section_auto_deploy` 節では、ターゲットIPC内のWindowsのファイルシステム内（Bootフォルダ）に対してイメージを直接書き込む方法でした。この節では、ファイル操作ではなくTwinCAT XAEとその操作を自動化する [TwinCAT Automation Interface](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242682763.html?id=5107059583047685772)の機能を使ってプロジェクトを自動更新する方法をご紹介します。
 
-[TwinCAT Automation Interface](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/2426813557874918667.html?id=2356474432064536078)には.NETを用いてさまざまな言語からTwnCAT XAEを操作する仕組みです。
+[TwinCAT Automation Interface](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242682763.html?id=5107059583047685772)とは.NETを用いてさまざまな言語からTwnCAT XAEを操作する仕組みです。
 
 ![](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/Images/png/242959243__en-US__Web.png){align=center}
 
@@ -23,15 +23,6 @@
 
 紹介するスクリプトは、この設定が英語であることを前提としています。その他の言語に切り替えてお使いいただいている方は、バックアップが正しく機能しませんのでご注意ください。
 
-なお、スクリプト中での使用箇所は次のとおりです。
-
-```powershell
-$dte.ExecuteCommand("File.OpenProjectFromTarget", $targetName + " " + $backupDir + " " + $prjName);
-```
-
-コマンド名`File.OpenProjectFromTarget`は、下記の通りツールバーの`Tools` > `Options...`メニューの`Environment` > `Keyboard` にて参照可能です。このコマンド名が言語設定により変化します。動作検証はできていませんが、言語設定に対応したコマンドに適宜変更いただければその他の言語にも対応する可能性があります。
-
-![](assets/2023-12-25-17-03-21.png){align=center}
 ````
 
 ```{admonition} ターゲットにソースファイルを含める設定を行ってください。
@@ -95,7 +86,7 @@ PLCプロジェクトの`Settings`タブを開いて、`Project Source`および
     ```
 
     $dte
-        : 開発環境がどのバージョンを使っているかにより、Visual Studio の Program IDを設定する必要があります。[Visual StudioのProgram ID](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307)を参照してください。{numref}`code_auto_dploy_powershell`例では、TwinCAT XAEシェル版の開発環境を用いています。
+        : Visual Studioのオートメーションモデルである`EnvDTE.DTE`インターフェースが提供するAPI機能です。Visual Studio または TwinCAT XAEシェルなどの開発環境のバージョンにより異なるProgram IDを指定することでオブジェクトを生成することができます。[Visual StudioのProgram ID](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307)を参照してください。{numref}`code_auto_dploy_powershell`例では、TwinCAT XAEシェル版の開発環境を用いています。
 
     上記をカスタマイズした次のPowershellスクリプトを準備します。
 
@@ -172,4 +163,63 @@ PLCプロジェクトの`Settings`タブを開いて、`Project Source`および
         ```
 
     2. `$prjDir`に格納したプロジェクトをターゲットIPCへの書き込み、その後自動スタートします。
+
+## API解説
+
+まず基本としてTwinCATのアプリケーションリソースへ接続する方法は、次の二通りがあります。（[参考](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242721803.html?id=6926366377621229322)）
+
+Visual Studio DTE
+    : Microsoft社が提供するVisual Studio用のインターフェース[`EnvDTE.DTE`](https://learn.microsoft.com/ja-jp/dotnet/api/envdte.dte?view=visualstudiosdk-2022)を使ってアクセスします。本スクリプト上では、`$dte`にオブジェクトが格納されています。
+
+TwinCAT Automation Interface
+    : Beckhoff TwinCAT プロジェクトが提供する[APIインターフェース](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242750731.html?id=8779542607648763499)を使ってアクセスします。本スクリプト上では、`$SystemManager` にオブジェクトが格納されています。
+
+上記を組み合わせて、TwinCAT上の操作を自動化させることができます。
+
+### Visual Studio DTEインターフェースの使い方
+
+スクリプト中での使用箇所は次のとおりです。COMオブジェクトを作成するには、[Visual StudioのProgram ID](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307)に示されるように各アプリケーションのバージョン毎に異なる Program IDが割り振られており、`new-object -com` でProgram IDを指定することで取得できます。これをオブジェクト変数`$dte`に代入し、以後dteインターフェースで定義されたプロパティやメソッドを活用してリソースにアクセスします。
+
+```powershell
+$dte = new-object -com 	TcXaeShell.DTE.15.0 # TwinCAT XAE Shell
+   :
+   :
+$dte.ExecuteCommand("File.OpenProjectFromTarget", $targetName + " " + $backupDir + " " + $prjName);
+```
+
+多用されるメソッドとしては、`ExecuteCommand`があります。これの第一引数には、コマンド名`File.OpenProjectFromTarget`を指定し、第二引数にはスペース区切りで、そのコマンドの引数を指定します。これらのProgram IDで指定したアプリケーションが提供するコマンドは、Visual Studioの場合、ツールバーの`Tools` > `Options...`メニューの`Environment` > `Keyboard` を開くと全てのコマンドが一覧されます。
+
+![](assets/2023-12-25-17-03-21.png){align=center}
+
+ただし、コマンド名は言語が変わると変化します。`ExecuteCommand`メソッドでは、文字列でコマンド名を指定する必要がありますので、言語設定を変更された場合は、このメニューから都度選び直す必要があります。
+
+### TwinCAT Automation Interface APIの使い方
+
+[APIドキュメントはこちら](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242750731.html?id=8779542607648763499)にあります。まず、大きく分けて下記二つのメインインターフェースが用意されています。
+
+ITcSysManager
+    : 基本機能のオブジェクトです。最も初期に新しい構成を新規作成したり、ターゲットIPCのAmsNetIdを指定してリモートIPCと接続したり、構成（プログラムや設定）をIPCに適用してRUNモードへ移行させたり、といった基本機能です。
+
+ITcSmTreeItem
+    : プロジェクト内にあるツリー形式の様々なリソースに対する追加、削除、変更などの機能を提供します。
+
+その他、ライブラリに特化したものや、タスク設定、ライセンス設定など専用のインターフェースが用意されています。
+
+オブジェクトの取得からオブジェクトの使い方までは、次の通りの手順になります。
+
+```powershell
+$prjPath = $prjDir + "\" + $prjName + ".sln"
+$sln = $dte.Solution
+$sln.Open($prjPath)
+
+$project = $sln.Projects.Item(1)
+$systemManager = $project.Object
+$systemManager.SetTargetNetId($targetNetId)
+$systemManager.ActivateConfiguration()
+$systemManager.StartRestartTwinCAT()
+```
+
+まず、Visual StudioのDTEインターフェースのSolutionプロパティにより、[ソリューションオブジェクト](https://learn.microsoft.com/ja-jp/dotnet/api/envdte.solution?view=visualstudiosdk-2022)を取得します。これを使ってソリューションを開き、[Projectsプロパティ](https://learn.microsoft.com/ja-jp/dotnet/api/envdte._solution.projects?view=visualstudiosdk-2022#envdte-solution-projects)からソリューションにぶら下がっているプロジェクトのコレクションを取得します。大概は、一つ目のアイテムにTwinCATオブジェクトが格納されていますので、[`Projects.Item`](https://learn.microsoft.com/ja-jp/dotnet/api/envdte.projects.item?view=visualstudiosdk-2022#envdte-projects-item(system-object))メソッドを使って、要素番号でこれを取得し、ObjectでTwinCATの[`ITcSysManager`オブジェクト](https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242753675.html?id=5988206545626171718)を収集します。
+
+以後、`SetTargetNetId`や`ActivateConfiguration`や`StartRestartTwinCAT`などのメソッドを使って、一連のTwinCATの操作を行います。
 
