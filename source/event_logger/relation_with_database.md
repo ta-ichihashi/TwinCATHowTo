@@ -67,13 +67,15 @@ PROGRAM MAIN
 VAR
     // Alarm calculation function block
     alarm_calculator    : FB_AlarmCalculator;    // アラーム集計FB
-    alarm_db_exporter   : FB_AlarmDBExporter(GVL.fbInfluxDBRecorder); // DBエクスポートFBインスタンス
+    alarm_db_listener   : FB_AlarmDBListener(GVL.fbInfluxDBRecorder); // DBエクスポートFBインスタンス
 END_VAR
 
 // Initialize alarm event calculatror and IoT service
-alarm_db_exporter.machine_name := 'Machine-1'; // データベース記録時の装置名を定義
-alarm_calculator.exporter := alarm_db_exporter; // DBエクスポートFBインスタンスを集計FBに登録
+alarm_db_listener.machine_name := 'Machine-1'; // データベース記録時の装置名を定義
+alarm_calculator.lang_code := 1031; // InfluxDBの場合は英語のみ対応なので、必ず1031とします。
+alarm_calculator.add_listener(alarm_db_listener); // DBエクスポートFBインスタンスを集計FBに登録
   :
   :
 alarm_calculator(); // アラーム集計用のFBインスタンス実行
 ```
+

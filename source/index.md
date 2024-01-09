@@ -24,6 +24,7 @@
 :caption: 目次
 
 basic.md
+develop_programing.md
 develop_environment.md
 develop_security.md
 develop_motion.md
