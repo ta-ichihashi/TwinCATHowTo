@@ -3,6 +3,7 @@
 %   You can adapt this file completely to your liking, but it should at least
 %   contain the root `toctree` directive.
 
+(chapter_dev_ops)=
 # DevOps開発環境構築
 
 特にクラウドコンピューティングにおいては、DevOpsという概念が注目されています。例えばソフトウェアの構成管理にGithubおよびそのマージシステムを用いて開発フローをIT上で完結させます。必要なプログラムコードが集まった後は、CI/CDと呼ばれるビルド・テスト・ターゲットマシンへのデプロイまでの開発工程を自動化する仕組みが提供されます。DevOpsはこれらを包括した概念です。これにより、開発者は開発に専念する事ができ、現場ニーズに適した機能を短期間で提供することが可能となり、生産性の向上に役立ちます。

@@ -98,6 +98,9 @@ END_VAR
 
 最後に、`FB_AlarmCalculator`のインスタンスをサイクル実行します。このインスタンスには次の二つのメソッドがあり、全体のアラームイベント状態を集計した結果を返します。
 
+is_active
+    : severityの引数に`TcEventSeverity.<<重大度>>` を指定し、その指定した重大度以上のアラーム発生原因が消滅していない場合にTrueを返す。
+
 is_raised
     : severityの引数に`TcEventSeverity.<<重大度>>` を指定し、その指定した重大度以上の発生中アラームが有る場合にTrueを返す。
 
@@ -139,14 +142,15 @@ fbTestAlarm2.ipArguments.Clear().AddString('WARN').AddInt(314);
 alarm_calculator();
 
 // 発報中のアラームの有無
+is_active := alarm_calculator.is_active(severity := TcEventSeverity.Warning); // Warningレベル以上の重大度のアラームで、発生要因が残っているものが存在するかチェックする。あればTrueを返す。
 
-is_error := alarm_calculator.is_raised(severity := TcEventSeverity.Warning); // Warningレベル以上の重大度のアラーム有無をチェックし、あればis_errorをTrueにする。
+// 発報中のアラームの有無
+is_error := alarm_calculator.is_raised(severity := TcEventSeverity.Warning); // Warningレベル以上の重大度のアラームが有効状態のものがあるかチェックする。あればTrueを返す。
 
 // 未確認アラームの有無
+is_unconfirm := alarm_calculator.is_unconfirmed(severity := TcEventSeverity.Warning); // Warningレベル以上の重大度の未確認のアラームがあるかチェックする。あればTrueを返す。
 
-is_unconfirm := alarm_calculator.is_unconfirmed(severity := TcEventSeverity.Warning); // Warningレベル以上の重大度の未確認アラーム有無をチェックし、あればis_errorをTrueにする。
-
-// 他の重大度で異なる振る舞いの集計が必要な場合は、`is_raised_event`, `is_unconfirmed_alarm` メソッドに最低重大度を指定して集計結果を取り出してください。
+// 他にも重大度にあわせた状態の集計が必要な場合は、同メソッドにて集計結果を取り出します。
 ```
 
 ```{admonition} アラーム集計に必要な演算負荷
@@ -158,3 +162,4 @@ is_unconfirm := alarm_calculator.is_unconfirmed(severity := TcEventSeverity.Warn
 * 重大度毎に状態インデックスが用意されています。走査時には個々のアラームの状態インデックス状態を更新しています。
 * `is_raised_event`や`is_unconfirmed_alarm`メソッドによるクエリ（問い合わせ）時は、全アラームを走査するのではなく、状態インデックスを走査することで演算負荷を軽減しています。
 ```
+
