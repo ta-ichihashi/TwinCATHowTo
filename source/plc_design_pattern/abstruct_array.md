@@ -1,16 +1,16 @@
 # 配列オブジェクトの参照渡しと処理
 
-配列を取り扱うプログラムをライブラリなど汎用性を高めるために必要なテクニックをご紹介します。
+ファンクションブロックに対して配列データを参照渡しするテクニック2例をご紹介します。
 
-## 可変長配列
+## 可変長配列を使って受け渡す
 
 ```{note}
 参考InfoSysサイト : [Array with variable length](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/8825257611.html?id=420093545259366736)
 ```
 
-ファンクションブロックのVAR_IN_OUT定義ブロック内では可変長配列を定義することができます。可変長であるのはあくまでもファンクションブロック内部だけであり、入出力変数に外部からセットする際の配列長は固定でなければなりません。
+上記参考サイトに記載されているとおり、ファンクションブロックのVAR_IN_OUT定義ブロック内でのみ、可変長配列を定義することができます。ファンクションブロック外部からセットする際の配列長は固定でなければなりません。
 
-ファンクションブロック内部では配列サイズに依存しないプログラムロジックを組む事で、ライブラリを利用するユーザ側は様々なサイズの配列を取り扱う事ができます。
+ファンクションブロック内部では配列サイズに依存しないプログラムロジックを組む事で、ライブラリに内包したファンクションブロックを利用するユーザは様々なサイズの配列を取り扱う事ができます。
 
 
 ### ファンクションやファンクションブロックの作り方と取り扱い方
@@ -65,21 +65,48 @@ iSumValue := F_Sum(aNaturalNumber1_10)
 iSumValue := F_Sum(aNaturalNumber11_15)
 ```
 
-## ポインタを用いた配列操作
+## ポインタを用いて受け渡す
 
-配列の実態は、決まったデータ型の連続したメモリイメージです。従って、個々のデータ型のサイズと、構造体やファンクションブロックであれば、メモリアドレスとその操作により配列操作を行う事ができます。
+配列の実体は、決まったデータ型の連続したメモリイメージです。従って、個々のデータ型のサイズと、構造体やファンクションブロックであれば、メモリアドレスとその操作により配列操作を行う事ができます。
 
-一例として、ある構造体配列とそのポインタアドレスを外部から定義し、両端キュー（deque）に該当する処理を行うファンクションブロックをご紹介します。
+一例として、ある構造体配列とそのポインタアドレスを外部から定義し、両端キュー（deque）に該当する処理を行うファンクションブロック{numref}`code_deque_sample`にご紹介します。
 
+ポイントは次の3点です。
 
-```{code} iecst
+* 入力変数ではデータの実体ではなく、配列サイズ、配列先頭ポインタアドレス、入出力するデータの変数のポインタアドレス、入出力するデータのサイズ、をそれぞれ受け渡す。
+
+* ファンクションブロック内では、これらのメタデータを手掛かりに、配列の決まった場所へ入出力用の変数へ出し入れする。
+
+* キーとなるファンクションは、次の3つ。
+
+    [ADR](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/2529015179.html?id=1469827000687367080)
+        : 変数のポインタアドレスを求めるファンクション
+
+    [SIZEOF](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/2528896907.html?id=1985493739426684680)
+        : 変数型のデータサイズ（バイト数）を求めるファンクション
+
+    [MEMCPY](https://infosys.beckhoff.com/content/1033/tcplclib_tc2_system/31041163.html?id=1342802077509225213)
+        : ポインタアドレスとデータサイズを指定し、メモリイメージをコピーするファンクション
+
+```{note}
+加えて重要な点として、ポインタ型の変数を宣言する際は、`POINTER TO <対象変数>`とすることで、型安全なアクセスが可能ですが、型に縛られないポインタアドレスの受け渡しを行う場合には、`PVOID`を宣言しておくと良いでしょう。ただし、受け渡した後、実際にデリファレンスする変数の型が一意ではなくてもコンパイルが通ってしまうため、型安全ではない点にご注意ください。
+```
+
+以上を駆使して、まるでストッカ棚へデータを出し入れするような装置のイメージのファンクションブロックが、このサンプルコードの仕組みとなります。
+
+```{code-block} iecst
+:linenos:
+:caption: 両端キューファンクションブロック
+:name: code_deque_sample
+
 FUNCTION_BLOCK FB_deque
 VAR_INPUT
     pArrayData: PVOID; // 配列変数のポインタ
     pData : PVOID; // セットしたいデータ型の無いメモリアドレスを指定する場合はPVOID型を使う
     cbData: UDINT; // 配列の要素変数のサイズを指定
     bPut: BOOL; // 書込み
-    bGet: BOOL; // 読み出し
+    bGetFirst: BOOL; // FIFO読み出し
+	bGetLast: BOOL; // LIFO読み出し
     nArraySize: UDINT; // 配列サイズ
 END_VAR
 
@@ -92,7 +119,9 @@ VAR
     write_index: UDINT; // 現在の書込みバッファインデックス
     read_index: UDINT; // 現在の読み込みバッファインデックス
     address_temp: PVOID;
+	write_flag :BOOL;
 END_VAR
+
 
 bError := FALSE;
 
@@ -108,15 +137,14 @@ IF bPut AND buffer_usage < nArraySize AND nArraySize > 0 THEN
     IF write_index > nArraySize - 1 THEN
         write_index := 0;
     END_IF
-    // Buffer使用量カウンタを繰り上げ
-    buffer_usage := buffer_usage + 1;
+	write_flag := TRUE;
 ELSIF bPut THEN
     bError := TRUE;
 END_IF
 
-// バッファからデータ読み出し要求の処理
+// FIFO読み出し要求の処理
 
-IF bGet AND buffer_usage > 0 AND nArraySize > 0 THEN
+IF bGetFirst AND buffer_usage > 0 AND nArraySize > 0 THEN
     // 書込み先の配列アドレスを計算
     address_temp := pArrayData + cbData * read_index;
     // 計算したアドレスへ、データをデータサイズ分メモリコピーする
@@ -127,10 +155,36 @@ IF bGet AND buffer_usage > 0 AND nArraySize > 0 THEN
     IF read_index > nArraySize - 1 THEN
         read_index := 0;
     END_IF
-    // Buffer使用量カウンタを繰り下げ
-    buffer_usage := buffer_usage - 1;
-ELSIF bGet THEN
+	write_flag := FALSE;
+ELSIF bGetFirst THEN
     bError := TRUE;
+END_IF
+
+// LIFO読み出し要求の処理
+
+IF bGetLast AND buffer_usage > 0 AND nArraySize > 0 THEN
+    // 書込み先の配列アドレスを計算
+    address_temp := pArrayData + cbData * write_index;
+    // 計算したアドレスへ、データをデータサイズ分メモリコピーする
+    MEMCPY(pData, address_temp, cbData);
+    IF write_index = 0 THEN
+		// 配列サイズに達したらインデックスを0リセット
+        write_index := nArraySize;
+    END_IF
+	// 次のバッファインデックスへ繰り上げ
+	write_index := write_index - 1;	
+	write_flag := FALSE;
+ELSIF bGetLast THEN
+    bError := TRUE;
+END_IF
+
+// バッファ使用量計算
+IF write_index > read_index THEN
+	buffer_usage := write_index - read_index;
+ELSIF write_index = read_index AND NOT write_flag THEN
+	buffer_usage := write_index - read_index;
+ELSE
+	buffer_usage := nArraySize - read_index + write_index;
 END_IF
 ```
 
@@ -175,7 +229,8 @@ fb_deque(
     pData := ADR(Nobita_kun),
     cbData := SIZEOF(Nobita_kun),
     nArraySize := BUFFER_SIZE,
-    bGet := FALSE,
+    bGetFirst := FALSE,
+    bGetLast := FALSE,
     bPut := write_trigger.Q
 );
 
@@ -184,7 +239,8 @@ fb_deque(
     pData := ADR(Doraemon),
     cbData := SIZEOF(Doraemon),
     nArraySize := BUFFER_SIZE,
-    bGet := FALSE,
+    bGetFirst := FALSE,
+    bGetLast := FALSE,
     bPut := write_trigger.Q
 );
 
@@ -193,23 +249,36 @@ fb_deque(
     pData := ADR(Shizu_chan),
     cbData := SIZEOF(Shizu_chan),
     nArraySize := BUFFER_SIZE,
-    bGet := FALSE,
+    bGetFirst := FALSE,
+    bGetLast := FALSE,
     bPut := write_trigger.Q
 );
 
-// キューアウト
+// キューアウト(FIFO)
 fb_deque(
     pArrayData := ADR(Users),
     pData := ADR(output),
     cbData := SIZEOF(output),
     nArraySize := BUFFER_SIZE,
-    bPut := FALSE,
-    bGet := read_trigger.Q
+    bGetFirst := read_trigger.Q,
+    bGetLast := FALSE,
+    bPut := FALSE
+);
+
+// キューアウト(LIFO)
+fb_deque(
+    pArrayData := ADR(Users),
+    pData := ADR(output),
+    cbData := SIZEOF(output),
+    nArraySize := BUFFER_SIZE,
+    bGetFirst := FALSE,
+    bGetLast := read_trigger.Q,
+    bPut := FALSE
 );
 ```
 
 ```{note}
-今回は、サンプルコード紹介する際の見せ方の都合で、キューイン、キューアウトともにファンクションブロック本体に記述してbPut, bGetの入力変数で制御していますが、変数状態によっては両方動作してしまう事で書込みデータを破壊する恐れがあります。よって、より望ましいのはメソッドで処理していただいた方が安全です。
+今回は、サンプルコード紹介する際の見せ方の都合で、キューイン、キューアウトともにファンクションブロック本体に記述してbPut, bGetFirst, bGetLast の入力変数で制御していますが、より望ましいのはメソッドで処理していただいた方が安全です。
 ```
 
 
