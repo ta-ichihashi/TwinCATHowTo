@@ -49,14 +49,14 @@ release = '第1版'
 extensions = [
     'myst_parser',
     'japanesesupport',
-    'sphinx_revealjs',
     'docxbuilder',
     'sphinx.ext.githubpages',
     'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag',
     'sphinxcontrib.actdiag',
     'sphinxcontrib.nwdiag',
-    'sphinxcontrib.youtube'
+    'sphinxcontrib.youtube',
+    'sphinxcontrib.applehelp'
 ]
 
 source_suffix = {
@@ -83,16 +83,6 @@ blockdiag_fontpath = './source/assets/ipaexg.ttf'
 actdiag_fontpath = './source/assets/ipaexg.ttf'
 seqdiag_fontpath = './source/assets/ipaexg.ttf'
 nwdiag_fontpath = './source/assets/ipaexg.ttf'
-
-# -- Options for revealjs output -------------------------------------------------
-revealjs_style_theme = 'sky'
-# 普通のHTMLと同じものを使えるので、簡単な設定として指定
-# revealjs_static_path = html_static_path
-# Reveal.jsプレゼンテーションで使うCSSファイルを指定
-# revealjs_static_pathで指定したフォルダからのパス
-revealjs_css_files = [
-    "slides.css",
-]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
