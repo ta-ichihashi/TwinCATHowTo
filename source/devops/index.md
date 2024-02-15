@@ -23,6 +23,7 @@
 :hidden:
 
 ../version_control/index.md
+../multiuser/index.md
 ../library/index.md
 ../simulation/index.md
 ```

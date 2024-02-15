@@ -69,7 +69,7 @@
 
     ![](assets/2023-12-17-20-24-07.png){align=center}
 
-    ```{admonition}
+    ```{admonition} 言語設定は必ずおこなってください
     :class: warning
 
     2の手順で言語を追加しない場合、英語だけであってもこの操作は必要です。この手順を実施しないと、{ref}`chapter_database_coupling` 節に示すデータベース連携の設定を行ってもイベントがデータベースに記録されません。

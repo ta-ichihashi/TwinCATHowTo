@@ -1,5 +1,5 @@
 (section_install_git)=
-# ソースコントロール機能
+# 導入
 
 [InfoSys サイトリンク](https://infosys.beckhoff.com/content/1033/tc3_sourcecontrol/index.html?id=6468228250695776754)
 
@@ -61,9 +61,3 @@ Gitをインストールしただけですと、原則CUI（コマンドユー�
 
     ![](assets/2023-05-23-23-17-46.png){width=600px align=center}
 
-```{toctree}
-:maxdepth: 2
-:hidden:
-
-working_source_control
-```
