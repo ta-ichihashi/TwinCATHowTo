@@ -10,14 +10,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+from enum import Enum
+from sphinx.highlighting import lexers
 import sys
 import os
 sys.path.insert(0, os.path.abspath('.'))
-
-
-from sphinx.highlighting import lexers
 from iecst import IecstLexer
-from enum import Enum
 
 
 lexers['iecst'] = IecstLexer()
@@ -38,7 +36,7 @@ class Author(Enum):
 titles = ['TwinCATテクニカルノート']
 
 project = ' '.join(titles)
-copyright = '2023, ベッコフオートメーション株式会社'
+copyright = '2024, ベッコフオートメーション株式会社'
 author = Author.author_native.value
 
 # The full version, including alpha/beta/rc tags

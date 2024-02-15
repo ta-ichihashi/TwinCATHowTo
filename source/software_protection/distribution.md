@@ -35,5 +35,5 @@ TwinCATメニューの `Software Protection` 項目を選択し、`Database` タ
     ![](assets/2023-05-15-18-52-01.png){align=center width=400px}
 
 ```{note}
-ユーザ自身によるパスワード変更はできません。これは、{numref}`system_acl` で設定した `Rights` タブの項目の中の、`User DB Management` がユーザデータベース管理者にしか許可されていないためです。ユーザデータベース管理者が与えたユーザ名およびパスワードを用いてください。
+ユーザ自身によるパスワード変更はできません。これは、{ref}`system_acl` で設定した `Rights` タブの項目の中の、`User DB Management` がユーザデータベース管理者にしか許可されていないためです。ユーザデータベース管理者が与えたユーザ名およびパスワードを用いてください。
 ```

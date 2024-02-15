@@ -55,7 +55,7 @@ CSVの収集を開始するには、次の手順を実施してください。
 
     }
 
-:numref:`section_plc_trigger` に示したPLCプログラムでは、100mm後進動作が完了後の inposition 信号を export_trigger[0] として出力しました。
+:ref:`section_plc_trigger` に示したPLCプログラムでは、100mm後進動作が完了後の inposition 信号を export_trigger[0] として出力しました。
 
 これを DataPool に登録したものとします。ここでは、つぎの条件でCSVファイルを出力する様に設定してみます。
 
