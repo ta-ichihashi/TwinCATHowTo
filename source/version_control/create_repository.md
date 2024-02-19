@@ -5,52 +5,20 @@
 (section_gitignore_for_twincat)=
 ## TwinCATプロジェクトへの`.gitignore`登録
 
-`.gitignore`とは、そのフォルダ以下にある該当するファイルやディレクトリをバージョン管理対象から無視するための設定です。様々な一時ファイルや、キャッシュなどを除外する設定をあらかじめ行っておき、登録前に
+`.gitignore`とは、そのフォルダ以下にある該当するファイルやディレクトリをバージョン管理対象から無視するための設定です。様々な一時ファイルや、キャッシュなどを除外する設定をあらかじめ行っておきます。以下のサイトに、.gitignoreの定義があります。ソリューションファイル(***.sln)が有る場所と同じディレクトリにテキスト形式で`.gitignore`ファイルを作成し、この定義内容を書き込んで保存してください。
 
-`.gitignore`の置き場所は様々な場所に設置することができますが、この節で設定する対象フォルダは、**TwinCATプロジェクトフォルダ内** です。
+TwinCAT3の .gitignore 定義
+    : [https://infosys.beckhoff.com/content/1033/tc3_sourcecontrol/14604066827.html?id=2009874071818176821](https://infosys.beckhoff.com/content/1033/tc3_sourcecontrol/14604066827.html?id=2009874071818176821)
 
-```
-Solution_Project
-│  .gitattributes
-│  .gitignore  <------------------- Visual studioが自動的に生成
-│  Project1.sln
-│
-└─TwinCAT_Project
-    │  .gitignore  <--------------- ここに置く
-    │  TwinCAT Project1.tsproj
-```
+置き場所
+    : ```
+        Solution_Project
+        │  .gitattributes
+        │  .gitignore  <------------------- ここに置く
+        │  Project1.sln
 
-ソリューションプロジェクトに対しても`.gitignore`を配置しますが、こちらはVisual Studioによって自動的生成されます。
+        ```
 
-TwinCATプロジェクトフォルダ内に、`.gitignore`という名前のテキストファイルを作成し、テキストエディタにて、以下の内容を書いて保存しておいてください。
-
-```sh
-# gitignore template for TwinCAT3
-# website: https://www.beckhoff.com/twincat3/
-#
-# Recommended: VisualStudio.gitignore
-
-# TwinCAT files
-*.tpy
-*.tclrs
-*.compiled-library
-*.compileinfo
-# Don't include the tmc-file rule if either of the following is true:
-#   1. You've got TwinCAT C++ projects, as the information in the TMC-file is created manually for the C++ projects (in that case, only (manually) ignore the tmc-files for the PLC projects)
-#   2. You've created a standalone PLC-project and added events to it, as these are stored in the TMC-file.
-*.tmc
-*.tmcRefac
-*.library
-*.project.~u
-*.tsproj.bak
-*.xti.bak
-LineIDs.dbg
-LineIDs.dbg.bak
-_Boot/
-_CompileInfo/
-_Libraries/
-_ModuleInstall/
-```
 
 ## リポジトリを作成
 
