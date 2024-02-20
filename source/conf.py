@@ -90,12 +90,16 @@ nwdiag_fontpath = './source/assets/ipaexg.ttf'
 html_theme = 'sphinx_book_theme'
 # html_static_path = ['_static']
 html_sidebars = {
-    "**": ["sbt-sidebar-nav.html"]
+    "**": [
+        "search-field.html",
+        "sbt-sidebar-nav.html"
+        ]
 }
 
 html_theme_options = {
     "repository_url": "https://github.com/Beckhoff-JP/TwinCATHowTo",
     "use_repository_button": True,
+    "home_page_in_toc": True,
 }
 
 myst_enable_extensions = [
