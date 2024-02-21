@@ -5,6 +5,76 @@
 
 この章では、このライブラリ機能の基本的な使い方について説明します。最初にライブラリの作成と、その使い方について大まかな手順概要を説明し、続いてライブラリ作成の詳細な設定方法について説明します。
 
+### 事前準備（ライブラリプロジェクトの作成）
+
+ライブラリの基になるTwinCATプロジェクトを作成します。この中で作成したファンクション、および、ファンクションブロックが、ライブラリとして活用できます。したがってファンクションやファンクションブロックを作成する際には、次の注意を必ず守ってください。
+
+カプセル化を厳密に守る
+    : 機能を独立させるには、ファンクションやファンクションブロック外で定義されたグローバルなデータを使用せず、ファンクション、ファクションブロック内の変数で定義したデータを使ってください。型を定義したデータをアクセッサ（Property）を通じて受け渡します。
+    
+    : 大きな構造データについてはインターフェースやリファレンス、ポインタなどを用いて参照渡しすることを意識してください。
+
+ドキュメントを明記する
+    : 少なくともMethod/Propertyや、VAR_INPUT, VAR_OUTPUTなどの変数には必ず行コメントを付けてください。ライブラリの説明欄にそのまま転記されます。
+
+    : 作成したライブラリをより正しく便利に使ってもらうには、{ref}`chapter_documentation` に示した方法でドキュメントを記述いただくことを推奨します。
+
+定数およびライブラリパラメータを活用してください
+    : 配列のサイズなどを定義する場合は、定数`VAR CONSTANT`を活用してください。また、ライブラリを使うアプリケーション要件により配列サイズなどのリソース量を調整を必要とする場合は、次項に示すライブラリパラメータ化することができます。
+    
+(section_library_parameter)=
+### ライブラリパラメータの設定方法
+
+ライブラリパラメータは、コンテキストメニューの`Add`から`Parameter List...`を作成します。GVLs以下に作成してください。
+
+![](assets/2024-02-21-16-54-02.png){align=center}
+
+パラメータへアクセスするためのnamespaceを設定します。ライブラリが使用されるプロジェクト含めて、一意の名前となるようにユニークな名前を設定してください。
+
+```{warning}
+
+単純な名前では、他のライブラリパラメータと重複し、正常にアクセスできなくなる可能性があります。
+```
+
+![](assets/2024-02-21-16-55-31.png){align=center}
+
+次の例の通り、`VAR_GLOBAL CONSTANT`にて設定します。
+
+```{code} iecst
+{attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT
+	COMMAND_QUEUE_BUFFER_SIZE :UDINT := 64; // Queue size for database insert command.
+	DATA_BUFFER_SIZE	:UDINT := 10000; // Data buffer size
+END_VAR
+```
+```{warning}
+初期値は必ず設定してください。ライブラリパラメータを設定しない場合、リソースサイズが正しく反映されず、プログラムロジックによっては著しい損害を与える不具合につながる恐れがあります。
+```
+
+プログラム内では、グローバル変数と同様、定数として使用することができます。
+
+```
+<Parameter list名>.<ライブラリパラメータ変数名>
+```
+
+例えば、配列のサイズ指定としても使用できますし、変数初期値としても使用できます。
+
+```{code} iecst
+FUNCTION_BLOCK dequeue
+VAR
+	_queue_usage:	UDINT;
+	_queue_size:	UDINT := DbLibParam.COMMAND_QUEUE_BUFFER_SIZE;
+	nWriteIndex: 	UDINT;
+	nReadIndex: 	UDINT;
+	queue_buffer:	ARRAY [0..DbLibParam.COMMAND_QUEUE_BUFFER_SIZE - 1] OF DbInsertCommand;
+END_VAR
+```
+
+このように作成されたライブラリは、使用時に次の通りライブラリマネージャから可変に設定することができますので、求められるアプリケーション要件によりスケールするリソース量に柔軟性を持たせることができます。
+
+![](assets/2024-02-21-18-08-34.png){align=center}
+
+
 (library_making_basic)=
 ### TwinCATプロジェクトからライブラリを作る手順
 
@@ -27,7 +97,7 @@
     Version, ライブラリバージョンを定義します。必ず4桁のピリオド区切りで定義してください。
     Released, {ref}`section_about_released_flag` をご覧ください。
     Library Categories, {ref}`section_library_category` をご覧ください。
-    Default namespace, 読み出す側とライブラリ内の変数名やファンクションブロック名が被らないように、該当ライブラリ内のリソースの頭に付ける接頭語を定義します。
+    Default namespace, 読み出す側とライブラリ内の変数名やファンクションブロック名が被らないように、該当ライブラリ内のリソースの頭に付ける接頭語を定義します。これをnamespaceと言います。ここではLibraryを読み込んだ際に設定される規定のnamespaceを設定します。Library追加後、任意のnamepspaceを設定できます。
     Placeholder, 作成したライブラリを読み込むと、デフォルトでは`Title`に示したPlaceholderが自動作成されて、これにライブラリが紐づきます。任意のPlaceholderを指定したい場合はこの欄で指定します。派生版のライブラリを作成される場合のブランチ名として利用されると良いでしょう。
     Author, 開発者名を記入します。
     Description, 説明を記入します。
