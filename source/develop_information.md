@@ -11,4 +11,5 @@ scope_view/index.rst
 database/index.md
 tf6311/index.md
 el_ethernet/index.md
+shared_memory/index.md
 ```
