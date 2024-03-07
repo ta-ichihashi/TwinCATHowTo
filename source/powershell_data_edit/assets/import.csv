@@ -1,0 +1,8 @@
+"Variable","Value"
+"GVL.test_data[1].ar_8[1]","36.8"
+"GVL.test_data[1].flag","True"
+"GVL.test_data[1].r_1","3.14"
+"GVL.test_data[1].record[0].datetime","2024-03-07 17:00:00"
+"GVL.test_data[1].record[0].value","32"
+"GVL.test_data[1].record[1].datetime","2024-03-07 17:14:32"
+"GVL.test_data[1].record[1].value","5"

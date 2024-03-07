@@ -12,5 +12,6 @@ TwinCATのADS通信を使うと、TwinCATプロジェクト内の変数データ
 :hidden:
 
 setup
+twincat_example
 powershell
 ```
