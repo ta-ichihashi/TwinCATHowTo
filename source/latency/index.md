@@ -29,44 +29,9 @@ PowerShellツールを動作させるレイテンシログ収集用のPCでは�
 
 ## 準備
 
-### TcXaeMgmtのインストール
+### TcXaeMgmtの最新バージョンへの更新
 
-インターネットに接続された環境で、管理者モードでPowerShellを起動してください。以下のコマンドを順に入力します。
-
-1. スクリプト実行を許可する
-
-    ```powershell
-    PS> Set-ExecutionPolicy RemoteSigned
-    ```
-
-2. PowershellGetモジュールの最新版をインストール
-
-    ```powershell
-    PS> Install-Module PowershellGet -Force
-    ```
-
-3. TcXaeMgmtツールのインストール
-
-    ```powershell
-    PS> Install-Module TcXaeMgmt -Force -AcceptLicense -SkipPublisherCheck
-    ```
-
-4. 完了したら下記の通りインストールできたのかを確認する  
-    下記の出力結果にある。 ``Directory: `` 以後に記載されたパスを記憶する。次の手順でパスを登録する必要がある。 
-
-    ```{code-block} powershell
-    PS > Get-Module TcXaeMgmt –ListAvailable
-     Directory: C:\Users\****
-    ModuleType Version Name ExportedCommands
-    ---------- ------- ---- ----------------
-    Script 6.0.57 TcXaeMgmt {Add-AdsRoute, Close-TcSession, Copy-AdsFile, Get-AdsRoute...
-    ```
-
-5. 環境変数“PSModulePath” へインストールされたTcXaeMgmtのパスを登録。  
-    ``ControlPanelのSystem Properties`` から環境変数の設定項目を探し、 ``System Variable`` の中から ``PSModulePath`` を選択。無け
-    れば ``Edit..`` ボタンを押して上記パスのエントリーを ``New`` で追加。
-
-    ![](2023-01-13-10-36-24.png)
+{ref}`section_update_tcxaemgmt` を参照してください。
 
 ## ツールの実行
 
