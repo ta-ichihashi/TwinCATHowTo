@@ -19,6 +19,8 @@ TYPE sub_struct :
 STRUCT
     datetime: STRING(255);
     value: UDINT;
+    duration: TIME;
+    update_at: DT;
 END_STRUCT
 END_TYPE
 ```
