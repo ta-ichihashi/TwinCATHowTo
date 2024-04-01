@@ -6,66 +6,18 @@
 
 ![](assets/2024-03-29-15-48-52.png){align=center}
 
-もう一つの方法として、ESIファイルをテキストエディタで開く方法があります。TwinCATのXAEにおいてESIファイルは、`C:\TwinCAT\3.1\Config\Io\EtherCAT` 以下に配置します。この中の該当するサブデバイスのESIファイルを閲覧する事で、個々の`Sub index`オブジェクトの名称、データ型、サイズがわかります。
+```{note}
+ODのより詳しい情報はデバイスメーカが提供している仕様書を参照してください。弊社製のELターミナルのマニュアル（InfoSys）では、[EtherCAT Terminals](https://infosys.beckhoff.com/content/1033/fieldbusinfosys/3149086475.html?id=1665754046226245738) 以下の各デバイスの `Commissioning` 以下の`Standard Object`や、`CoE Object`などに記載があります。
 
-```{code-block} xml
-:caption: Beckhoff EL66xx.xml
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<EtherCATInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="EtherCATInfo.xsd" Version="1.2">
-    <Descriptions>
-        <Devices>
-            <Device Physics="KK">
-                <Profile>
-                    <Dictionary>
-                        <DataTypes>
-                            <DataType>
-                                <Index>#xFA20</Index>
-                                <Name>Device Diag</Name>
-                                <Name>DTFA20</Name>
-                                <BitSize>480</BitSize>
-                                <SubItem>
-                                    <SubIdx>0</SubIdx>
-                                    <Name>SubIndex 000</Name>
-                                    <Type>USINT</Type>
-                                    <BitSize>8</BitSize>
-                                    <BitOffs>0</BitOffs>
-                                    <Flags>
-                                        <Access>ro</Access>
-                                    </Flags>
-                                </SubItem>
-                                <SubItem>
-                                    <SubIdx>1</SubIdx>
-                                    <Name>Status</Name>
-                                    <Type>UINT</Type>
-                                    <BitSize>16</BitSize>
-                                    <BitOffs>16</BitOffs>
-                                    <Flags>
-                                        <Access>ro</Access>
-                                    </Flags>
-                                </SubItem>
-                                <SubItem>
-                                    <SubIdx>2</SubIdx>
-                                    <Name>CPU Usage [%]</Name>
-                                    <Type>UINT</Type>
-                                    <BitSize>16</BitSize>
-                                    <BitOffs>32</BitOffs>
-                                    <Flags>
-                                        <Access>ro</Access>
-                                    </Flags>
-                                </SubItem>
-                                <SubItem>
-                                    <SubIdx>3</SubIdx>
-                                    <Name>Heap Usage [%]</Name>
-                                    <Type>UINT</Type>
-                                    <BitSize>16</BitSize>
-                                    <BitOffs>48</BitOffs>
-                                    <Flags>
-                                        <Access>ro</Access>
-                                    </Flags>
-                                </SubItem>
-                                    :
+例:
+    : [EL34x3 電力計測ターミナルの場合](https://infosys.beckhoff.com/content/1033/el34x3/2346739851.html?id=5414847329222130982)
+    : [EL6695 EtherCATブリッジターミナルの場合](https://infosys.beckhoff.com/content/1033/el6695/1318278155.html?id=1498117205910471182)
 ```
-これに応じた構造体を以下の通り定義します。
+
+
+## 構造体の定義
+
+任意の`Index`をコンプリートアクセスする場合、サブインデックスのバイト配列に準じた構造体を定義します。定義する構造体は2Byteアライメントとなるように`pack_mode`を指定します。
 
 ```{admonition} 重要
 :class: warning
