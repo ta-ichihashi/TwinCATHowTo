@@ -1,3 +1,4 @@
+(freeze_library_version)=
 # 内包されるライブラリバージョンをフリーズする
 
 以下の通り、PLCプロジェクト内の References をダブルクリックして、Library managerを起動します。Placeholder設定にて指定のバージョンにフリーズする手順を説明します。
