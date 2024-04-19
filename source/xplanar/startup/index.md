@@ -44,7 +44,3 @@ XPlanarの開発は次の手順で行います。
     ![](assets/set_unset_mover.png){align=center width=450px}
 
 ```
-
-## EtherCATのスキャン
-
-
