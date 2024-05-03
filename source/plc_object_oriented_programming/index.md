@@ -43,4 +43,5 @@ VAR_IN_OUTの活用
 :hidden:
 
 object_interface
+sample_universal_activity
 ```
