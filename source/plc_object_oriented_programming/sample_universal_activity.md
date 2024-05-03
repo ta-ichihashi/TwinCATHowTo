@@ -118,7 +118,7 @@ END_CASE
 
 本サンプルプログラムは、以下で公開しています。
 
-https://github.com/Beckhoff-JP/PLC_JobManagementFramework.git
+[https://github.com/Beckhoff-JP/PLC_JobManagementFramework.git](https://github.com/Beckhoff-JP/PLC_JobManagementFramework.git)
 
 ```
 
