@@ -110,37 +110,28 @@ END_CASE
 
 この実装例でみられるとおり、本来の目的では、状態1はタイマによる処理、状態2はカウンタによる処理、としたいところですが、タイマの後始末や初期化処理がその前後のステップに食い込むなど、明確にプログラムロジックが分かれていません。
 
-これはメンテナンス性、可読性を落とす原因となっています。これらを処理目的毎に明確に「タスク」に分離し、オブジェクトモデルでジョブを構築できることを目指しましょう。
+PLCは、TcCOMモジュール全体でサイクリックに処理が繰り返されるもので、機能毎に独立して処理される訳ではありません。よって前述のとおり非活性状態のオブジェクトを含む、全体のオブジェクト状態を常に管理し続けなければなりません。これが徹底されていないことにより、不具合やバグが生じる要因となりえます。
 
-## サンプルプログラム解説
+## 並列ジョブ制御フレームワークサンプルコードのご紹介
 
-```{note}
+このサンプルコードでは、タスクの生成から終了に対する統合的な状態管理機能と、その状態に応じたユーザ定義機能を提供します。これにより前節で説明したオブジェクト状態管理に関する問題を解決することができます。
 
-本サンプルプログラムは、以下で公開しています。
+また、さまざまなIOやハードウェアの制御機能を「タスク」として抽象化することができます。これによってソフトウェア機能の部品化を加速し、統一したインターフェースに基づいてトレーサビリティ、イベント管理など付帯機能などとの連携が容易になります。
 
-[https://github.com/Beckhoff-JP/PLC_JobManagementFramework.git](https://github.com/Beckhoff-JP/PLC_JobManagementFramework.git)
+### タスクの構成とオブジェクトモデル
 
+フレームワークでは、{numref}`fig_future_time_chart`に示すタイミングチャートの単位をタスクとして制御できるようにします。タスクの本体は`executing()`で定義しますが、`init()`、`quit()`でその前後処理を定義します。
+
+```{figure} assets/task_time_chart.png
+:align: center
+:name: fig_future_time_chart
+
+タスクの構成と外部とのハンドシェーク
 ```
 
-まず、今回作成するジョブ制御フレームワークのクラス図を{numref}`fig_job_control_class_diagram` に示します。
+クラス図を{numref}`fig_job_control_class_diagram` に示します。タスクの定義は、`InterfaceFuture`のインターフェースを実装することで行います。サンプルコードではPOUsのツリー以下に`model/activities`というサブフォルダを構成し、ここにさまざまな制御パターンを集めて定義しています。これを用いてMAINプログラムでジョブを組み立てます。（{numref}`example_of_main_program_using_job_framework`）
 
-このモデルの中核は、タスクの構成を表すインターフェース`InterfaceFuture`です。非同期並列処理の概念である、[Futureパターン](https://ja.wikipedia.org/wiki/Future_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)からこの名前としました。
-
-このインターフェースでは、次のメソッドを定義します。いずれも引数は無しで、戻り値はBOOL型です。`FB_Executor` オブジェクトによりメソッドが実行され、処理を進行するためには、個々のメソッドの戻り値をTRUEにします。処理結果は別途`HRESULT`型のプロパティ`result`にセットします。
-
-```{csv-table}
-:header: メソッド名, 説明
-
-`init`, 実行前に必要な変数やオブジェクトの初期化を行います。
-`execute`, 独自の処理ロジックを実装します。
-`quit`, 実行後の変数やオブジェクトの後始末を行います。
-```
-
-このインターフェースを実装するプログラムは、すべて特定のフォルダに集めておきます。この例では`activities`フォルダにあります。
-
-ここには、いわば制御デザインパターンを格納する場所です。ハードウェアに合わせたものや、動作パターン毎にファンクションブロックを配置します。
-
-正常系だけではなく、異常終了した後の特別な処理なども定義しておくと良いでしょう。
+このように、制御デザインパターンと、これを組み合わせたジョブを区別して管理することで拡張性に優れた制御プログラムや、制御デザインパターンのライブラリ化が容易になります。
 
 ```{figure} assets/activity_control_class_diag.png
 :align: center
@@ -149,45 +140,10 @@ END_CASE
 JOB制御クラス図
 ```
 
-InterfaceFutureを実装したファンクションブロックインスタンスを`FB_Executor`の`future`プロパティを経てロードし、init()およびexecute()メソッドを実行すると、{numref}`fig_future_time_chart`の基本処理単位のセッションを実施します。先ほど示した状態マシンの例にあるような、制御実行前の準備、そして、制御終了後の処理など個別に定義でき、前処理や処理本体の開始タイミングは外部から与えられるようにします。
-
-```{figure} assets/task_time_chart.png
-:align: center
-:name: fig_future_time_chart
-
-Futureの構成とハンドシェーク
-```
-
-また、単一のタスクだけではなく、複数のタスクをまとめて処理するコンテナオブジェクトを用意しました。`FB_ParallelJobContainer`や`FB_SerialJobContainer`を用いると、{numref}`fig_parallel_job_container`や、{numref}`fig_serial_job_container`のように同時実行、または、逐次実行が可能となります。
-
-
-```{figure} assets/run_future_cue.png
-:align: center
-:name: fig_parallel_job_container
-
-並列処理JOBコンテナ（`FB_ParallelJobContainer`によるJOB配置イメージ）
-```
-
-```{figure} assets/run_future_serial.png
-:align: center
-:name: fig_serial_job_container
-
-直列処理JOBコンテナ（`FB_SerialJobContainer`によるJOB配置イメージ）
-```
-
-また、`FB_ParallelJobContainer`と`FB_SerialJobContainer`もまた`InterfaceFuture`インターフェースを実装していますので、それ自体を`FB_Executor`に処理させることができます。これにより、並列処理と逐次処理を組み合わせた複雑なタスク実行が可能となっています。
-
-```{tip}
-このデータモデルは、コンテナと処理が親子関係を構成し、定義によってさまざまな枝葉モデルが構築可能です。このソフト実装のデザインパターンを、[GoFのCompositeパターン](https://ja.wikipedia.org/wiki/Composite_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)と呼びます。
-```
-
-コンテナも含めたJOBの概念図は次の通りとなります。色付きの線が、個々のタスクに該当します（{numref}`fig_job_control_class_diagram`の`ConcreteActivity`に該当するオブジェクト）。これらはFB_ParallelJobContainerやFB_SerialJobContainerと共に、InterfaceFutureを実装したものです。このインターフェースを使って、FB_Executorが処理を実行します。
-
-![](assets/sample_code_job_structure.png){align=center}
-
-次のMAINプログラムは、この図に従った実際のプログラム例です。
-
 ```{code-block} iecst
+:caption: 並列ジョブ管理フレームワークを用いたMAINプログラム例
+:name: example_of_main_program_using_job_framework
+
 PROGRAM MAIN
 VAR
     _state :UINT;
@@ -195,6 +151,10 @@ VAR
     fbTask2 : FB_ControllerType_1;
     fbTask3 : FB_ControllerType_2;
     fbTask4 : FB_ControllerType_2;
+    fbTask5 : FB_ControllerType_1;
+    fbTask6 : FB_ControllerType_1;
+
+
     component1_in : BOOL;
     component1_out : BOOL;
     component2_in : BOOL;
@@ -208,18 +168,22 @@ VAR
     serial_job3 : FB_SerialJobContainer;
     pararel_job1 : FB_ParallelJobContainer;
     pararel_job2 : FB_ParallelJobContainer;
-    executor : FB_Executor;
+    executor: FB_Executor;
+    execution_step: UINT;
+    resume: BOOL;
+    abort: BOOL;
 END_VAR
 
-
-// FB_Executor.execute()メソッドは常時実行
-executor.execute();
+// HMIボタンによる処理中断
+IF abort THEN
+    executor.abort();
+END_IF
 
 CASE _state OF
     0:
-        // 固有パラメータ設定
-        fbTask1.own_parameter := T#3S;
-        fbTask2.own_parameter := T#10S;
+        // 固有パラメータ設
+        fbTask1.own_parameter := T#13S;
+        fbTask2.own_parameter := T#20S;
         fbTask3.own_parameter := 2;
         fbTask4.own_parameter := 2;
         
@@ -236,22 +200,221 @@ CASE _state OF
         serial_job1.add_future(fbTask2);
         serial_job2.add_future(fbTask3);
         serial_job2.add_future(fbTask4);
-        pararel_job2.add_future(fbTask1);
-        pararel_job2.add_future(fbTask2);
+        pararel_job2.add_future(fbTask3); // 同時実行でなければ同じFutureオブジェクトを使いまわせる
+        pararel_job2.add_future(fbTask4);
         serial_job3.add_future(pararel_job1);
         serial_job3.add_future(pararel_job2);
         executor.future := serial_job3;
         _state := 1;
     1:
-        // シーケンス開始
-        IF executor.ready THEN
+        // タスクスタート（wait_for_process か 処理中断再開でスタート）
+        IF (executor.current_state = E_FutureExecutionState.wait_for_process AND executor.ready) OR 
+            (executor.current_state = E_FutureExecutionState.abort AND resume) THEN
             executor.start();
         END_IF
-        IF executor.done THEN
+        // ジョブ実行中execute()の常時実行
+        IF executor.execute() AND SUCCEEDED(executor.result) THEN
             _state := 2;
         END_IF
     2:
+        // シーケンス初期化を行い、再度ジョブ実行（繰り返し処理）
         executor.init();
         _state := 1;
 END_CASE
+
+execution_step := executor.active_task_id;
+
+resume := FALSE;
+
 ```
+
+
+```{note}
+
+本サンプルプログラムは、以下で公開しています。
+
+[https://github.com/Beckhoff-JP/PLC_JobManagementFramework.git](https://github.com/Beckhoff-JP/PLC_JobManagementFramework.git)
+
+```
+
+### InterfaceFuture
+
+
+```{csv-table}
+:header: メソッド名, 型, 戻り値 ,説明
+
+`init`, BOOL , 実行前に必要な変数やオブジェクトの初期化を行います。処理完了時にTRUEを返す必要があります。
+`execute`, BOOL , タスク本体の処理を実装します。処理完了時にTRUEを返す必要があります。
+`quit`, BOOL , 実行後の変数やオブジェクトの後始末を行います。処理完了時にTRUEを返す必要があります。
+`abort`, BOOL , 中断処理が行われた際に実施する処理を実装します。処理完了時にTRUEを返す必要があります。
+```
+
+```{csv-table}
+:header: プロパティ名,型, 方向 ,説明
+:widths: 1,1,1,5
+
+result, HRESULT, GET, 処理結果を[`hrErrorCode`](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/12049349259.html?id=2525089929595466454)に従った型で出力します。
+active_futures, UINT, GET, `FB_SerialJobContainer`や`FB_ParallelJobContainer`に実装されたプロパティ。`FB_SerialJobContainer`の場合は現在処理中のFuture番号を返す。`FB_ParallelJobContainer`では、実行するFutureの合計数を返す。いずれも`executing()`メソッド実行中以外は0を返す。`FB_Executor` の `active_task_id` プロパティから取り出すことができます。
+```
+
+
+`InterfaceFuture`インターフェースの名前は[Futureパターン](https://ja.wikipedia.org/wiki/Future_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)から由来しています。複数の演算コアで並列処理を行うのではなく、単一の演算コア上にタスクを順次パイプライン実行していく仕組みにより、処理完了を待たされる（ブロックされる）ことなく処理を進めることができます。実際の演算は将来行われることからFutureパターンと呼ばれています。
+
+このインターフェースにより実装したファンクションブロックをタスクとして、次節に示す`FB_Executor`で統一的に実行することが可能になります。
+
+### FB_Executor
+
+`InterfaceFuture`をの実装ファンクションブロックを実行する主体は、`FB_Executor`です。
+
+```{csv-table}
+:header: メソッド名, 型, 戻り値 ,説明
+:widths: 1,1,2,6
+
+`init`, BOOL , 初期化処理完了時にTRUEが返る , タスクの処理を開始できる状態に初期化する。
+`execute`, BOOL , タスク処理完了時にTRUEが返る , "`future.init()`, `future.execute()`, `future.quit()`を順次実行します。すべて完了したら戻り値がTRUEになります。"
+`abort`, BOOL, 中断処理完了時にTRUEが返る, "`future.init()`、`future.execute()`、`future.quit()` 何れか実行中にこのメソッドを実行すると、`E_FutureExecutionState.abort` の状態に遷移し、`future.abort()`を実行する。"
+`start`, BOOL , なし, `E_FutureExecutionState.wait_for_process` 状態時にこのメソッド実行すると、`InterfaceFuture.execute()`処理を、`E_FutureExecutionState.abort` の状態の際にこのメソッドを実行すると、中断する前に実行していた`future.init()`、`future.execute()`、`future.quit()`の処理を再開する。
+```
+
+```{csv-table}
+:header: プロパティ名,型, 方向 ,説明
+:widths: 1,1,1,5
+
+result, HRESULT, GET, 処理結果を[`hrErrorCode`](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/12049349259.html?id=2525089929595466454)に従った型で出力します。
+active_task_id, UINT, GET, `FB_SerialJobContainer`や`FB_ParallelJobContainer`の実行状態がモニタできます。`FB_SerialJobContainer`の場合は現在処理中のFuture番号を返します。`FB_ParallelJobContainer`では、実行するFutureの合計数を返します。いずれも`executing()`メソッド実行中以外は0を返します。
+current_state, E_FutureExecutionState, GET, `execute()`中の実行状態を返します。
+future, InterfaceFuture, SET, 実装したタスクをセットします。
+done, BOOL, GET, InterfaceFutureで実装した`execute()`の処理が完了後TRUEを返します。
+ready, BOOL, GET, InterfaceFutureで実装した`init()`の処理が完了後TRUEを返します。
+```
+
+`start()`メソッドや、`ready`、`done`プロパティはタスク同士を連続して実行する際、InterfaceFutureの`init()`や`quit()`の処理によりサイクルの隙間が発生しないようにするトリガやイベントです。
+
+### ジョブコンテナ
+
+複数のタスクをまとめて取り扱うコンテナオブジェクトが二つ用意されています。`FB_ParallelJobContainer`や`FB_SerialJobContainer`を用いると、{numref}`fig_parallel_job_container`や、{numref}`fig_serial_job_container`のように同時実行、または、逐次実行が可能となります。
+
+```{figure} assets/run_future_cue.png
+:align: center
+:name: fig_parallel_job_container
+
+並列処理JOBコンテナ（`FB_ParallelJobContainer`によるJOB配置イメージ）
+```
+
+```{figure} assets/run_future_serial.png
+:align: center
+:name: fig_serial_job_container
+
+直列処理JOBコンテナ（`FB_SerialJobContainer`によるJOB配置イメージ）
+```
+
+`FB_ParallelJobContainer`や`FB_SerialJobContainer`内でタスク同士が同期的に連動するのは`execute()`の前後のみです。`init()`はタスク開始時から全タスク同時に開始し、`quit()`は`execute()`実行完了後すぐに実行されます。
+
+また、`FB_ParallelJobContainer`と`FB_SerialJobContainer`もまた`InterfaceFuture`インターフェースを実装していますので、それ自体を`FB_Executor`に処理させることができます。これにより、並列処理と逐次処理を組み合わせた複雑なタスク実行が可能となっています。
+
+```{tip}
+このデータモデルは、コンテナと処理が親子関係を構成し、定義によってさまざまな枝葉モデルが構築可能です。このソフト実装のデザインパターンを、[GoFのCompositeパターン](https://ja.wikipedia.org/wiki/Composite_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)と呼びます。
+```
+
+{numref}`example_of_main_program_using_job_framework`のMAINプログラム例で作成したジョブのタイムチャートイメージを{numref}`fig_job_container_task_image`に示します。枠囲い部分がジョブコンテナです。その中の線は個々のタスクです（{numref}`fig_job_control_class_diagram`の`ConcreteActivity`に該当するオブジェクト）。これらはFB_ParallelJobContainerやFB_SerialJobContainerと共に、InterfaceFutureを実装したものです。このインターフェースを使って `FB_Executor` が処理を実行します。
+
+```{figure} assets/sample_code_job_structure.png
+:align: center
+:name: fig_job_container_task_image
+
+ジョブコンテナを組み合わせたジョブイメージ
+```
+
+### 実装手順
+
+本フレームワークを用いた開発手順についてご説明します。
+
+#### ジョブコンテナに格納できるタスク数の設定
+
+FB_ParallelJobContainerやFB_SerialJobContainer内に配置可能なInterfaceFutureの配列数は、GVLs内の`ParameterFutureLib`のライブラリパラメータ`MAX_TASK_NUM`にて設定してください。
+
+本フレームワークをライブラリとして活用される場合は、{ref}`section_library_parameter` に示すとおり、ライブラリマネージャのライブラリ内の`Library parameters`タブを開いて設定してください。
+
+#### インターフェース実装
+
+インターフェースの追加は、ファンクションブロックの追加時に次の通り指定します。
+
+![](assets/2024-05-05-20-51-35.png){align=center}
+
+これにより追加されたファンクションブロックは次のとおり`IMPLEMENTS InterfaceFuture`が付加されたファンクションブロックが作成されます。
+
+```{code-block} iecst
+
+FUNCTION_BLOCK FB_YourTask1 IMPLEMENTS InterfaceFuture
+VAR_INPUT
+ :
+```
+
+また、ライブラリを変更し、インターフェースに新たなメソッドやプロパティ定義を加えた場合は、次の操作にて実装ファンクションブロックに対して、不足分を反映することができます。
+
+1. 実装ファンクションブロックを選択してコンテキストメニューから`Implements Interfaces`を選択する。
+2. メソッドで実装するIEC61131-3の言語を選択します。
+
+![](assets/2024-05-05-20-56-33.png){align=center}
+
+```{note}
+Implements Interfacesメニューで自動反映される内容はメソッドやプロパティの新規追加のみです。実装済みのファンクションブロックのメソッドやプロパティについて行われた、インターフェースの変更や削除の内容は反映されませんのでご注意ください。
+
+インターフェースと実装ファンクションブロックのメソッド、プロパティ、またその型や引数の仕様が異なると、ビルドに失敗します。ビルドエラーが出なくなるように手動で変更を反映してください。
+```
+
+##### init, execute, quit, abort メソッドの実装
+
+サンプルプログラムでは、`model/activities`フォルダ内にある各ファンクションブロックに該当する部分で、機能やコンポーネントに合わせた具体的なタスクを定義するファンクションブロックの書き方について説明します。
+
+入出力変数は空にしておく
+    : 入出力変数はインターフェースにより定められていますので、加えることはできません。ファンクションブロックの入出力変数や、ファンクションブロック独自のプロパティを使って、外部とのデータアクセスを行ってください。
+
+終了条件としてメソッドの戻り値を`TRUE`にする
+    : FB_Executorファンクションブロックが`init()`, `execute()`, `quit()` メソッドを実行する際、戻り値がTRUEとなる事で終了とみなされます。次の通りメソッド名の変数に対してTRUEとなる終了条件を定義してください。
+
+    : ```{code} iecst
+      execute := <<終了条件>>;
+      ```
+
+    : 不要な`init()`, `quit()`, `abort()`などは、空の処理として少なくとも次を実装する必要があります。
+
+    : ```{code} iecst
+      init/quit/abort := TRUE;
+      ```
+
+終了時の状態は `result` プロパティを通して通知します
+    : `init()`, `execute()`, `quit()`の終了時の状態は、resultプロパティにて通知してください。 `FB_Executor` で実行した際、これらの処理が完了するとこの終了コードが`FB_Executor.result`プロパティで取り出せます。また、`SUCCEEDED()`ファンクションでFALSEとなった場合は、`E_FutureExecutionState.abort`状態となり処理中断状態となります。中断時に実行する処理内容は、`abort()`に定義してください。
+
+##### I/Oなどをファンクションブロック内で操作する
+
+I/Oなど参照渡しする変数についてはファンクションブロックの`VAR_IN_OUT`を用いる方法が最もシンプルです。インターフェースなどを使う目的でプロパティで受け渡す場合は、型安全のためにも`PVOID`ではなく`POINTER TO`修飾子によって型を明示したポインタ型変数を用いてください。
+
+#### メインプログラム実装
+
+メインプログラムでは、タスク（`InterfaceFuture`を実装したもの）、`FB_executor`、ジョブコンテナ（`FB_ParallelJobContainer`、`FB_SerialJobContainer`）の各インスタンスを定義します。
+
+ジョブにつき一つの`FB_executor`のインスタンスを用意する
+    : ここでは、複数のタスクが組み合わされた一連の流れをジョブと呼びます。このジョブ毎に一つの`FB_executor`インスタンスを用意してください。`future`プロパティにて、タスクインスタンス、または、複数のタスクを束ねるジョブコンテナオブジェクトを関連付けます。
+
+ジョブコンテナインスタンスのadd_task
+    : `FB_ParallelJobContainer`、`FB_SerialJobContainer`それぞれ`add_task()`を実施します。`FB_SerialJobContainer`では、`add_task()`を実施した順番で処理が行われます。
+
+`FB_Executor.execute()` でジョブを実行し、タスク開時に`FB_Executor.start()`を呼び出す
+    : ジョブ実行中は`FB_Executor.execute()`を呼び出し続けてください。また、`FB_Executor.ready`がTRUEとなったら、`FB_Executor.start()`を呼び出してください。これによりタスク処理を開始します。
+    
+    : また、処理中断からの再開時にも、`FB_Executor.start()`を呼び出してください。中断前に実施していた`InterfaceFutre.init()`, `InterfaceFuture.execute()`, `InterfaceFuture.quit()`を再開実行します。
+
+    : ```{note}
+      `FB_Executor.abort()` や Futureの各処理でHRESULTでエラー終了した場合、直前に行っていたinit(), execute(), quit()などのメソッドは中断されます。このためオブジェクトの変数状態は保持されます。これにより、例えばTONファンクションブロック等では、バックグラウンドで時間カウントアップを継続したままの状態で中断される事となり、次回再開時にはタイマ値がlimitに達した状態から処理が行われてしまいます。
+
+      この対策として、サンプルコードでは`InterfaceFuture.abort()`処理内にて、タイマ値の現在地を保存した上でタイマの計測停止を行います。また、次回処理再開時にはその残時間を改めてTONに設定しています。処理中断・再開処理にはこのような対策が必要となります。
+      ```
+
+外部からの処理中断を行う
+    : ボタン操作等で、実行中の処理を中断を行うには、`FB_Executor.abort()`を実行してください。1度実行すれば内部で状態保持しますので、1サイクルのみ実行してください。
+
+ジョブを最初からやりなおす場合は`FB_Executor.init()`を実行する
+    : 実行済みのジョブの各オブジェクトは最終状態を保持したままとなっています。ジョブコンテナおよびそこに関連付けられたタスク全てを初期化するには、`FB_Executor.init()`を実行します。
+
+    : また、処理中断となったあと、再開せずに初期状態に戻す場合も`FB_Executor.init()`を実行してください。
