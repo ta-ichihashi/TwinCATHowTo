@@ -213,7 +213,7 @@ CASE _state OF
             executor.start();
         END_IF
         // ジョブ実行中execute()の常時実行
-        IF executor.execute() AND SUCCEEDED(executor.result) THEN
+        IF executor.execute() AND executor.nErrorID = 0 THEN
             _state := 2;
         END_IF
     2:
@@ -253,7 +253,7 @@ resume := FALSE;
 :header: プロパティ名,型, 方向 ,説明
 :widths: 1,1,1,5
 
-result, HRESULT, GET, 処理結果を[`hrErrorCode`](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/12049349259.html?id=2525089929595466454)に従った型で出力します。
+nErrorID, UDINT, GET, エラー発生時は0以外の値を返します。[参照](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/12049349259.html?id=2525089929595466454)
 active_futures, UINT, GET, `FB_SerialJobContainer`や`FB_ParallelJobContainer`に実装されたプロパティ。`FB_SerialJobContainer`の場合は現在処理中のFuture番号を返す。`FB_ParallelJobContainer`では、実行するFutureの合計数を返す。いずれも`executing()`メソッド実行中以外は0を返す。`FB_Executor` の `active_task_id` プロパティから取り出すことができます。
 ```
 
@@ -280,7 +280,7 @@ active_futures, UINT, GET, `FB_SerialJobContainer`や`FB_ParallelJobContainer`�
 :header: プロパティ名,型, 方向 ,説明
 :widths: 1,1,1,5
 
-result, HRESULT, GET, 処理結果を[`hrErrorCode`](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/12049349259.html?id=2525089929595466454)に従った型で出力します。
+nErrorID, UDINT, GET, エラー発生時は0以外の値を返します。[参照](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/12049349259.html?id=2525089929595466454)
 active_task_id, UINT, GET, `FB_SerialJobContainer`や`FB_ParallelJobContainer`の実行状態がモニタできます。`FB_SerialJobContainer`の場合は現在処理中のFuture番号を返します。`FB_ParallelJobContainer`では、実行するFutureの合計数を返します。いずれも`executing()`メソッド実行中以外は0を返します。
 current_state, E_FutureExecutionState, GET, `execute()`中の実行状態を返します。
 future, InterfaceFuture, SET, 実装したタスクをセットします。
@@ -383,8 +383,8 @@ Implements Interfacesメニューで自動反映される内容はメソッド�
       init/quit/abort := TRUE;
       ```
 
-終了時の状態は `result` プロパティを通して通知します
-    : `init()`, `execute()`, `quit()`の終了時の状態は、resultプロパティにて通知してください。 `FB_Executor` で実行した際、これらの処理が完了するとこの終了コードが`FB_Executor.result`プロパティで取り出せます。また、`SUCCEEDED()`ファンクションでFALSEとなった場合は、`E_FutureExecutionState.abort`状態となり処理中断状態となります。中断時に実行する処理内容は、`abort()`に定義してください。
+終了時にエラーが発生した場合は `nErrorID` プロパティを通して0以外の値を通知します
+    : `init()`, `execute()`, `quit()`の終了時のエラー状態は、`nErrorID` プロパティにて通知してください。 `FB_Executor` で実行した際、これらの処理が完了するとこの終了コードが`FB_Executor.nErrorID`プロパティで取り出せます。また、0以外の値となった場合は、`E_FutureExecutionState.abort`状態となり処理中断状態となります。中断時に実行する処理内容は、`abort()`に定義してください。
 
 ##### I/Oなどをファンクションブロック内で操作する
 
@@ -406,7 +406,7 @@ I/Oなど参照渡しする変数についてはファンクションブロッ�
     : また、処理中断からの再開時にも、`FB_Executor.start()`を呼び出してください。中断前に実施していた`InterfaceFutre.init()`, `InterfaceFuture.execute()`, `InterfaceFuture.quit()`を再開実行します。
 
     : ```{note}
-      `FB_Executor.abort()` や Futureの各処理でHRESULTでエラー終了した場合、直前に行っていたinit(), execute(), quit()などのメソッドは中断されます。このためオブジェクトの変数状態は保持されます。これにより、例えばTONファンクションブロック等では、バックグラウンドで時間カウントアップを継続したままの状態で中断される事となり、次回再開時にはタイマ値がlimitに達した状態から処理が行われてしまいます。
+      `FB_Executor.abort()` や Futureの各処理でnErrorIDでエラー検出した場合、直前に行っていたinit(), execute(), quit()などのメソッドは中断されます。このためオブジェクトの変数状態は保持されます。これにより、例えばTONファンクションブロック等では、バックグラウンドで時間カウントアップを継続したままの状態で中断される事となり、次回再開時にはタイマ値がlimitに達した状態から処理が行われてしまいます。
 
       この対策として、サンプルコードでは`InterfaceFuture.abort()`処理内にて、タイマ値の現在地を保存した上でタイマの計測停止を行います。また、次回処理再開時にはその残時間を改めてTONに設定しています。処理中断・再開処理にはこのような対策が必要となります。
       ```
