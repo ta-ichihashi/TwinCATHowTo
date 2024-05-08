@@ -1,4 +1,4 @@
-# 並列非同期ジョブ制御
+# 並行ジョブ実行フレームワーク
 
 制御システムでは、様々な動作や振る舞いを持つサブコンポーネント機器を取り扱う必要があり、これらの特徴に合わせて制御機器システムのソフトウェア開発とテスト（品質管理）に手間や工数をかけなければなりません。
 
@@ -112,7 +112,7 @@ END_CASE
 
 PLCは、TcCOMモジュール全体でサイクリックに処理が繰り返されるもので、機能毎に独立して処理される訳ではありません。よって前述のとおり非活性状態のオブジェクトを含む、全体のオブジェクト状態を常に管理し続けなければなりません。これが徹底されていないことにより、不具合やバグが生じる要因となりえます。
 
-## 並列ジョブ制御フレームワークサンプルコードのご紹介
+## 並行ジョブ実行フレームワークサンプルコードのご紹介
 
 このサンプルコードでは、タスクの生成から終了に対する統合的な状態管理機能と、その状態に応じたユーザ定義機能を提供します。これにより前節で説明したオブジェクト状態管理に関する問題を解決することができます。
 
@@ -141,7 +141,7 @@ JOB制御クラス図
 ```
 
 ```{code-block} iecst
-:caption: 並列ジョブ管理フレームワークを用いたMAINプログラム例
+:caption: 並行ジョブ実行フレームワークを用いたMAINプログラム例
 :name: example_of_main_program_using_job_framework
 
 PROGRAM MAIN
@@ -298,19 +298,19 @@ ready, BOOL, GET, InterfaceFutureで実装した`init()`の処理が完了後TRU
 :align: center
 :name: fig_parallel_job_container
 
-並列処理JOBコンテナ（`FB_ParallelJobContainer`によるJOB配置イメージ）
+並行処理ジョブコンテナ（`FB_ParallelJobContainer`によるタスク配置）イメージ
 ```
 
 ```{figure} assets/run_future_serial.png
 :align: center
 :name: fig_serial_job_container
 
-直列処理JOBコンテナ（`FB_SerialJobContainer`によるJOB配置イメージ）
+直列処理ジョブコンテナ（`FB_SerialJobContainer`によるJOB配置）イメージ
 ```
 
 `FB_ParallelJobContainer`や`FB_SerialJobContainer`内でタスク同士が同期的に連動するのは`execute()`の前後のみです。`init()`はタスク開始時から全タスク同時に開始し、`quit()`は`execute()`実行完了後すぐに実行されます。
 
-また、`FB_ParallelJobContainer`と`FB_SerialJobContainer`もまた`InterfaceFuture`インターフェースを実装していますので、それ自体を`FB_Executor`に処理させることができます。これにより、並列処理と逐次処理を組み合わせた複雑なタスク実行が可能となっています。
+また、`FB_ParallelJobContainer`と`FB_SerialJobContainer`もまた`InterfaceFuture`インターフェースを実装していますので、それ自体を`FB_Executor`に処理させることができます。これにより、並行処理と逐次処理を組み合わせた複雑なタスク実行が可能となっています。
 
 ```{tip}
 このデータモデルは、コンテナと処理が親子関係を構成し、定義によってさまざまな枝葉モデルが構築可能です。このソフト実装のデザインパターンを、[GoFのCompositeパターン](https://ja.wikipedia.org/wiki/Composite_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)と呼びます。
@@ -363,7 +363,7 @@ Implements Interfacesメニューで自動反映される内容はメソッド�
 インターフェースと実装ファンクションブロックのメソッド、プロパティ、またその型や引数の仕様が異なると、ビルドに失敗します。ビルドエラーが出なくなるように手動で変更を反映してください。
 ```
 
-##### init, execute, quit, abort メソッドの実装
+##### init(), execute(), quit(), abort() メソッドの実装
 
 サンプルプログラムでは、`model/activities`フォルダ内にある各ファンクションブロックに該当する部分で、機能やコンポーネントに合わせた具体的なタスクを定義するファンクションブロックの書き方について説明します。
 
@@ -371,24 +371,99 @@ Implements Interfacesメニューで自動反映される内容はメソッド�
     : 入出力変数はインターフェースにより定められていますので、加えることはできません。ファンクションブロックの入出力変数や、ファンクションブロック独自のプロパティを使って、外部とのデータアクセスを行ってください。
 
 終了条件としてメソッドの戻り値を`TRUE`にする
-    : FB_Executorファンクションブロックが`init()`, `execute()`, `quit()` メソッドを実行する際、戻り値がTRUEとなる事で終了とみなされます。次の通りメソッド名の変数に対してTRUEとなる終了条件を定義してください。
+    : FB_Executorファンクションブロックは `init()`, `execute()`, `quit()`, `abort()` 各メソッドを実行したあと、戻り値がTRUEとなる事でプログラムが進行します。かならず戻り値を設定してください。
 
     : ```{code} iecst
       execute := <<終了条件>>;
       ```
 
-    : 不要な`init()`, `quit()`, `abort()`などは、空の処理として少なくとも次を実装する必要があります。
+    : ファンクションブロック内の変数や処理の初期化や中断の処理が不要な場合でも、以下の通り空の`init()`, `quit()`, `abort()`を実装する必要があります。
 
     : ```{code} iecst
-      init/quit/abort := TRUE;
+      {warning 'add method implementation '}
+      METHOD init : BOOL
+
+      init := TRUE;
+      ```
+
+    : ```{code} iecst
+      {warning 'add method implementation '}
+      METHOD quit : BOOL
+
+      quit := TRUE;
+      ```
+
+    : ```{code} iecst
+      {warning 'add method implementation '}
+      METHOD abort : BOOL
+
+      abort := TRUE;
       ```
 
 終了時にエラーが発生した場合は `nErrorID` プロパティを通して0以外の値を通知します
     : `init()`, `execute()`, `quit()`の終了時のエラー状態は、`nErrorID` プロパティにて通知してください。 `FB_Executor` で実行した際、これらの処理が完了するとこの終了コードが`FB_Executor.nErrorID`プロパティで取り出せます。また、0以外の値となった場合は、`E_FutureExecutionState.abort`状態となり処理中断状態となります。中断時に実行する処理内容は、`abort()`に定義してください。
 
-##### I/Oなどをファンクションブロック内で操作する
+##### I/O変数の受け渡し
 
-I/Oなど参照渡しする変数についてはファンクションブロックの`VAR_IN_OUT`を用いる方法が最もシンプルです。インターフェースなどを使う目的でプロパティで受け渡す場合は、型安全のためにも`PVOID`ではなく`POINTER TO`修飾子によって型を明示したポインタ型変数を用いてください。
+I/Oなど参照渡しする変数についてはファンクションブロックの`VAR_IN_OUT`を用いる方法が最もシンプルです。インターフェースなどを使う目的でプロパティで受け渡す場合は、次の方法があります。
+
+1. ポインタ型の内部変数を用意
+
+    タスクのファンクションブロック内部ではポインタとして変数を定義し、プログラムロジックを記述します。ここでは、XPlanarのオブジェクト変数である`MC_PlanarMover`を外部から参照渡しする例でご説明します。
+
+    ```{code-block} iecst
+
+    VAR
+        _fbMover    : POINTER TO MC_PlanarMover;
+        _cmdFB      : POINTER TO MC_PlanarFeedback;
+    END_VAR
+
+    //直線運動
+    _fbMover^.MoveToPosition(_cmdFB^,stMoverPosition,fbDnyMove,0);
+    ```
+
+2. REFERENCE TO で参照渡しするメソッドやプロパティを実装する。
+
+    プロパティでセットする場合は、プロパティの型を `REFERENCE TO ****` とし、内部変数には、`ADR()`関数でポインタにして渡す。これにより、外部の変数そのものをファンクションブロック内でメンバ変数として扱うことができます。
+
+    ```{code-block} iecst
+    PROPERTY fbMover : REFERENCE TO MC_PlanarMover
+
+    SET:
+
+    _fbMover := ADR(fbMover);
+    ```
+
+    コンストラクタメソッドで受け渡す場合も同様に、リファレンスでコンストラクタ引数を設定し、ポインタで内部変数に渡します。
+
+    ```{code-block} iecst
+    METHOD FB_init : BOOL
+    VAR_INPUT
+        bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+        bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+        fbMover : REFERENCE TO MC_PlanarMover;
+    END_VAR
+
+    _fbMover := ADR(fbMover);
+    ```
+
+    外部からは次の方法で参照渡しします。コンストラクタ引数の場合は、`()`内の引数ですのでリファレンス変数でも`:=`代入演算子が用いられますが、プロパティセットの場合、`REF=` の演算子で参照代入する必要があります。（[参照](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/2529458827.html?id=2716630061017907414)）
+
+
+    ```{code-block} iecst
+    PROGRAM MAIN
+    VAR
+        fbMover   : MC_PlanarMover; // 例: XPlanarの可動子オブジェクト
+
+        // InterfaceFutureを実装したタスクファンクションブロック
+        fbTask    : FB_AnyTask(fbMover := fbMover);  // コンストラクタで受け渡す場合
+    END_VAR
+
+    // Property SET メソッドで受け渡す場合は、`REF=`演算子で参照代入する必要があります
+    fbTask.fbMover REF= fbMover;
+    ```
+
+    上記の方法で、`AT %I*`や`AT %Q*`などを付加した入出力変数なども参照渡ししてファンクションンブロック内でIO制御を行うことが可能になります。
 
 #### メインプログラム実装
 
