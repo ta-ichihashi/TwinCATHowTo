@@ -31,7 +31,7 @@ IEC-61131-3の第二版では、ファンクションブロックを用いるこ
       ```
 エアシリンダ軸
     : ```{code} iecst
-      FUNCTION BLOCK FB_AirSylinder IMPLEMENTS ITF_mover,  ITF_move_limit
+      FUNCTION BLOCK FB_AirSylinder IMPLEMENTS ITF_mover, ITF_pos_init
       ```
 
 ## インターフェースの有無チェック
