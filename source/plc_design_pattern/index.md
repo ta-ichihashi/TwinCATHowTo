@@ -6,4 +6,5 @@ IEC61131-3を用いたPLCのさまざまなプログラムデザインパター�
 :hidden:
 
 abstruct_array
+../job_management/index.md
 ```
