@@ -45,4 +45,5 @@ VAR_IN_OUTの活用
 object_interface
 sample_universal_activity
 solid
+case_study
 ```
