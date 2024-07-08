@@ -197,7 +197,7 @@ CASE _state OF
     fbTask1.future_name := 'Blinker'; // Future名を設定
     main_job.future := fbTask1; // ExecutorにFutureをセット
     main_job.init(); // 初期化
-    _state := 1;
+    _state := 2;
   2: // 実行
 
     IF main_job.execute() THEN // 実行と終了監視
@@ -239,10 +239,11 @@ VAR
   fbTasks    : ARRAY [1..4] OF FB_ControllerType_1;
   outputs  AT %Q*  : ARRAY [1..4] OF BOOL; // 順番に点滅させたいBOOL変数
   fbJobContainer : FB_BatchJobContainer;
+  ads_reporter : bajp_jobmgmt.FB_ADSLOG_reporter; // 備え付けのイベントレポート
   main_job   : FB_Executor;
   start      : BOOL; // HMIなどのスタートスイッチ
   _state     : UDINT;
-  i :UINT; 
+  i :UINT;  
 END_VAR
 ```
 さきほどの例と違うのは、複数のIO（アクチュエータ）とそれに応じたFutureオブジェクトを配列で用意し、`FB_BatchJobContainer`のインスタンスを1つ宣言している点です。
@@ -261,12 +262,13 @@ CASE _state OF
     END_FOR
 
     main_job.future := fbJobContainer; // ExecutorにFutureをセット
+    main_job.job_event_reporter := ads_reporter; // ADSLOGSTR出力のイベントハンドラをセット
     main_job.init(); // 初期化
-    _state := 1;
+    _state := 2;
   2: // 実行
 
     IF main_job.execute() THEN // 実行と終了監視
-      _state := 0;
+      _state := 3;
     END_IF
 
     // Start条件。wait_for_processかabortからのリトライの何れかで再開
@@ -274,12 +276,18 @@ CASE _state OF
       main_job.start();
       start := FALSE;
     END_IF
+  3:
+    IF main_job.reset() THEN
+      _state := 0;
+    END_IF
 
 END_CASE
 
 ```
 
 実装の違いは、JOBの組み立て方だけが異なります。まず配列で定義した出力変数と、個々のFutureオブジェクトのプロパティをセットし、`FB_BatchJobContainer`の`add_future`メソッドにてFutureオブジェクトを追加しています。また、main_jobとなるFB_Executorには、組み立てた`FB_BatchJobContainer`インスタンスをセットしています。
+
+おまけで、job_event_reporterにフレームワーク付属のADSLOGSTRを使ったジョブの状態遷移イベントをメッセージウィンドウに出力する機能を付けています。
 
 これを実行すると、`outputs[1]`～`outputs[4]`に10秒間順番に点滅を実行します。
 
