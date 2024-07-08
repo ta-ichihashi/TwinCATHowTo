@@ -10,14 +10,14 @@ XPlanarに関する概要についてご紹介します。事前にお知りい�
 位置決め精度、速度などの諸元は以下の通りです。
 
 ```{csv-table}
-:header: 項目, 動作範囲, 繰り返し精度, 最高速度
+:header: 項目, 動作範囲, 繰り返し精度, 単位分解能 ,最高速度
 
-{math}`X`, タイル数に依存,  {math}`\pm 50 \mu m`, {math}`2m/s`
-{math}`Y`, タイル数に依存, {math}`\pm 50 \mu m`, {math}`2m/s`
-{math}`Z`, {math}`2 \sim 5 mm`,,
-{math}`\theta x`, {math}`\pm` 5{math}`^\circ`
-{math}`\theta y`, {math}`\pm` 5{math}`^\circ`
-{math}`\theta z`, {math}`\pm` 5{math}`^\circ`
+{math}`X`, タイル数に依存,  {math}`\pm 10 \mu m`, {math}`\pm 1 \mu m`,{math}`2m/s`
+{math}`Y`, タイル数に依存, {math}`\pm 10 \mu m`, {math}`\pm 1 \mu m`, {math}`2m/s`
+{math}`Z`, {math}`2 \sim 5 mm`,{math}`\pm 10 \mu m`, {math}`\pm 1 \mu m`
+{math}`a (\theta x)`, {math}`\pm` 5{math}`^\circ`,{math}`\pm 0.03 ^\circ`,{math}`\pm 0.01 ^\circ` 
+{math}`b (\theta y)`, {math}`\pm` 5{math}`^\circ`,{math}`\pm 0.03 ^\circ`,{math}`\pm 0.01 ^\circ`
+{math}`c (\theta z)`, {math}`\pm` 5{math}`^\circ`,{math}`\pm 0.03 ^\circ`,{math}`\pm 0.01 ^\circ`
 ```
 
 * 最大接続可能タイル数は、EtherCAT G マスタにつき10枚までです。
@@ -117,11 +117,13 @@ XPlanarに関する概要についてご紹介します。事前にお知りい�
 ```{csv-table}
 :header: 型番, 可動子サイズ, 積載負荷
 
-APM4220-0000, {math}`115mm \times 115mm`, {math}`0.4Kg`
-APM4330-0000, {math}`155mm \times 155mm`, {math}`1.5Kg`
-APM4550-0000, {math}`235mm \times 235mm`, {math}`4Kg`
+APM4220-0000, {math}`113mm \times 113mm \times 12mm`, {math}`0.6Kg`
+APM4230-0000, {math}`115mm \times 155mm \times 12mm`, {math}`0.8Kg`
+APM4221-0000, {math}`127mm \times 127mm \times 12mm`, {math}`1.0Kg`
+APM4330-0001, {math}`155mm \times 155mm \times 12mm`, {math}`1.2Kg`
+APM4350-0000, {math}`155mm \times 235mm \times 12mm`, {math}`3.0Kg`
+APM4550-0000, {math}`235mm \times 235mm \times 12mm`, {math}`4.5Kg`
 ```
-
 
 - 可動子のBTN番号はタイルとは異なり制御プログラム上では個体特定（Identify）の目的には使用しません。制御を有効（Enable）した時点のタイル上に配置された可動子の位置により動的にマッピングされます。またオプションのIDバンパーによりIDに紐づいた個体マッピングされます。
 - 大きさの違う 3 種類の Mover があり、異なる種類の Mover を混在できる。
