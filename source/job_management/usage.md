@@ -178,7 +178,7 @@ METHOD quit : BOOL
 VAR
   fbTask1         : FB_ControllerType_1;
   output  AT %Q*  : BOOL; // 点滅させたいBOOL変数
-  main_job        : FB_Executor;
+   executor        : FB_Executor;
   start           : BOOL; // HMIなどのスタートスイッチ
   _state          : UDINT;
 END_VAR
@@ -195,18 +195,18 @@ CASE _state OF
     fbTask1.own_output REF= output; // IOの受け渡し
     fbTask1.own_parameter := T#10S;   // 点滅時間の設定
     fbTask1.future_name := 'Blinker'; // Future名を設定
-    main_job.future := fbTask1; // ExecutorにFutureをセット
-    main_job.init(); // 初期化
+     executor.future := fbTask1; // ExecutorにFutureをセット
+     executor.init(); // 初期化
     _state := 2;
   2: // 実行
 
-    IF main_job.execute() THEN // 実行と終了監視
+    IF  executor.execute() THEN // 実行と終了監視
       _state := 0;
     END_IF
 
     // Start条件。wait_for_processかabortからのリトライの何れかで再開
-    IF start AND main_job.ready THEN
-      main_job.start();
+    IF start AND  executor.ready THEN
+       executor.start();
       start := FALSE;
     END_IF
 
@@ -240,7 +240,7 @@ VAR
   outputs  AT %Q*  : ARRAY [1..4] OF BOOL; // 順番に点滅させたいBOOL変数
   fbJobContainer : FB_BatchJobContainer;
   ads_reporter : bajp_jobmgmt.FB_ADSLOG_reporter; // 備え付けのイベントレポート
-  main_job   : FB_Executor;
+   executor   : FB_Executor;
   start      : BOOL; // HMIなどのスタートスイッチ
   _state     : UDINT;
   i :UINT;  
@@ -261,23 +261,24 @@ CASE _state OF
       fbJobContainer.add_future(fbTasks[i]); // 逐次実行ジョブを追加
     END_FOR
 
-    main_job.future := fbJobContainer; // ExecutorにFutureをセット
-    main_job.job_event_reporter := ads_reporter; // ADSLOGSTR出力のイベントハンドラをセット
-    main_job.init(); // 初期化
+     executor.future := fbJobContainer; // ExecutorにFutureをセット
+     executor.job_event_reporter := ads_reporter; // ADSLOGSTR出力のイベントハンドラをセット
+     executor.init(); // 初期化
     _state := 2;
   2: // 実行
 
-    IF main_job.execute() THEN // 実行と終了監視
+    IF  executor.execute() THEN // 実行と終了監視
       _state := 3;
     END_IF
 
     // Start条件。wait_for_processかabortからのリトライの何れかで再開
-    IF start AND main_job.ready THEN
-      main_job.start();
+    IF start AND  executor.ready THEN
+       executor.start();
       start := FALSE;
     END_IF
   3:
-    IF main_job.reset() THEN
+    // `reset()`にて、executorオブジェクトにぶら下がっている全てのジョブを削除
+    IF  executor.reset() THEN
       _state := 0;
     END_IF
 
@@ -285,11 +286,23 @@ END_CASE
 
 ```
 
-実装の違いは、JOBの組み立て方だけが異なります。まず配列で定義した出力変数と、個々のFutureオブジェクトのプロパティをセットし、`FB_BatchJobContainer`の`add_future`メソッドにてFutureオブジェクトを追加しています。また、main_jobとなるFB_Executorには、組み立てた`FB_BatchJobContainer`インスタンスをセットしています。
+ジョブコンテナでは、複数のJOBを`add_future`で登録し、そのコンテナオブジェクトを1つのジョブとして扱うことができます。この例では、配列で定義した出力変数とFutureオブジェクトをインスタンス化します。これらを`FB_BatchJobContainer`の`add_future`メソッドにて順に登録しています。このジョブを、executorオブジェクトのfutureプロパティでセットして実行すると、登録した子ジョブを逐次実行することができます。上記実装例では、`outputs[1]`～`outputs[4]`の間で、10秒間ごとに順次点滅する出力が移動します。
 
-おまけで、job_event_reporterにフレームワーク付属のADSLOGSTRを使ったジョブの状態遷移イベントをメッセージウィンドウに出力する機能を付けています。
+また、{ref}`section_event_handler`節で詳しく説明しているとおり、`job_event_reporter`プロパティには、本フレームワーク付属のADSLOGSTRを使ったジョブの状態遷移イベントをメッセージウィンドウに出力するイベントハンドラを登録していますので、XAEのメッセージウィンドウに、PLCのシステム時刻（100ns精度）でのジョブの名称やIDとその開始、終了イベントが記録されます。
 
-これを実行すると、`outputs[1]`～`outputs[4]`に10秒間順番に点滅を実行します。
+
+```{admonition} QueueJobの場合
+
+上記で示す実装例は静的ジョブコンテナでした。`_state=1`で構築したジョブを`_state=2`で実行したあと、`_state=3`で`reset()`を行うことでいったん全て消滅させた上で、再度`_state=0`へ戻りジョブを組み立て直しています。
+
+`FB_QueueJobContainer`および、`FB_ParallelQueueJobContainer`を用いる場合は、終了したら自動的にキューから消滅しますので`reset()`を行う必要はありません。`add_future()`を行うとすぐさまジョブを実行し、全てのジョブが完了したら自動的にコンテナ上はジョブが無くなった状態となり、終了します。
+
+ただし、動的ジョブコンテナの場合でも、全てのジョブが実行完了になると実行状態の完了シグナルである`execute()`のTRUEを返します。これにより、そのドライブオブジェクトである`FB_Executor`ではfinish状態まで進んでしまいますので、もう一度最初から`execute()`しなおす必要があります。
+
+ジョブコンテナの中身が空になっても実行状態を維持するには、ジョブコンテナオブジェクトのオプションを使って`continuous_mode := TRUE` を指定してください。これにより空になっても実行状態を維持できます。
+
+このモードでは特に終了待ちを行う必要はありませんので、`num_of_future`の状況を監視して実行中のジョブが無いか確認の上、自発的にシーケンスを終了させてください。
+```
 
 ## 処理中断とリセット
 
@@ -311,6 +324,7 @@ END_CASE
 このように、処理単位をFutureファンクションブロック化することで、インスタンスごとに安全な処理中断・再開処理が可能になります。
 ```
 
+(section_event_handler)=
 ## イベントハンドラの適用
 
 `FB_Executor`には、`job_event_reporter`というプロパティがあり、`InterfaceJobEventReporter`型で実装した状態遷移毎に実行されるイベントハンドラを登録することができます。
@@ -322,35 +336,81 @@ END_CASE
 ここでは、本フレームワークに内包している、ADSLOGSTRに出力する実装例をご紹介します。開発環境のメッセージウィンドウに文字列でスクロール表示します。
 
 ```{code-block} iecst
+FUNCTION_BLOCK FB_ADSLOG_reporter IMPLEMENTS InterfaceJobEventReporter
+
 METHOD report : BOOL
-VAR_INPUT
-  old_state	: E_FutureExecutionState;
-  new_state	: E_FutureExecutionState;
-  record_time	: Tc2_Utilities.T_FILETIME64;
-  executor	: REFERENCE TO FB_Executor;
-END_VAR
-VAR_INST
-  fb_timezone_info : FB_GetTimeZoneInformation := (bExecute := TRUE);
-END_VAR
+  VAR_INPUT
+    old_state	: E_FutureExecutionState;
+    new_state	: E_FutureExecutionState;
+    record_time	: Tc2_Utilities.T_FILETIME64;
+    executor	: REFERENCE TO FB_Executor;
+  END_VAR
+  VAR_INST
+    fb_timezone_info : FB_GetTimeZoneInformation := (bExecute := TRUE);
+  END_VAR
+  VAR
+    last_state : STRING;
+    current_state : STRING;
+  END_VAR
+
+  last_state := TO_STRING(old_state);
+  current_state := TO_STRING(new_state);
+  fb_timezone_info();
+  text := FILETIME64_TO_ISO8601(fileTime := record_time, nBias := DINT_TO_INT(fb_timezone_info.tzInfo.bias), bUTC := TRUE,nPrecision := 6);
+  text := CONCAT(text, ':');
+  text := CONCAT(text, last_state);
+  text := CONCAT(text, '->');
+  text := CONCAT(text, TO_STRING(current_state));
+  text := CONCAT(text, ':');
+  text := CONCAT(text, executor.future.future_name);
+  text := CONCAT(text, ':');
+  text := CONCAT(text, executor.id);
+
+  ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := text, strArg := '');
+
+  report := TRUE;
+```
+
+このファンクションブロックをインスタンス化し、`FB_Executor`の`job_event_reporter`プロパティにセットします。
+
+```{code-block} iecst
+PROGRAM MAIN
 VAR
-  last_state : STRING;
-  current_state : STRING;
+  :
+  ads_reporter : bajp_jobmgmt.FB_ADSLOG_reporter; // 備え付けのイベントレポート
+   executor   : FB_Executor;
+  :
 END_VAR
 
-last_state := TO_STRING(old_state);
-current_state := TO_STRING(new_state);
-fb_timezone_info();
-text := FILETIME64_TO_ISO8601(fileTime := record_time, nBias := DINT_TO_INT(fb_timezone_info.tzInfo.bias), bUTC := TRUE,nPrecision := 6);
-text := CONCAT(text, ':');
-text := CONCAT(text, last_state);
-text := CONCAT(text, '->');
-text := CONCAT(text, TO_STRING(current_state));
-text := CONCAT(text, ':');
-text := CONCAT(text, executor.future.future_name);
-text := CONCAT(text, ':');
-text := CONCAT(text, executor.id);
+:
+   executor.job_event_reporter := ads_reporter; // ADSLOGSTR出力のイベントハンドラをセット
 
-ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := text, strArg := '');
+```
 
-report := TRUE;
+このジョブの実行中、リアルタイムにADSLOGSTRでメッセージが出力されます。このように、今回はADSLOGSTRでしたが、このメソッドの実装方法次第ではデータベースやMQTTなどのデータウェアハウスに格納すれば、簡単に、特定の`future_name`の、特定の`job_id`の処理開始、終了の範囲データを抽出することが可能です。
+
+電流、モータトルク、圧力、温度など様々な時系列連続データがありますが、これらの値とは別に、制御モードを示すデータを統一的なフォーマットで収集することは、製造業のリソース4M（Man, Machine, Material, Method）という定性データを示す[カテゴリカルデータ](https://python-data-analysis.readthedocs.io/en/latest/pandas/categoricaldata.html)の生成根拠となりえます。データ収集時点で苦労されているのはこの点だと思いますので、この課題を解決できる本フレームワークの導入は、データ活用を飛躍的に向上させることにつながるでしょう。
+
+```{code} csv
+Message 2024/07/08 22:32:47 757 ms | 'PlcTask' (350): 2024-07-08T22:32:47.757000+09:00:finish->wait_for_process:BATCH JOB:
+Message 2024/07/08 22:32:47 707 ms | 'PlcTask' (350): 2024-07-08T22:32:47.707000+09:00:quit->finish:Blinker 4:/4
+Message 2024/07/08 22:32:47 707 ms | 'PlcTask' (350): 2024-07-08T22:32:47.707000+09:00:quit->finish:BATCH JOB:
+Message 2024/07/08 22:32:47 697 ms | 'PlcTask' (350): 2024-07-08T22:32:47.697000+09:00:process->quit:Blinker 4:/4
+Message 2024/07/08 22:32:47 697 ms | 'PlcTask' (350): 2024-07-08T22:32:47.697000+09:00:process->quit:BATCH JOB:
+Message 2024/07/08 22:32:37 687 ms | 'PlcTask' (350): 2024-07-08T22:32:37.687000+09:00:wait_for_process->process:Blinker 4:/4
+Message 2024/07/08 22:32:37 677 ms | 'PlcTask' (350): 2024-07-08T22:32:37.677000+09:00:quit->finish:Blinker 3:/3
+Message 2024/07/08 22:32:37 667 ms | 'PlcTask' (350): 2024-07-08T22:32:37.667000+09:00:process->quit:Blinker 3:/3
+Message 2024/07/08 22:32:27 657 ms | 'PlcTask' (350): 2024-07-08T22:32:27.657000+09:00:wait_for_process->process:Blinker 3:/3
+Message 2024/07/08 22:32:27 647 ms | 'PlcTask' (350): 2024-07-08T22:32:27.647000+09:00:quit->finish:Blinker 2:/2
+Message 2024/07/08 22:32:27 637 ms | 'PlcTask' (350): 2024-07-08T22:32:27.637000+09:00:process->quit:Blinker 2:/2
+Message 2024/07/08 22:32:17 627 ms | 'PlcTask' (350): 2024-07-08T22:32:17.627000+09:00:wait_for_process->process:Blinker 2:/2
+Message 2024/07/08 22:32:17 617 ms | 'PlcTask' (350): 2024-07-08T22:32:17.617000+09:00:quit->finish:Blinker 1:/1
+Message 2024/07/08 22:32:17 607 ms | 'PlcTask' (350): 2024-07-08T22:32:17.607000+09:00:process->quit:Blinker 1:/1
+Message 2024/07/08 22:32:07 597 ms | 'PlcTask' (350): 2024-07-08T22:32:07.597000+09:00:wait_for_process->process:Blinker 1:/1
+Message 2024/07/08 22:32:07 587 ms | 'PlcTask' (350): 2024-07-08T22:32:07.587000+09:00:idle->wait_for_process:Blinker 4:/4
+Message 2024/07/08 22:32:07 587 ms | 'PlcTask' (350): 2024-07-08T22:32:07.587000+09:00:idle->wait_for_process:Blinker 3:/3
+Message 2024/07/08 22:32:07 587 ms | 'PlcTask' (350): 2024-07-08T22:32:07.587000+09:00:idle->wait_for_process:Blinker 2:/2
+Message 2024/07/08 22:32:07 587 ms | 'PlcTask' (350): 2024-07-08T22:32:07.587000+09:00:idle->wait_for_process:Blinker 1:/1
+Message 2024/07/08 22:32:07 577 ms | 'PlcTask' (350): 2024-07-08T22:32:07.577000+09:00:wait_for_process->process:BATCH JOB:
+Message 2024/07/08 22:31:42 217 ms | 'PlcTask' (350): 2024-07-08T13:31:42.217000+00:00:idle->wait_for_process:BATCH JOB:
 ```
