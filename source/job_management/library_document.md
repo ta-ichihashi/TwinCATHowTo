@@ -4,9 +4,15 @@
 
 ### オブジェクト構成
 
-クラス図を{numref}`fig_job_control_class_diagram` に示します。タスクの定義は、`InterfaceFuture`のインターフェースを実装することで行います。サンプルコードではPOUsのツリー以下に`model/activities`というサブフォルダを構成し、ここにさまざまな制御パターンを集めて定義しています。これを用いてMAINプログラムでジョブを組み立てます。（{numref}`example_of_main_program_using_job_framework`）
+クラス図を{numref}`fig_job_control_class_diagram` に示します。タスクの定義は、`InterfaceFuture`のインターフェースを実装して行いますが、ユーザが実装する基底ファンクションブロック`FB_AbstructFuture`と、各種ジョブコンテナファンクションブロックで実装されています。`FB_Executor`は、ジョブであるFutureオブジェクトの実行主体ですので、1:1の関係で包含します。
 
-このように、制御デザインパターンと、これを組み合わせたジョブを区別して管理することで拡張性に優れた制御プログラムや、制御デザインパターンのライブラリ化が容易になります。
+また、各種ジョブコンテナは、`FB_Executor`型の配列を内包します。配列サイズはライブラリパラメータ`MAX_FUTURE_NUM`で設定します。これを順に実行する場合はBatchJobContainer、または、QueueJobContainer、並行して同時実行する場合はParallelJobContainer、または、ParallelQueueJobContainerを用います。
+
+このように、ジョブコンテナも、`FB_AbstructFuture`を継承したユーザタスクも、どちらも`InterfaceFuture`が基底インターフェースとなり、同様に`FB_Executor`は実行することができます。
+
+```{tip}
+このデータモデルは、コンテナとユーザ定義タスクインスタンスが親子関係を構成し、さらにコンテナの中にコンテナを構成するなど、深いツリーモデルが構築可能です。このデザインパターンを、[GoFのCompositeパターン](https://ja.wikipedia.org/wiki/Composite_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)と呼びます。
+```
 
 ```{figure} assets/activity_control_class_diag.png
 :align: center
@@ -19,7 +25,7 @@ JOB制御クラス図
 
 Futureオブジェクトは処理内容の静的な定義のみ行い、InterfaceFutureのインターフェースをを用いて実行する主体はFB_Executorファンクションブロックです。
 
-FB_ExecutorファンクションブロックではE_FutureExecutionState enum型の変数を持ちた状態を持ち、current_stateプロパティを用いて参照することができます。状態遷移図を{numref}`fig_fb_executor_state_machine`, {numref}`table_future_methods` に示します。
+FB_ExecutorファンクションブロックではE_FutureExecutionState enum型の変数を持ちた状態を持ち、current_stateプロパティを用いて参照することができます。状態遷移図を{numref}`fig_fb_executor_state_machine`, {numref}`table_state_machine` に示します。
 
 ```{figure} assets/fb_executor_state_machine.png
 :align: center
@@ -29,7 +35,7 @@ FB_Executorステートマシン図
 ```
 ```{csv-table} E_FutureExecutionState メンバとFB_Executorの状態遷移制御一覧
 :header: ステート, 説明, 終了条件
-:name: table_future_methods
+:name: table_state_machine
 
 idle, 初期状態（非活性状態）, FB_Executorが制御するジョブオブジェクトが、idleまたはfinish状態など実行中でない状態であること。
 init, futureオブジェクトの初期化処理`init()`を実行している状態。, futureオブジェクトの`init()`が完了する
