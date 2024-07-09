@@ -19,7 +19,7 @@ JOB制御クラス図
 
 Futureオブジェクトは処理内容の静的な定義のみ行い、InterfaceFutureのインターフェースをを用いて実行する主体はFB_Executorファンクションブロックです。
 
-FB_ExecutorファンクションブロックではE_FutureExecutionState enum型の変数を持ちた状態を持ち、current_stateプロパティを用いて参照することができます。状態遷移図を{numref}`fig_fb_executor_state_machine`に示します。
+FB_ExecutorファンクションブロックではE_FutureExecutionState enum型の変数を持ちた状態を持ち、current_stateプロパティを用いて参照することができます。状態遷移図を{numref}`fig_fb_executor_state_machine`, {numref}`table_future_methods` に示します。
 
 ```{figure} assets/fb_executor_state_machine.png
 :align: center
@@ -27,14 +27,26 @@ FB_ExecutorファンクションブロックではE_FutureExecutionState enum型
 
 FB_Executorステートマシン図
 ```
+```{csv-table} E_FutureExecutionState メンバとFB_Executorの状態遷移制御一覧
+:header: ステート, 説明, 終了条件
+:name: table_future_methods
 
-
+idle, 初期状態（非活性状態）, FB_Executorが制御するジョブオブジェクトが、idleまたはfinish状態など実行中でない状態であること。
+init, futureオブジェクトの初期化処理`init()`を実行している状態。, futureオブジェクトの`init()`が完了する
+wait_for_process, 外部からの実行指示待ち状態。, FB_Executorの`start()`メソッドを実行する
+process, 実行中状態, futureオブジェクトの`execute()`が完了する
+quit, 終了処理状態, futureオブジェクトの`quit()`が完了する
+abort, 中断処理中、または中断処理完了状態, 中断処理完了状態で、FB_Executorの`start()`メソッドを実行する
+finish, 終了状態（非活性状態）, idleとおなじ
+```
 
 ## ファンクションブロック
 
 ### InterfaceFuture
 
-```{csv-table} フューチャーオブジェクトのメソッド一覧
+タスク、および、ジョブコンテナ向けのインターフェースです。
+
+```{csv-table} InterfaceFutureのメソッド一覧
 :header: メソッド名, 型, 戻り値 ,説明
 :name: table_future_methods
 
@@ -44,7 +56,7 @@ FB_Executorステートマシン図
 `abort`, BOOL , 中断処理が行われた際に実施する処理を実装します。処理完了時にTRUEを返す必要があります。
 ```
 
-```{csv-table} フューチャーオブジェクトのプロパティ一覧
+```{csv-table} InterfaceFutureのプロパティ一覧
 :header: プロパティ名,型, 方向 ,説明
 :widths: 1,1,1,5
 :name: table_future_properties
@@ -64,21 +76,27 @@ state, E_FutureExecutionState, GET SET,Futureインスタンスが`FB_Executor`�
 
 ### InterfaceContainer
 
+ジョブコンテナ用のインターフェースです。
 
-```{csv-table}
+```{csv-table} InerfaceContainerのメソッド一覧
 :header: メソッド名, 型, 戻り値 ,説明
+:name: table_interface_container_method
 
 `add_future`, UINT, 登録されたFuture番号を返す, ジョブコンテナにFutureを登録する。
-`reset_sub_futures`, BOOL , コンテナの初期化完了でTRUEを返す, add_futureで登録したFutureを全てクリアする。
+`reset`, BOOL , コンテナの初期化完了でTRUEを返す, add_futureで登録したFutureを全てクリアする。
 get_future_statue, E_FutureExecutionState, 引数で指定したFuture番号の現在の実行状態を返す, 指定したFuture番号の現在状態を調べる。
 ```
 
-```{csv-table}
+```{csv-table} InerfaceContainerのプロパティ一覧
 :header: プロパティ名,型, 方向 ,説明
 :widths: 1,1,1,5
+:name: table_interface_container_property
 
 active_futures, UINT, Get, `FB_SerialJobContainer`では現在実行中のFutureの連番を返します。`FB_ParallelJobContainer`では実行中のFuture数を返します。
+continuous_mode, BOOL, Set, "全てのfutureが実行完了しても終了せず、新たなfutureが追加されるのを待つモードを有効にします。`QueueJobContainer`, `ParallelQueueJobContainer`のみ有効。"
+job_event_reporter, InterfaceJobEventReporter, Set, 包含している`FB_Executor`の各配列にセットする`InterfaceJobEventReporter`実装オブジェクトを受け取ります。
 num_of_future, UINT, Get, `add_future`で追加されたFuture数を返します。
+parent_executor, REFERENCE TO FB_Executor, Set Get, 親のコンテナジョブオブジェクトが有る場合、そのExecutorオブジェクトにアクセスします。
 ```
 
 
@@ -86,9 +104,10 @@ num_of_future, UINT, Get, `add_future`で追加されたFuture数を返します
 
 `FB_Executor`は、`InterfaceFuture`を実装したファンクションブロックを実行するファンクションブロックです。
 
-```{csv-table}
+```{csv-table} FB_Executorのメソッド一覧
 :header: メソッド名, 型, 戻り値 ,説明
 :widths: 1,1,2,6
+:name: table_executor_methods
 
 `init`, BOOL , 初期化処理完了時にTRUEが返る , タスクの処理を開始できる状態に初期化する。
 `execute`, BOOL , タスク処理完了時にTRUEが返る , "`future.init()`, `future.execute()`, `future.quit()`を順次実行します。すべて完了したら戻り値がTRUEになります。"
@@ -96,9 +115,10 @@ num_of_future, UINT, Get, `add_future`で追加されたFuture数を返します
 `start`, BOOL , なし, `E_FutureExecutionState.wait_for_process` 状態時にこのメソッド実行すると、`InterfaceFuture.execute()`処理を、`E_FutureExecutionState.abort` の状態の際にこのメソッドを実行すると、中断する前に実行していた`future.init()`、`future.execute()`、`future.quit()`の処理を再開する。
 ```
 
-```{csv-table}
+```{csv-table} FB_Executorのプロパティ一覧
 :header: プロパティ名,型, 方向 ,説明
 :widths: 1,1,1,5
+:name: table_executor_properties
 
 nErrorID, UDINT, GET, エラー発生時は0以外の値を返します。[参照](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/12049349259.html?id=2525089929595466454)
 active_task_id, UINT, GET, `FB_SerialJobContainer`や`FB_ParallelJobContainer`の実行状態がモニタできます。`FB_SerialJobContainer`の場合は現在処理中のFuture番号を返します。`FB_ParallelJobContainer`では、実行するFutureの合計数を返します。いずれも`executing()`メソッド実行中以外は0を返します。
@@ -114,11 +134,9 @@ job_event_reporter, InterfaceJobEventReporter, SET, InterfaceJobEventReporter実
 (section_InterfaceJobEventReporter)=
 ### InterfaceJobEventReporter
 
-本インターフェースの実装ファンクションブロックのインスタンスを、`FB_Executor`の`job_event_reporter`にセットします。
+`FB_Executor`の状態変化時にコールされるイベントハンドラ用のインターフェースです。このインターフェースを実装したファンクションブロックインスタンスを、`FB_Executor`の`job_event_reporter`にプロパティにセットして使います。
 
-これにより`FB_Executor`の状態遷移時にreportメソッドをコールします。
-
-report
+reportメソッド
     : `FB_Executor`の処理で状態遷移が発生した際にコールされるイベントハンドラ。
     : 引数
         : old_state
