@@ -13,4 +13,5 @@ tf6311/index.md
 el_ethernet/index.md
 shared_memory/index.md
 powershell_data_edit/index.md
+ads_python/index.md
 ```
