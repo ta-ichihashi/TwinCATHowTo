@@ -9,4 +9,5 @@ faq/5941
 faq/resume_op
 faq/fb_local_system_time
 faq/product_finder
+faq/open_from_target
 ```
