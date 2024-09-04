@@ -1,6 +1,16 @@
 # リモートIPCからTwinCATプロジェクトを読み出す方法をおしえてください
 
-以下の手順になります。
+```{admonition} 事前条件
+:class: tip
+
+接続したIPCからTwinCATのPLCソースを読み出すには、IPCにインストールされたPLCプロジェクトの設定が次図の通りとなっている必要があります。
+
+![](assets/2024-09-04-17-45-44.png){align=center}
+
+PLC プロジェクトの Settings で、Target Archive に少なくとも Project Sources および Complied Libraries がチェックされていること。
+```
+
+以下の手順でターゲットIPCのプロジェクトを読み出すことができます。
 
 1. Visual StudioまたはTwinCAT XAE Shellを開き、File メニューの `Open` > `Open Project form Target...` を選びます。
 
