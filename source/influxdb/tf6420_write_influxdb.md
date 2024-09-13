@@ -55,7 +55,11 @@
 
 通常は`minimum_chunk_size`を下限としたサイズのチャンクで小刻みにデータベースに書込みを行い最新データを速やかにデータベースへ反映することができます。データベースに対して一時的に負荷がかかった場合（たとえば別クライアントからデータベースに対して大量のデータ問い合わせが発生したり他のプロセスにより一時的にリソース不足に陥った場合）は、書込み速度が一時的に低下します。この際、自動的にチャンクサイズを大きくすることで、書込みの回数を減らしてインサートに掛かるオーバヘッドを最小化させることができます。これによってこの後、リソースが回復した際に速やかにバッファ容量を回復させることができます。
 
-![](assets/2023-08-08-10-09-56.png){align=center width=800px}
+```{figure} assets/2023-08-08-10-09-56.png
+:align: center
+:name: figure_grafana_timeline
+
+Grafanaによるバッファ使用状況可視化
 ```
 
 
@@ -86,7 +90,7 @@
 
     ![](assets/2023-05-23-18-45-22.png){width=600px align=center}
 
-5. `Beckhoff-JP` > `Utility` > `Database` > `InfluxDB` > `influxdb-client` を選択してOKボタンを押します。
+5. `Beckhoff-JP` > `Utility` > `cyclic_database_recorder` を選択してOKボタンを押します。
 
     ![](assets/2023-05-23-20-51-12.png){width=700px align=center}
 
@@ -129,6 +133,7 @@ TF6420とのADS通信により、データベースのレスポンスに依存�
 このように通信に対する安定性をPLCで担保できることが本ライブラリを利用いただくメリットにもなります。
 ```
 
+(section_db_session_driver)=
 ### データベース書込み部プログラム作成
 
 まず、グローバル変数定義（Global variable list名を `GVL`とします）としてデータベース書き込みファンクションブロック`RecordInfluxDB`のインスタンスを定義します。
@@ -154,6 +159,10 @@ END_VAR
 GVL.fbInfluxDBRecorder();
 
 ```
+
+上記の作成したプログラムは専用のタスクで動作するようにします。
+
+![](assets/2024-09-13-08-15-56.png){align=center}
 
 ## 計測用データ構造体の定義
 
@@ -198,311 +207,113 @@ InfluxDBの仕様により、タグに使用できるデータ型は`STRING`ま�
 [^high-cardinality]: この状態を「カーディナリティが高い」状態といいます。
 
 
-本節の例では、下記のとおりのデータ構造を定義する例で説明します。
+以上、タグ構造体は以下の通り定義します。この例では、データベースへ書き込む際のバッファの使用状況を計測するデータ `DatabaseThroughput`構造値を記録するプログラムをご紹介します。ライブラリ内のPOUにも含まれています。この結果は、最終的には {ref}`figure_grafana_timeline` のようにGrafanaと呼ばれる可視化WEBアプリケーションで確認することができます。
 
-* データタグ
-
-   機械名称、および、その内部のモジュール名称を定義します。1台のエッジPLCだとしても複数の機械、モジュールを制御している可能性があり、該当するデータがどの部位のものかをここで定義します。
-
-* データフィールド
-
-   この例では、弊社のリニア搬送システムXTSの位置、速度、加速度、エラーコードを記録します。
-
-タグ構造体
 ```iecst
-TYPE DataTag :
+TYPE DatabaseThroughput:
 STRUCT
     {attribute 'TagName' := 'machine_id'}
-    machine_id : STRING;
-    {attribute 'TagName' := 'module_name'}
-    module_name: STRING;
+    machine_id : STRING(255); // 設備名
+    {attribute 'TagName' := 'data_type_id'}
+    job_id : STRING(255); // 発生イベント種別
+    {attribute 'FieldName' := 'DB_queue_count'}
+    db_insert_queue_count: UDINT; // キューインされたデータの個数
+    {attribute 'FieldName' := 'DB_buffer_current_index'}
+    current_index: UDINT; // バッファ配列の現在のインデックス番号
+    {attribute 'FieldName' := 'DB_buffer_next_index'}
+    next_index: UDINT; // 次回InfluxDBへ書き込みを行う配列のインデックス番号
+    {attribute 'FieldName' := 'DB_buffer_usage'}
+    buffer_usage: REAL; //バッファ使用率
 END_STRUCT
 END_TYPE
-```
-
-フィールド構造体
-
-```iecst
-TYPE MotionActivityData EXTENDS DataTag :
-STRUCT
-    {attribute 'FieldName' := 'machine_mode'}
-    machime_mode : INT;
-    {attribute 'FieldName' := 'activity'}
-    activity_id: INT;
-    {attribute 'FieldName' := 'position'}
-    position : LREAL;
-    {attribute 'FieldName' := 'velocity'}
-    velocity : LREAL;
-    {attribute 'FieldName' := 'acceleration'}
-    acceleration : LREAL;
-    {attribute 'FieldName' := 'set_position'}
-    set_position : LREAL;
-    {attribute 'FieldName' := 'set_velocity'}
-    set_velocity : LREAL;
-    {attribute 'FieldName' := 'set_acceleration'}
-    set_acceleration : LREAL;
-    {attribute 'FieldName' := 'axis_error_code'}
-    axis_error_code : UDINT;
-END_STRUCT
-END_TYPE
-```
-
-## 計測用プログラム実装
-
-データ収集には2つの方式があります。
-
-* BufferedRecord
-
-   登録したデータをバッファにコピーし、キュー配列に並べて順次データベースへ書き込む方式です。データベース処理中に重なって次のデータを書き込む必要が有る場合は、この方式を採用する必要があります。
-   バッファのサイズと書込みデータのチャンクサイズによっては、データベースへ記録されるタイミングに遅延が生じます。
-
-* DirectRecord
-
-   登録したデータを直接データベースへ書き込む方式です。キューが有りませんのでデータベース書き込み処理中に登録データの内容を変更すると、意図しないデータが記録される可能性があります。
-   ただし、即時データベースへは反映されます。
-
-```{note}
-データベースに記録される時刻は、いずれもこのファンクションブロックの`write`メソッド実行時です。キューによる書込み遅延には影響しません。
-```
-
-(section_buffered_record_program_example)=
-### データバッファ付き計測実装例（BufferdRecord）
-
-宣言した構造体`Motion ActivityData`の実体を作り、キューへデータを送り込みます。
-
-次の実装を行ってください。
-
-* 宣言部にて以下の変数を定義
-
-    * 前節で作成したフィールド構造体型のデータバッファ配列を定義する
-    
-        データバッファサイズは、ライブラリ内で`DbLibParam.DATA_BUFFER_SIZE`が初期値として使用されているため、これに準じる場合はこのサイズの配列を作成します。任意のサイズを指定したい場合は{ref}`section_adjust_influxdb_data_queue_buffer_size`をご覧ください。
-
-    * `BufferedRecord`インスタンスを作成し、コンストラクタ引数に以下を指定する
-
-        * 前項で作成したデータバッファのポインタを第一引数に渡す
-        * グローバル変数として定義したデータベース書込みファンクションブロック`RecordInfluxDB`のインスタンスを第二引数に渡す
-
-* プログラム部に以下を実装
-
-    * 前節で作成したフィールド構造体型のインスタンス変数（下記実装例では`motion_activities`）を作成し、各フィールド要素に値をセット
-    * 記録するデータのInfluxDBのメジャメント名をセット
-    * 前節で作成したフィールド構造体型の構造体名をセット
-    * `motion_activities`をT_Arg型（F_BIGTYPE）に変換し、`write`メソッドで処理する。
-
-``` iecst
-PROGRAM MAIN
-VAR
-    // 現在データ登録用変数
-    motion_activities     : MotionActivityData := (module_name := 'XTS1');
-    // データバッファの配列
-    motion_activity_data_buffer    : ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OFMotionActivityData;
-    // ビジネスロジック用ファンクションブロック
-    fbActivityDataController    :BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
-END_VAR
-
-// データセット
-motion_activities.machine_id := 'Roll Dice demo';
-motion_activities.machime_mode := MAIN.iState;
-motion_activities.activity_id := MAIN.iState_Run;
-motion_activities.position := MAIN.stMover1.NcToPlc.ActPos;
-motion_activities.velocity := MAIN.stMover1.NcToPlc.ActVelo;
-motion_activities.acceleration := MAIN.stMover1.NcToPlc.ActAcc;
-motion_activities.set_position := MAIN.stMover1.NcToPlc.SetPos;
-motion_activities.set_velocity := MAIN.stMover1.NcToPlc.SetVelo;
-motion_activities.set_acceleration := MAIN.stMover1.NcToPlc.SetAcc;
-motion_activities.axis_error_code := MAIN.stMover1.NcToPlc.ErrorCode;
-
-//キューへのデータ書き込み
-
-fbActivityDataController.db_table_name := 'MotionActivityData'; // InfluxDBのメジャメント名
-fbActivityDataController.data_def_structure_name := 'MotionActivityData'; // データ構造体名称
-
-fbActivityDataController.write(
-    input_data := F_BIGTYPE(
-        pData := ADR(motion_activities),
-        cbLen := SIZEOF(motion_activities)
-    )
-); // キューへのデータ書き込み処理
-
-```
-
-(section_adjust_influxdb_data_queue_buffer_size)=
-### 任意のサイズのデータバッファ付き計測実装例（BufferdRecord）
-
-前節の実装例では、ライブラリパラメータ`DbLibParam.DATA_BUFFER_SIZE`が暗示的にライブラリ内部でデータバッファの制御に用いられています。前節のとおりデータバッファの実体を定義する場合も下記のとおり設定する必要がありました。
-
-``` iecst
-VAR
-   motion_activity_data_buffer    : ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OF MotionActivityData;
-END_VAR
-```
-
-しかし、計測部が複数あり、それぞれのタスクサイクルタイムが一意でない場合は、それぞれに適したバッファサイズを指定する必要があります。この方法について示します。
-
-バッファ配列の初期化
-    : 0..バッファサイズ - 1
-        : バッファの最大インデックスを0始まりの配列でインデックス指定できる配列を作成してください。 
-
-BufferedRecordファンクションブロックのプロパティ
-    : minimum_chunk_size
-        : デフォルトでは、ライブラリパラメータで指定するバッファサイズの20%が設定されています。任意の値を設定してください。
-    : maximum_chunk_size
-        : バッファサイズ - 1 が最大インデックスとなるように設定してください。
-    : buffer_size
-        : 任意のバッファサイズを設定してください。
-
-次にバッファサイズとして定数 `LOG_BUFFER_SIZE_LOW` を定義した実装例を示します。
-
-```{admonition} minimum_chunk_size設定時の注意
-:class: warning
-
-連続記録データにおいて`minimum_chunk_size`を小さな値に設定すると、それだけ頻繁にコマンドが発行されるため、代わりにコマンドキューが圧迫される事になります。この場合、{ref}`section_library_deploy` 節に示す`COMMAND_QUEUE_BUFFER_SIZE`を十分大きな値に設定してください。
-```
-
-``` iecst
-PROGRAM MAIN
-VAR CONSTANT
-    LOG_BUFFER_SIZE_LOW    : UINT := 2500;
-END_VAR
-VAR
-    // 現在データ登録用変数
-    motion_activities     : MotionActivityData := (module_name := 'XTS1');
-    // データバッファの配列（バッファサイズの違いに注意）
-    motion_activity_data_buffer    : ARRAY [0..LOG_BUFFER_SIZE_LOW - 1] OF MotionActivityData;
-    // ビジネスロジック用ファンクションブロック
-    fbActivityDataController    :BufferedRecord(ADR(motion_activity_data_buffer), GVL.fbInfluxDBRecorder); 
-END_VAR
-
-fbActivityDataController.db_table_name := 'MotionActivityData'; // InfluxDBのメジャメント名
-fbActivityDataController.data_def_structure_name := 'MotionActivityData'; // データ構造体名称
-
-fbActivityDataController.minimum_chunk_size := 1;
-fbActivityDataController.maximum_chunk_size := LOG_BUFFER_SIZE_LOW - 1;
-fbActivityDataController.buffer_size := LOG_BUFFER_SIZE_LOW;
-
-fbActivityDataController.write(
-    input_data := F_BIGTYPE(
-        pData := ADR(motion_activities),
-        cbLen := SIZEOF(motion_activities)
-    )
-); // キューへのデータ書き込み処理
-
-```
-
-### BufferedRecordで1個づつ記録したい場合
-
-前述のとおり、BufferdRecordではチャンクサイズは自動計算されます。これはサイクリックな連続データの場合に用意された機構です。
-
-イベントデータを記録したい場合は問題となります。いつ起こるか分からないイベントデータの場合、リアルタイムにそのデータを活用するためにも速やかにデータベースは反映させる事が望ましいです。しかしシステム内部で計算されたチャンクサイズにバッファが満たされるまではデータベースに記録されない事となります。
-
-DirectRecordはこのために用意された機構ですが、困った事に不意に発生するイベントは、短期間に集中して発生する可能性もあります。このため、データバッファ機構は必要です。
-
-このケースにおいては、次の通り設定してください。
-
-``` iecst
-fbActivityDataController.minimum_chunk_size := 1;
-fbActivityDataController.maximum_chunk_size := 1;
-```
-
-つまり、チャンクサイズの上限値と下限値をそれぞれ1とします。これにより、バッファ機構を活かしながら、必ず1個づつデータベースへ記録される動作となります。
-
-#### 直接計測実装例（DirectRecord）
-
-直接記録の場合は、一度につき1レコードのみ記録可能です。TF6420を通じてデータベースへ書込みが行われている最中に`motion_activities`のデータが直接ADSを通じてデータベースに参照されますので、データベースの記録が完了するまでこのデータを保持しておくことが求められます。
-
-さらに、データベースへの書込み処理の開始は、他のキューからの書き込みコマンドのキューを待ってから行われますので、遅延する可能性があります。
-
-十分な書込み間隔が保証されている場合のみこのファンクションブロックをご利用ください。
-
-実装方法は以下の通りで、`BufferedRecord`の実装例と比較して、バッファ配列を取り除いただけの違いとなります。
-
-``` iecst
-PROGRAM MAIN
-VAR
-    // 現在データ登録用変数
-    motion_activities     : MotionActivityData := (module_name := 'XTS1');
-    // ビジネスロジック用ファンクションブロック
-    fbActivityDataController    :DirectRecord(GVL.fbInfluxDBRecorder); 
-END_VAR
-
-// データセット
-motion_activities.machine_id := 'Roll Dice demo';
-motion_activities.machime_mode := MAIN.iState;
-motion_activities.activity_id := MAIN.iState_Run;
-motion_activities.position := MAIN.stMover1.NcToPlc.ActPos;
-motion_activities.velocity := MAIN.stMover1.NcToPlc.ActVelo;
-motion_activities.acceleration := MAIN.stMover1.NcToPlc.ActAcc;
-motion_activities.set_position := MAIN.stMover1.NcToPlc.SetPos;
-motion_activities.set_velocity := MAIN.stMover1.NcToPlc.SetVelo;
-motion_activities.set_acceleration := MAIN.stMover1.NcToPlc.SetAcc;
-motion_activities.axis_error_code := MAIN.stMover1.NcToPlc.ErrorCode;
-
-//キューへのデータ書き込み
-
-fbActivityDataController.db_table_name := 'MotionActivityData'; // InfluxDBのメジャメント名
-fbActivityDataController.data_def_structure_name := 'MotionActivityData'; // データ構造体名称
-
-fbActivityDataController.write(
-    input_data := F_BIGTYPE(
-        pData := ADR(motion_activities),
-        cbLen := SIZEOF(motion_activities)
-    )
-); // キューへのデータ書き込み処理
-
 ```
 
 (section_adjust_data_buffer_size)=
-## 評価とバッファサイズの調整
+## 計測用プログラム実装
 
-別途データベースのバッファ使用状況についても、InfluxDBへ記録するプログラムを以下の通り追加します。
+次にメインプログラムに計測用のプログラムを記述します。ここでは、記録データの構造体毎に、FIFOキューでデータベース側に一定のサイズに分割して書き込み指令を送る`BufferRecord`ファンクションブロックインスタンスを定義し、これを使ってデータ記録を行います。
 
-計測する値は、前項の例で作成した`fbActivityDataController`のファンクションブロックから提供されているバッファの使用状況を示す様々なメトリクスです。
+まず、プログラム変数の宣言部です。
+
+```{code-block} iecst
+PROGAM MAIN
+VAR
+    // Record data buffer
+    DatabaseThroughputRecordData    :DatabaseThroughput;    // for insert dataset
+    DatabaseThroughputRecordBuffer  :ARRAY [0..DBLibParam.DATA_BUFFER_SIZE] OF DatabaseThroughput;
+    fbThroughputRecorder_influxDB   :BufferedRecord(
+                                        GVL.fbInfluxDBRecorder, 
+                                        ADR(DatabaseThroughputRecordBuffer)
+                                    );  // record controller
+    initialized : BOOL; // 初期化用フラグ
+END_VAR
+```
+`DatabaseThroughputRecordData`
+    : 毎サイクル記録するデータを保管する構造体変数です。計測した値は、この変数の要素にセットします。
+
+`DatabaseThroughputRecordBuffer`
+    : 連続したデータが保管されるデータバッファです。配列の個数はサイクルタイムやデータサイズなどの要件によりチューニングして決定します。配列の要素数は0始まりとします。
+
+`fbThroughputRecorder_influxDB`
+    : `BufferReocrd`ファンクションブロックインスタンスです。データバッファの中から順番に適切なサイズ（チャンク）を切り取ってデータベースへの書込みコマンドを発行します。次の引数をコンストラクタ変数で指定します。
+        * {ref}`section_db_session_driver` 節で定義したデータベース書き込みドライバのオブジェクト変数を指定。
+        * データバッファのアドレスを指定。
+        * 記録データの構造体名
+
+プログラム部には、まず初期化ロジックを定義します。このロジックは`initialized`フラグによって、PLCスタート後1サイクルのみ実行されます。
+
+```
+(* Initialize*)
+IF NOT initialized THEN
+    // Influx DB
+    fbThroughputRecorder_influxDB.set_buffer_info(
+        struct_size := SIZEOF(DatabaseThroughputRecordBuffer[0]),
+        buffer_size := SIZEOF(DatabaseThroughputRecordBuffer),
+        structure_name := 'DatabaseThroughput'); // Measurement name
+    fbThroughputRecorder_influxDB.SQL_parameters.table_name := 'DatabaseThroughput'; // Structure type name
+    initialized := TRUE;
+END_IF
+
+```
+
+次に、実際のデータ書き込みを行うプログラムを定義します。これは毎サイクル実行します。計測データは下表の方法で取得できます。
 
 ```{csv-table}
 :header: インスタンス, プロパティ, 説明
 :widths: 1,1,8
 
-InfluxDBRecorder,queue.queue_usage,コマンドキューの使用率
-BufferedRecord,current_index, 現在のデータ記録インデックス
-BufferedRecord,next_index, 次回データベースに書込みが行われる予定のインデックス
-BufferedRecord,buffer_usage, 現在バッファに溜まっているデータの全体のサイズに対する比率
+GVL.InfluxDBRecorder,queue.queue_usage,コマンドキューの使用率
+fbThroughputRecorder_influxDB,index, 現在のデータ記録インデックス
+fbThroughputRecorder_influxDB,next_index, 次回データベースに書込みが行われる予定のインデックス
+fbThroughputRecorder_influxDB,buffer_usage, 現在バッファに溜まっているデータの全体のサイズに対する比率
 ```
 
-これらのメトリクスは、ライブラリ内にあらかじめ定義された構造体`DatabaseThroughput`にて定義されています。本ライブラリは、`tf6420`というデフォルトのネームスペースが定義されていますので、念のために`tf6420.DatabaseThroughput`という構造体名を指定してください。
+ここから計測できるデータを使って、下記の通り記録プログラムを定義します。
 
 ```{code-block} iecst
 :caption: データベーススループット計測プログラム
 :name: database_throughput_monitoring
 
-PROGRAM MAIN
-VAR
-   // For cycric insert
-   DatabaseThroughputRecordData   :tf6420.DatabaseThroughput; // for insert dataset
-   DatabaseThroughputRecordBuffer   :ARRAY [0..DBLibParam.DATA_BUFFER_SIZE - 1] OF DatabaseThroughput;
-   fbThroughputDataController   :BufferedRecord(ADR(tf6420.DatabaseThroughputRecordBuffer), GVL.fbInfluxDBRecorder); // record controller
-END_VAR
-
+// Tag Data
+DatabaseThroughputRecordData.machine_id := 'machine-1';
+DatabaseThroughputRecordData.job_id := 'db_throughput';
 // Field data
 DatabaseThroughputRecordData.db_insert_queue_count := GVL.fbInfluxDBRecorder.queue.queue_usage;
-DatabaseThroughputRecordData.current_index := fbActivityDataController.index;
-DatabaseThroughputRecordData.next_index := fbActivityDataController.next_index;
-DatabaseThroughputRecordData.buffer_usage := fbActivityDataController.buffer_usage;
+DatabaseThroughputRecordData.current_index := fbThroughputRecorder_influxDB.index;
+DatabaseThroughputRecordData.next_index := fbThroughputRecorder_influxDB.next_index;
+DatabaseThroughputRecordData.buffer_usage := fbThroughputRecorder_influxDB.buffer_usage;
 
-// Insert command queue
-fbThroughputDataController.db_table_name := 'DatabaseThroughput'; // Measurement name
-fbThroughputDataController.data_def_structure_name := 'tf6420.DatabaseThroughput'; // Structure type name
-
-// cyclic record
-fbThroughputDataController.write(
-    input_data := F_BIGTYPE(
-        pData := ADR(DatabaseThroughputRecordData), 
-        cbLen := SIZEOF(DatabaseThroughputRecordData)
-    )
-);
+// キューイン
+fbThroughputRecorder_influxDB.write(ADR(DatabaseThroughputRecordData));
 ```
 
-このデータ収集を計測するBufferedRecord毎に行い、InfluxDBへ記録させます。Grafanaにて次の2つのダッシュボードを作成します。
+上記のとおり、まずは`DatabaseThroughputRecordData` というデータ構造体のインスタンス変数の各要素に記録値をセットし、`BufferedReocrd`のインスタンス変数の`write()`メソッドの引数にそのアドレスを渡す事でデータのバッファへのキューインが行われます。
+
+`BufferedRecord`ファンクションブロックでは、データベースへの書き込み速度に応じて自動的にチャンクサイズを決定し、バッファが一定サイズ要素数になるとInfluxDBへ記録コマンドが発行されます。
+
+このように、サイクルデータの記録と、InfluxDBへの書き込みが非同期で行われる様子が、Grafanaにて閲覧することができます。
+
+# InfluxDBのクエリとGrafanaへの表示
 
 ```{code-block}
 :caption: データバッファ使用率のfluxクエリ
