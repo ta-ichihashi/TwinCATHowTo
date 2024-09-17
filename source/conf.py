@@ -49,7 +49,7 @@ release = '第1版'
 extensions = [
     'myst_parser',
     'japanesesupport',
-    'docxbuilder',
+    'docxsphinx',
     'sphinx.ext.githubpages',
     'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag',
@@ -66,7 +66,7 @@ source_suffix = {
 
 suppress_warnings = ["myst.header"]
 
-templates_path = ['_templates']
+docx_template = '_templates/beckhoff_document_template.docx'
 exclude_patterns = []
 
 language = 'ja'
