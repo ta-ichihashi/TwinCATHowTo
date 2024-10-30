@@ -191,7 +191,7 @@ To abort and get back to the state before "git rebase", run "git rebase --abort"
 
 次節から上記の1. Mergeボタンを押して1行ごとに判定しながらマージする方法について説明します。
 
-### 行単位マージの方法
+### 行単位マージツールTcProjectCompareによるマージ
 
 ```{admonition} 作業前にご確認ください
 * Pullを行った時点でTwinCAT XAEの編集画面は、自分の最終の状態ではなく全てリモートリポジトリの状態に更新されます。
@@ -243,9 +243,10 @@ To abort and get back to the state before "git rebase", run "git rebase --abort"
 2. プロジェクトに戻りますので、マージした結果が反映された確認します。
 
 (section_free_modifying)=
-#### TcProjectCompareで修正できなかった個所の変更と反映
+### TcProjectCompareで修正できなかった個所の変更と反映
 
 1. `TcProjectCompare` ツールでは加えられなかった修正が必要な場合、この段階でXAE上でプログラム編集を行ってください。
+
 2. 修正した後は、Team ExplorerのChangeメニューに進み、変更を行ったファイルの右側にある `+` アイコンをクリックして、Staged Changesに移動させます。
     ![](assets/2024-10-30-17-08-35.png){align=center}
 
@@ -254,15 +255,16 @@ To abort and get back to the state before "git rebase", run "git rebase --abort"
 * Staged Changesに反映されていない変更が残留していると、次手順で示す Synchronization メニューの Rebase In Progressの `Continue` リンクが効かず、マージモードを抜けることができません。
 ```
 
-#### マージモードの終了
+### マージモードの終了
 
-1. `TcProjectCompare` によるマージ、および、XAE上での編集が終了しましたら、動作に問題が無いかテストを実施してください。テストに問題が生じた場合、{ref}`section_free_modifying` の手順に戻ってプログラムを修正します。
-2. 品質に問題がないことが確認できましたら再度Team ExplorerのSyncメニューに進み、次図の通り `Continue` リンクを押します。
+1. `TcProjectCompare` によるマージ、および、XAE上での編集が終了しましたら、動作に問題が無いかテストを実施してください。テストに問題が生じた場合はXAE上のプログラムを修正して再度テストを行います。
+2. 品質に問題がないことが確認できましたら、最後に、{ref}`section_free_modifying` の手順に従って、テスト時に行われた変更も含めて全てを Staged Change に反映します。
+3. Team ExplorerのSyncメニューに進み、次図の通り `Continue` リンクを押します。
 
-![](assets/2024-02-20-17-10-56.png){align=center}
+    ![](assets/2024-02-20-17-10-56.png){align=center}
 
 ```{tip}
-最初からやりなおす場合は、 `Abort` を押します。`Abort`を押すと、Pullを実施する前（自分の変更が反映された状態）に戻ります。
+マージ自体を最初からやりなおす場合は、 `Abort` を押します。`Abort`を押すと、Pullを実施する前（自分の変更を行ったローカルリポジトリの最新）の状態に戻ります。
 ```
 
 これでマージは完了です。続けてPushを行いますと、マージした変更がリモートリポジトリへ反映されます。
