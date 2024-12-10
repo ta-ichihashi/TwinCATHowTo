@@ -10,4 +10,6 @@ faq/resume_op
 faq/fb_local_system_time
 faq/product_finder
 faq/open_from_target
+faq/IPC_iis_setting
+faq/visualization_password
 ```
