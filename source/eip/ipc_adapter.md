@@ -82,8 +82,12 @@ PLCとリンクしたEtherNet/IPのアダプタIOは、通常スキャナのサ�
 
     ![](assets/2024-12-24-18-36-15.png){align=center}
 
-
+(section_create_io_assembly)=
 ## IO Assembly作成
+
+インプリシットデータとして周期通信を行う入出力データのオブジェクトをIO Assemblyと呼びます。ここではIO Assemblyの構成設定を通じて入力、出力それぞれのデータ構造の定義を行います。コネクションはIO Assembly単位で生成されますので、前述のとおりIO Assemblyごとに入出力合わせて上限 502Byte までのデータが構成可能です。ただし、入力、出力双方において先頭には接続状態、および、制御を行うための4Byteのデータが割り当てられます。よって、正味ユーザが割り当てられるデータ領域は496Byteまでとなります。
+
+これを越えるデータを送受信したい場合は、IO Assemblyに分ける必要があります。{ref}`section_multiple_io_assembly` をご参照ください。
 
 1. `BOX * (TC EtherNet/IP Slave)` ツリー上でコンテクストメニューから `Append IO Assembly` を選択します。
 
@@ -194,3 +198,28 @@ Keyence等のPLC側の設定として、前項のEDSを読み込んで子局と�
 9. PLCがRUNし、アダプタとのEthernetの接続が正常であれば、ツリー上に現われるアダプタのアイコンに、緑色の丸印のオーバラップアイコンが描画されます。
 
     ![](assets/2024-12-25-15-55-22.png){align=center}
+
+(section_multiple_io_assembly)=
+## 複数のIO Assemblyを登録する
+
+497Byteを越えるデータを送りたい場合、複数のIO Assemblyを作成する必要があります。この場合は、{ref}`section_create_io_assembly`からの手順を繰り返してください。次のとおりPLCの変数とマッピングされたIO Assemblyが複数登録可能です。
+
+![](assets/2024-12-28-11-37-02.png){align=center}
+
+KV-8000側は次のとおり設定します。
+
+1. IO Assemblyが追加された新しいEDSファイルを読み込みます。構成が上書きされます。
+
+2. 子局を選択し、コンテキストメニューからコネクション設定を選びます。
+
+    ![](assets/2024-12-25-15-44-07.png){align=center}
+
+3. 複数のIO Assemblyが設定されたEDSファイルを読み込むと、デフォルトでさいしょのIO Assemblyのみが有効となっています。その他のIO Assemblyを追加するには、`追加(A)` ボタンを押します。
+
+    ![](assets/2024-12-28-11-43-49.png){align=center}
+
+4. 次図のとおり「有効なコネクションがありません」というダイアログがポッポアップされるまで追加ボタンを何度も押すと、EDSファイルに設定されている全てのIO Assemblyのコネクションがリストされます。
+
+    ![](assets/2024-12-28-11-45-48.png){align=center}
+
+このように、複数のコネクションを登録することで、497Byte以上のデータを送受信することが可能になります。
