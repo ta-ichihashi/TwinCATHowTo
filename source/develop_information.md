@@ -7,6 +7,7 @@
 :caption: 目次
 
 iot/index.md
+opcua/index.md
 scope_view/index.rst
 database/index.md
 tf6311/index.md
