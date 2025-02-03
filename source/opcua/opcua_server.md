@@ -41,6 +41,13 @@ OPC UAによるデータアクセスを許可したいPLC変数宣言部に以�
 nMyCounter : INT;
 ```
 
+```{note}
+より詳しいプログラム方法については以下のInfoSysをご覧ください。
+
+[https://infosys.beckhoff.com/content/1033/ts6100_tc2_opcua_server/15620470667.html?id=7253220225871226637](https://infosys.beckhoff.com/content/1033/ts6100_tc2_opcua_server/15620470667.html?id=7253220225871226637)
+```
+
+
 PLCプロジェクトの Settingsにて、Target Files内の `TMC File`にチェックを入れます。
 
 ![](https://infosys.beckhoff.com/content/1033/tf6100_tc3_opcua_server/Images/jpg/9007200001209355__Web.jpg){align=center}
@@ -59,9 +66,6 @@ OPC UAのサーバ設定済みのTwinCATのサンプルコードは以下で取�
 
 [https://github.com/Beckhoff/TF6100_Samples](https://github.com/Beckhoff/TF6100_Samples)
 
-また、より詳しい設定方法については以下のInfoSysをご覧ください。
-
-[https://infosys.beckhoff.com/content/1033/ts6100_tc2_opcua_server/15620470667.html?id=7253220225871226637](https://infosys.beckhoff.com/content/1033/ts6100_tc2_opcua_server/15620470667.html?id=7253220225871226637)
 ```
 
 
@@ -206,7 +210,7 @@ IPCのOSに登録したユーザアカウントを基に認証を行う方式で
 
 OPC UAで接続するユーザ名を登録します。
 
-![](assets/2025-02-03-16-19-50.png){slign=center}
+![](assets/2025-02-03-16-19-50.png){align=center}
 
 必要に応じて権限グループを選択してください。何も無ければUsersのままとしてください。
 
@@ -216,7 +220,22 @@ OPC UAで接続するユーザ名を登録します。
 
 ![](assets/2025-02-03-16-30-31.png){align=center}
 
+ユーザ情報を入力します。次の通り設定してください。
+
 ![](assets/2025-02-03-16-36-36.png){align=center}
+
+```{csv-table}
+:header: 設定項目,推奨値, 説明
+:widths: 1,2,7
+
+Authentication, OS, "認証する先のシステムを指定します。OS : OSアカウント、X.509: 証明書ファイル、Server : OPC UAサーバ内に格納したユーザ、パスワードの何れかを選択できます。"
+IsRoot,False ,"OPC UA Serverのシステム管理者かどうかを指定します。本節のユーザ追加の目的は、通常の運用ユーザとしてのアカウント追加なので、Falseとします。"
+MemberOf, Users, "ユーザグループ設定。OPC UA ServerにはTwinCATのリソースにアクセスする権限設定が細かく設定可能になっています。この権限レベルが初期化時のデフォルトとして、Administrators, Users, Guestの3段階で設定されています。"
+Password, **Authentication が Server 以外では必ず未設定とすること** ,"OPC UA側にストアされるパスワード文字列です。Authenticationで設定する認証方式がServerの時のみ使用します。IPC内の設定ファイルには平文でパスワード文字列が保存される仕様ですので、Server認証以外の場合は絶対に空白にしてください。"
+Username, Windowsに設定したユーザ名, "OPC UAサーバは、Windowsに対してこのユーザ名でパスワード認証を行います。存在しないユーザ名は指定しないでください。"
+```
+
+OS認証とすることで、Windows側にも同じユーザ名のアカウント登録が必要であることを警告するダイアログが発生します。OKボタンを押してください。
 
 ![](assets/2025-02-03-16-57-26.png){align=center}
 
@@ -243,10 +262,10 @@ XAEのConfiguratorでユーザを以下の通り設定されているとしま�
   </Users>
 ```
 
-認証方式（Administration）設定は、Server, OS, X.509の3通りがありますが、Serverを選択すると、上記TestUserに見られるようにパスワードが平文で保存されてしまいます。X.509によるTLS認証か、OSによるユーザ、パスワード認証をお使いいただくことをお勧めします。
+認証方式（Administration）設定は、Server, OS, X.509の3通りがあります。Serverの場合は、上記TestUserにあるような平文で保存されたパスワードによる認証が行われます。X.509による証明書による認証か、OSによるユーザ、パスワード認証の場合は、このPasswordエントリは参照しません。セキュリティの観点から平文でのパスワード文字列記録は推奨しません。認証方式はServerを使わず、OSまたは証明書による認証としていただくことを推奨します。
 
+また、このPasswordエントリはAdministrationの設定に関係なく入力した文字列が反映されます。Server認証以外はPassword設定欄は必ず空のままとしてください。
 ````
-
 
 ### 接続確認
 
@@ -254,7 +273,7 @@ XAEのConfiguratorでユーザを以下の通り設定されているとしま�
 1. 接続先のURLを入力して、左端の`Get Endpoints`ボタンを押します。
     ![](assets/2025-02-03-17-48-51.png){align=center}
 
-2. サーバが提供する認証方式から一つを選び、`Connect`ボタンを押します。
+2. サーバが提供する暗号レベルから一つを選び、`Connect`ボタンを押します。
     ![](assets/2025-02-03-17-51-02.png){align=center}
 
 3. {ref}`opc_ua_server_authenticate_by_os`で追加したアカウントのユーザ名とパスワードを設定してOKボタンをおしてください。
