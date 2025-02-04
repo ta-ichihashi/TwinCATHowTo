@@ -269,15 +269,20 @@ XAEのConfiguratorでユーザを以下の通り設定されているとしま�
 
 ### 接続確認
 
+1. Sample client（テスト用クライアント）の起動
 
-1. 接続先のURLを入力して、左端の`Get Endpoints`ボタンを押します。
+    Sample clientは、OPC UA Configuratorに同梱されるテスト用のクライアントソフトウェアです。
+
+    ![](https://infosys.beckhoff.com/content/1033/tf6100_tc3_opcua_server/Images/png/9007214874890763__Web.png)
+
+2. 接続先のURLを入力して、左端の`Get Endpoints`ボタンを押します。
     ![](assets/2025-02-03-17-48-51.png){align=center}
 
-2. サーバが提供する暗号レベルから一つを選び、`Connect`ボタンを押します。
+3. サーバが提供する暗号レベルから一つを選び、`Connect`ボタンを押します。
     ![](assets/2025-02-03-17-51-02.png){align=center}
 
-3. {ref}`opc_ua_server_authenticate_by_os`で追加したアカウントのユーザ名とパスワードを設定してOKボタンをおしてください。
+4. {ref}`opc_ua_server_authenticate_by_os`で追加したアカウントのユーザ名とパスワードを設定してOKボタンをおしてください。
     ![](assets/2025-02-03-17-52-06.png){align=center}
 
-4. 認証が許可されて接続が成功すると、BrowserツリーにDAリソースが一覧されます。
+5. 認証が許可されて接続が成功すると、BrowserツリーにDAリソースが一覧されます。
     ![](assets/2025-02-03-17-57-30.png){align=center}
