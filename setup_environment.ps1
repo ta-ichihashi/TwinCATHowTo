@@ -56,10 +56,8 @@ code --install-extension mushan.vscode-paste-image
 
 if ( - ! $gitonly) {
    # python インストール
-   scoop install python
-   # python 初期セットアップ
-   pip install wheel
-   python -m pip install --upgrade pip
+   scoop install uv
+   uv sync
 
    if ($includelatex) {
       # latex インストール

@@ -49,7 +49,7 @@ release = '第1版'
 extensions = [
     'myst_parser',
     'japanesesupport',
-    'docxsphinx',
+    'docxbuilder',
     'sphinx.ext.githubpages',
     'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag',
