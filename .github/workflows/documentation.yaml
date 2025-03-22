@@ -3,17 +3,27 @@ on: [push, pull_request, workflow_dispatch]
 permissions:
     contents: write
 jobs:
-  docs:
+  uv-example:
+    name: python
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
       - name: Sphinx build
-        run: |
-          sphinx-build source _build
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: uv run sphinx-build source _build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
