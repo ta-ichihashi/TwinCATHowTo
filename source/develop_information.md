@@ -10,7 +10,7 @@ iot/index.md
 opcua/index.md
 scope_view/index.rst
 database/index.md
-tf6311/index.md
+socket_communication/index.md
 el_ethernet/index.md
 eip/index.md
 shared_memory/index.md
