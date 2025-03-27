@@ -1,4 +1,4 @@
-# パッケージマネージャは
+# パッケージマネージャ
 
 パッケージマネージャは、TwinCAT 3.1 build 4026 より導入されたTwinCAT関連ソフトウェアのインストール、アンインストールシステムです。特定のソフトウェアのインストールにおいて、依存する関連ソフトウェアを自動的にインストールしたり、個々のインストーラに頼らず、包括的にバージョンアップすることができます。
 
@@ -136,7 +136,7 @@ PS C:\> tcpkg uninstall <パッケージ名> --include-dependencies
 PS C:\> tcpkg uninstall all
 ```
 
-### 現在インストールされているパッケージの一覧をエクスポートする
+### 構成のエクスポート
 
 次のコマンドにより、現在インストールされているTwinCATコンポーネントの構成を定義ファイルとしてエクスポートできます。
 
@@ -144,14 +144,14 @@ PS C:\> tcpkg uninstall all
 PS C:\> tcpkg export -o twincat_required.xml
 ```
 
-上記により、次のように `twincat_required.xml` ファイルが作成されます。
+上記により、次のように構成定義ファイル `twincat_required.xml` が作成されます。
 
-### エクスポートしたパッケージ構成ファイルに基づいて同じ構成のTwinCATコンポーネントをインストールします。
+### 構成のインポート
 
-前節でエクスポートした定義ファイルを基に、別のPCに同じTwinCATコンポーネントを構成します。
+前節でエクスポートしたパッケージ構成ファイルに基づいて同じ構成のTwinCATコンポーネントをインストールします。
 
 ```{code-block} powershell
-PS C:\> tcpkg import -i twincat_required.xml -y --no-cache
+PS C:\> tcpkg import -i twincat_required.xml
 ```
 
 各オプションの説明は以下の通りです。
