@@ -8,4 +8,5 @@ twincat_project_export_import/index.md
 ebus_current_consumption/index.md
 TwinCATConfiguration/index.md
 coe_sdo_access/index
+tcbsd/index
 ```
