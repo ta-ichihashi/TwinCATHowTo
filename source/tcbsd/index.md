@@ -168,15 +168,15 @@ export XMODIFIER=@im=fcitx
     ```{csv-table}
     :header: 項目, 説明, 推奨設定
     :widths: 1,3,6
-    Name, 起動するプログラム名称, TF1810
-    Description, プログラムの説明, PLC HMI Web
+    Name, 起動するプログラム名称, fcitx
+    Description, プログラムの説明, 
     Command, 起動するコマンドライン(実行ファイルはフルパスで), 下記参照
     Trigger, いつ実行するか, ログイン時
     ```
 
     ```{code-block} sh
     :caption: Commandフィールドに記載するコマンド文字列
-    /usr/local/bin/ungoogled-chromium --kiosk http://localhost/Tc3PlcHmiWeb/Port_851/Visu/webvisu.htm
+    /usr/local/bin/fcitx -r -d
     ```
 
 上記設定が完了したらログインし直してください。
@@ -350,7 +350,11 @@ $ doas pkg install ungoogled-chromium
     ```
 
     ```{tip}
-    TF1810ではなく、TF2000（TwinCAT HMI）を使う場合も同様の設定方法でログイン後ブラウザによる操作パネルの表示が可能です。`--kiosk` に続くURLを適切に設定してください。
+    TF1810だけではなくTF2000（TwinCAT HMI）を使う場合も同様の設定方法でログイン後ブラウザによる操作パネルの表示が可能です。`--kiosk` に続くURLを適切に設定してください。
     ```
 
   4. TwinCAT XAEからVisualization managerからWebVisualizationを有効にしたプロジェクトをTwinCAT BSDのXARへダウンロードし、再起動します。RUNモードへ移行していたら、Administratorへログイン後ブラウザが全画面モードで開き、Web Visualizationのページが表示されます。
+
+```{tip}
+全画面モードで開いているchromiumを閉じるには `ALT + F4` を押してください。
+```
