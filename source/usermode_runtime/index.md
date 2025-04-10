@@ -45,6 +45,24 @@ CPUコアへのタスクの割り当ては、Usermodeランタイムで受け入
 
     ![](assets/2025-04-10-10-38-24.png){align=center}
 
+3. 実行中はコンソール上で制御できます。
+
+    ```{code} powershell
+    TcSysSrvUm: started
+    2025-04-10 11:26:48.183175 - Init client interface
+    TcSysSrvUm state: Config [8976]
+    AmsNetId: 199.4.42.250.1.1
+    TcSysSrvUm state: Config [8976]
+
+    Press 'c' for Reconfig TwinCAT System.  ---> Configuモードへ移行
+    Press 'r' for Restart TwinCAT system.   ---> Runモードへ移行
+    Press 's' to view current state.        ---> 現在の状態を表示
+    Press 'x' to exit TwinCAT system service.   ---> ユーザモードランタイムの終了
+    Press 'd' to detach the exception handler   ---> 例外やブレークポイントによる停止を無視します。
+    ```
+
+    終了したい場合は、`x` を押してください。
+
 ```{admonition} 制限事項
 :class: warning
 
