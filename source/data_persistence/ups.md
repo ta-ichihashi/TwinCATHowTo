@@ -12,7 +12,7 @@ IPCに搭載可能なUPSには次の2タイプがあり、それぞれ実装方�
 
     : CXと呼ばれる組み込み型IPCに搭載される大容量キャパシタによる組み込み電源保持機構です。cFastメモリという特別な書き込み速度の速いストレージに変数を保持し、多くの機種でその最大容量は1Mbyteとなります。専用のファンクションブロック`FB_S_UPS_****`が用意され、RUN中は常時実行し続けることで、選択したモードにより不意の停電発生時には自動的にPERSISTENT変数の値をファイルへ永続化することができます。またPERSISTENTデータへの保存が完了したあと、`FB_NT_QuickShutdown` によりWindowsのシャットダウン処理を行う事ができます。
 
-[UPS Software Components（汎用UPS）](https://infosys.beckhoff.com/content/1033/tcupsshellext/html/overview.htm?id=1892807518135003723)
+[UPS Software Components（汎用UPS）](https://infosys.beckhoff.com/content/1033/tcupsshellext/index.html?id=4330553038683935593)
 
     : 1 second UPSの搭載が無いIPCに電源保護を行う場合は外付けUPSの設置が必要です。UPS Software Componentsは、この汎用UPSをWindowsでマネジメントするユーティリティソフトウェアです。UPSの残量やバッテリのみの駆動時間により自動的にWindowsシャットダウンを実施するところまで管理してくれるソフトウェアとなっています。PLCでは`FB_GetUPSStatus`によりUPSの稼働状態がモニタリングできますので、これにより `WritePersistentData` ファンクションブロックを実行し、PERSISTENT変数を永続化します。その後は、マネジメントソフトが自動的にシャットダウン処理まで行いますので、PLCからのシャットダウン処理は必要ありません。
     対応しているUPSはベッコフ製、APC製などがあります。ベッコフ製の場合はIPCとの間で電源線と通信線を共用するOCT（One Cable Technology）が採用されていますので、別途USBやシリアル通信ケーブルの設置が不要になります。次の通り容量別にラインナップされたコンパクトなUPSをご検討ください。
@@ -29,7 +29,7 @@ IPCに搭載可能なUPSには次の2タイプがあり、それぞれ実装方�
 
 * [1 second UPS](https://infosys.beckhoff.com/content/1033/tcplclib_tc2_sups/index.html?id=2087920595982685749)
 
-* [UPS Software Components](https://infosys.beckhoff.com/content/1033/tcupsshellext/html/overview.htm?id=1892807518135003723)
+* [UPS Software Components](https://infosys.beckhoff.com/content/1033/tcupsshellext/index.html?id=4330553038683935593)
 
 * [WritePersistentData](https://infosys.beckhoff.com/content/1033/tcplclibutilities/11850907403.html?id=1644098846396023990)
 

@@ -3,7 +3,7 @@
 
 以下の通り、PLCプロジェクト内の References をダブルクリックして、Library managerを起動します。Placeholder設定にて指定のバージョンにフリーズする手順を説明します。
 
-![](assets/2023-05-12-09-19-29.png){w=500px align=center}
+![](assets/2023-05-12-09-19-29.png){align=center}
 
 1. PLCプロジェクトを開き、Referencesツリーをダブルクリックしますと、ライブラリマネージャが開きます。
 2. この中のPlaceholderを開きますと、インストールされているライブラリのバージョンが指定できます。
