@@ -51,6 +51,11 @@
 
     次節の手順に従って言語ファイルを作成します。
 
+## Excelからのインポート
+
+[https://infosys.beckhoff.com/content/1033/tc3_eventlogger/13716277515.html?id=8116147229532100751](https://infosys.beckhoff.com/content/1033/tc3_eventlogger/13716277515.html?id=8116147229532100751)
+
+
 ## 言語設定
 
 1. TMC Module classes ツリーから Translations を選択する。初期状態でEnglish(United States)は一覧されています。
@@ -82,3 +87,14 @@
 5. アラームを追加した場合は、次図の通り3の手順の操作（丸2のアイコン）から繰り返します。
 
     ![](assets/2023-12-17-20-51-18.png){align=center}
+
+## PLCからEventClassへアクセスできるようにする
+
+登録したEventClassをPLC内で使用するには、External Type設定から登録します。Build 4024と4026で設定方法が異なりますのでご注意ください。
+
+Build 4024における登録方法
+    : ![](assets/2025-02-27-11-44-10.png){align=center}
+
+Build 4026における登録方法
+    : ![](https://infosys.beckhoff.com/content/1033/tc3_eventlogger/Images/png/9007213060640267__en-US__Web.png){align=center}
+    : ![](https://infosys.beckhoff.com/content/1033/tc3_eventlogger/Images/png/9007213060643467__en-US__Web.png){align=center}
