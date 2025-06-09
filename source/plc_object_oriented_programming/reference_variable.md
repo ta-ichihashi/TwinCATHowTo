@@ -2,17 +2,13 @@
 
 TwinCATには、実体を間接参照する方法として様々な手段が提供されています。
 
-## VAR_IN_OUT
-
-前節で説明したとおり、ファンクションブロックのみの機能です。`VAR_IN_OUT`で受け渡す変数は実体ではなく参照を渡します。ファンクションブロック内では外部の変数そのものを操作します。ファンクションブロック入出力を共に操作したい場合はこの受け渡しかたが必要です。
-
 ## ポインタ
 
 `ADR`関数を用いる事で、該当する変数のポインタを返します。ポインタの実体は単なるメモリアドレスですので直接変数にアクセスすることはできません。`POINTER TO ****` で定義した「ポインタ型変数」にセットすることで使えるようになります。ポインタ型変数を通して参照先の実体変数へアクセスすることをデリファレンスと呼びます。TwinCATでは、ポインタ変数の最期にカレット `^` を付加することでデリファレンスできます。また、ポインタ変数には、ポインタがセットされていない状態（ヌルポインタ）があり、この状態でデリファレンスを行うとプログラムエラーでPLCが停止します。ポインタ変数が `0` でないことを条件にデリファレンスするプログラムコードとする必要があります。　
 
 ```{code} iecst
 VAR
-    stParameter : ST_ParameterData := (Velocity := 50, Acceleration := 500, Decceleration := 300);
+    stParameter : ST_Parameter := (Velocity := 50, Acceleration := 500, Decceleration := 300);
     pParameter  : POINTER TO ST_Parameter; // ポインタ型変数の定義
     lrVelocity  : LREAL; // 取り出したパラメータ値
 END_VAR
@@ -30,7 +26,7 @@ END_IF
 
 ```{code} iecst
 VAR
-    stParameter : ST_ParameterData := (Velocity := 50, Acceleration := 500, Decceleration := 300);
+    stParameter : ST_Parameter := (Velocity := 50, Acceleration := 500, Decceleration := 300);
     refParameter  : REFERENCE TO ST_Parameter; // 参照型変数の定義
     lrVelocity  : LREAL; // 取り出したパラメータ値
 END_VAR
@@ -62,7 +58,7 @@ END_IF
 
 ```{code} iecst
 VAR
-    stParameter     : ST_ParameterData := (Velocity := 50, Acceleration := 500, Decceleration := 300);
+    stParameter     : ST_Parameter := (Velocity := 50, Acceleration := 500, Decceleration := 300);
     fbController    : FB_ModuleController;
 END_VAR
 
@@ -70,6 +66,35 @@ fbController(refParameter := stParameter);
 
 ```
 
+## VAR_IN_OUT
+
+前節で説明したとおり、ファンクションブロックのみの機能です。`VAR_IN_OUT`で受け渡す変数は実体ではなく参照を渡します。ファンクションブロック内では外部の変数そのものを操作します。ファンクションブロック入出力を共に操作したい場合はこの受け渡しかたが必要です。
+
+```{code} iecst
+FUNCTION_BLOCK FB_ModuleController
+VAR_IN_OUT
+    refParameter  : ST_Parameter; // ファンクションブロックの入出変数を定義。暗黙的に参照型となる。
+END_VAR
+
+VAR
+    lrVelocity    : LREAL;
+END_VAR
+
+lrVelocity := refParameter.Velocity;
+```
+
+入力変数同様に `:=` を用いて受け渡します。
+
+```{code} iecst
+VAR
+    stParameter     : ST_Parameter := (Velocity := 50, Acceleration := 500, Decceleration := 300);
+    fbController    : FB_ModuleController;
+END_VAR
+
+fbController(refParameter := stParameter);
+```
+
+VAR_IN_OUT で定義した変数を省略した場合はビルドエラーとなり省略できません。従って、ファンクションブロック内で参照型変数の未定義チェックを行う必要はありません。
 
 ## インターフェース
 
