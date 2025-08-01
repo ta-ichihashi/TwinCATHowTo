@@ -506,7 +506,7 @@ subject=C = JP, ST = Kanagawa, L = Yokohama, O = Beckhoff Automation K.K., CN = 
 最後に、pemに設定したパスワードをファイルに出力しておきます。
 
 ```{code} bash
-# sudo echo 'パスフレーズ' > ~/passwd
+# sudo echo 'パスフレーズ' > passwd
 ```
 
 再度生成された証明書を確認します。
