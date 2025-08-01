@@ -584,3 +584,119 @@ $ sudo service nginx start
 これにより他のTwinCATのOSと同様、ポート `42341` に直接ではなく、SSLでアクセスする事ができるようになりました。今回は自己署名証明書でしたが、ドメイン名やメールアドレス等正規な値を設定した証明書要求ファイルを作成の上、正式な署名ファイルにてSSL通信していただくとより安全です。
 
 `https://192.168.3.45/Tc3PlcHmiWeb/Port_851/Visu/webvisu.htm`
+
+## バックアップ
+
+Acronis製のバックアップソリューションを備えたBSTでは、TwinCAT BSDのZFSや、Linuxのext4などのファイルシステムのバックアップができません。このような場合、各OSのコマンドを使ってイメージバックアップを取ります。
+
+### USBディスクのマウント
+
+CX82xxのX002は、USB3.0デバイスです。ここにUSBメモリを挿してください。挿した直後、次のコマンドを発行します。
+
+```{code} bash
+$ sudo dmesg
+```
+
+下記のとおり、最終行辺りにカーネルがUSBを認識したことを示すログが一覧されます。
+
+```{code-block} none
+:caption: USBメモリをX002に挿した直後のdmesgの内容
+
+[ 1261.696617] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[ 1261.833454] usb 1-1: New USB device found, idVendor=abcd, idProduct=1234, bcdDevice= 1.00
+[ 1261.833479] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[ 1261.833486] usb 1-1: Product: UDisk
+[ 1261.833491] usb 1-1: Manufacturer: General
+[ 1261.833497] usb 1-1: SerialNumber: \xd0\x89
+[ 1261.914295] SCSI subsystem initialized
+[ 1261.938827] usb-storage 1-1:1.0: USB Mass Storage device detected
+[ 1261.944135] scsi host0: usb-storage 1-1:1.0
+[ 1261.946819] usbcore: registered new interface driver usb-storage
+[ 1261.962097] usbcore: registered new interface driver uas
+[ 1262.949386] scsi 0:0:0:0: Direct-Access     General  UDisk            5.00 PQ: 0 ANSI: 2
+[ 1262.979544] sd 0:0:0:0: [sda] 31457280 512-byte logical blocks: (16.1 GB/15.0 GiB)
+[ 1262.979809] sd 0:0:0:0: [sda] Write Protect is off
+[ 1262.979822] sd 0:0:0:0: [sda] Mode Sense: 0b 00 00 08
+[ 1262.980205] sd 0:0:0:0: [sda] No Caching mode page found
+[ 1262.980214] sd 0:0:0:0: [sda] Assuming drive cache: write through
+[ 1263.006047]  sda:
+[ 1263.006232] sd 0:0:0:0: [sda] Attached SCSI removable disk
+```
+
+ここから、デバイスファイルは `sda` として認識したことがわかります。`/dev`以下を一覧し、認識されたブロックデバイスを確認します。
+
+```{code} bash
+$ ls /dev/sda*
+/dev/sda
+```
+
+どうやらパーティション等は無さそうなので、これをFATファイルシステムとしてマウントしてみます。まずは、マウントポジションを作成します。
+
+```{code} bash
+$ sudo mkdir /mnt/usb
+```
+
+続いてマウントコマンドを発行します。
+
+
+```{code} bash
+$ sudo mount -t vfat /dev/sda /mnt/usb
+```
+
+ファイル規定の容量のファイルシステムがマウントされているか確認します。
+
+```{code} bash
+$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+udev            417M     0  417M   0% /dev
+tmpfs            98M  448K   98M   1% /run
+/dev/mmcblk0p2   14G  444M   14G   4% /
+tmpfs           488M     0  488M   0% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+efivarfs        128K  2.2K  126K   2% /sys/firmware/efi/efivars
+/dev/mmcblk0p1 1022M   43M  980M   5% /boot/efi
+/dev/sda         15G  1.1G   14G   8% /mnt/usb
+```
+
+無事マウントできていることを確認しました。
+
+### 保存元デバイスを調べる
+
+つづいてバックアップ元となるIPCのルートファイルシステムのデバイス名を探します。以下のとおりmountコマンドで一覧されたルートファイルシステムの使用しているデバイスを確認します。この結果 `/dev/mmcblk0p2` であることがわかります。
+
+このデバイスは、パーティションも含めたものとなっていますので、ディスク全体のデバイスファイル名は`/dev/mmcblk0`であることがわかります。これにより下記のとおり`boot`ファイルシステムもまとめてバックアップされます。
+
+```{code} bash
+$ df -h
+/dev/mmcblk0p2   14G  444M   14G   4% /
+        :
+/dev/mmcblk0p1 1022M   43M  980M   5% /boot/efi
+```
+
+デバイスファイルを下記の通り確認します。
+
+```{code} bash
+$ ls /dev/mmcblk0*
+/dev/mmcblk0  /dev/mmcblk0p1  /dev/mmcblk0p2
+```
+
+### バックアップの保存
+
+マウントしたUSBメモリに対して次のコマンドでバックアップを保存します。パイプやリダイレクションを用いて複合的にコマンドを実行するため、環境全体をrootへ移行する必要があります。最初に `sudo -s` でrootに移行してください。
+
+```{code} bash
+$ sudo -s
+# dd if=/dev/mmcblk0 bs=64k | gzip -c > /mnt/usb/cx8290_20250801.ddimg.gz
+```
+
+しばらく応答の無い状態が続きますが、この間、USBメモリにIPCのディスクイメージを圧縮しながら `cx8290_20250801.ddimg.gz` というファイル名で保存しています。
+
+### リストア
+
+TwinCAT RT Linuxの起動ディスクを用意します。IPCをこのディスクから起動し、バックアップファイルを保存したドライブ `/mnt/usb` をマウントします。ターゲットのデバイスが `/dev/mmcblk0` であることを確認した上で、次の通りコマンドを発行すると、ディスクイメージが復元できます。
+
+```{code} bash
+$ sudo -s
+# gunzip -c /mnt/usb/cx8290_20250801.ddimg.gz | dd of=/dev/mmcblk0 bs=64k 
+```
+
