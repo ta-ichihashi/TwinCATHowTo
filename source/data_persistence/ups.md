@@ -28,7 +28,7 @@ IPCに搭載可能なUPSには次の2タイプがあり、それぞれ実装方�
 
 [UPS Software Components（汎用UPS）](https://infosys.beckhoff.com/content/1033/tcupsshellext/index.html?id=4330553038683935593)
 
-    : 1 second UPSの搭載が無いIPCに電源保護を行う場合は外付けUPSの設置が必要です。UPS Software Componentsは、この汎用UPSをWindowsでマネジメントするユーティリティソフトウェアです。UPSの残量やバッテリのみの駆動時間により自動的にWindowsシャットダウンを実施するところまで管理してくれるソフトウェアとなっています。PLCでは`FB_GetUPSStatus`によりUPSの稼働状態がモニタリングできますので、これにより `WritePersistentData` ファンクションブロックを実行し、PERSISTENT変数を永続化します。その後は、マネジメントソフトが自動的にシャットダウン処理まで行いますので、PLCからのシャットダウン処理は必要ありません。
+    : 1 second UPSの搭載が無いIPCや、Windows側のファイル破損が装置稼働に影響を与えるリスクがある場合は外付けUPSの設置が必要です。UPS Software Componentsは、この汎用UPSをWindowsでマネジメントするユーティリティソフトウェアです。UPSの残量やバッテリのみの駆動時間により自動的にWindowsシャットダウンを実施するところまで管理してくれるソフトウェアとなっています。PLCでは`FB_GetUPSStatus`によりUPSの稼働状態がモニタリングできますので、これにより `WritePersistentData` ファンクションブロックを実行し、PERSISTENT変数を永続化します。その後は、マネジメントソフトが自動的にシャットダウン処理まで行いますので、PLCからのシャットダウン処理は必要ありません。
 
     : ```{admonition} UPS Software Components のダウンロード先
       :class: tip
