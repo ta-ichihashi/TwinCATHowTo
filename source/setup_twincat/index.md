@@ -6,4 +6,5 @@ TwinCATのセットアップに関する情報をご紹介します。
 :hidden:
 
 package_manager
+offline_install
 ```
