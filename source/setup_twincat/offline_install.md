@@ -1,5 +1,9 @@
 # パッケージマネージャでオフラインインストールする方法
 
+パッケージマネージャに登録したパッケージのFeedsサーバは初期状態でBeckhoff社のサーバが設定されています。通常はインターネットを経由してここからパッケージを取得してインストールを行います。
+
+しかし、エンドポイントのコントローラは必ずしもインターネットアクセスができる環境にあるとは限りません。よって、いちどパッケージをダウンロードしておき、オフライン状態でもパッケージマネージャを通じてインストールできる必要があります。このための設定手順を示します。
+
 ## オンラインPCでのパッケージのダウンロード
 
 PowerShellなどのコマンドラインインターフェースにて、次のコマンドを発行してください。
@@ -18,6 +22,66 @@ PowerShellなどのコマンドラインインターフェースにて、次の�
     ```
 
 3.  このpackagesフォルダをUSBメモリ等に入れます。
+
+### 自動化スクリプト
+
+全てのパッケージ一覧を取得してダウンロードするPowerShellスクリプトをご紹介します。下記のとおりPowershellスクリプトを `fetch_packages.ps1` という名前で保存してください。
+
+```{code-block} powershell
+:caption: fetch_packages.ps1
+
+# parameter
+param (
+    [String]$distination = "."
+)
+
+# Get package list
+$packages = tcpkg list -t workload | ForEach-Object {
+    if ($_ -match "\[(.+)\]\s+(.+)\s+(.+)") {
+        New-Object -TypeName PSObject -Property @{
+            "feed" = $matches[1]
+            "name" = $matches[2]
+            "version" = $matches[3]
+        }
+    }
+}
+
+$command = 'tcpkg download'
+
+foreach ($item in $packages){
+    $command += " " + $item.name
+}
+
+
+$command += " -o " + $distination 
+
+invoke-expression $command
+```
+
+次のコマンドを実行することで、 `<保存先パス>` にFeedに登録したサーバからの全てのパッケージを保存します。
+
+```{code} powershell
+PS> fetch_packages.ps1 <保存先パス>
+```
+
+
+````{tip} 
+
+スクリプト中、`$packages` 変数にはすべてのパッケージリストのPowerShellのオブジェクトに変換されます。次の通り `name` 列にパッケージ名が一覧されます。
+
+```{code-block}
+feed                   name                                      version
+----                   ----                                      -------
+Beckhoff Stable Feed   Beckhoff.DeviceManager.XAR                2.4.5
+Beckhoff Stable Feed   TC1000.ADS.XAR                            1.0.0
+     :
+Beckhoff Outdated Feed TwinCAT.StandardRM.XAE                    4024.67.1
+Beckhoff Stable Feed   TwinCAT.SupportInformationReport.XAE      20.17.3
+```
+
+この一覧から必要なものだけにフィルタしていただいたものを `$packages` に設定していただければ、必要なパッケージリストだけをダウンロードする事も可能です。
+
+````
 
 ## オフライン環境のIPCでの作業
 
