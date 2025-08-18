@@ -8,8 +8,9 @@ TwinCAT Linuxの導入に関するドキュメントを提供します。
 ```
 
 ```{toctree}
-:hidden:
 
 cx82xx
+tf1200/index
+docker/index
 ```
 
