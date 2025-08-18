@@ -41,7 +41,7 @@
 
     初回接続時は自己署名証明書で接続するか確認されます。`yes` を入力して接続してください。
 
-    ``` powershell
+    ```{code} powershell
     PS > ssh Administrator@fe80::201:5ff:fea3:e942     <----- Administratorユーザで IPv6 のIPアドレスを指定してSSH接続
     The authenticity of host 'fe80::201:5ff:fea3:e942 (fe80::201:5ff:fea3:e942)' can't be established.
     ED25519 key fingerprint is SHA256:YMDaKiSiJ+Hs89lJ2X/Ewq5QCPqT9gWwAac+IqOfxgw.
@@ -509,7 +509,7 @@ subject=C = JP, ST = Kanagawa, L = Yokohama, O = Beckhoff Automation K.K., CN = 
 # sudo echo 'パスフレーズ' > passwd
 ```
 
-再度生成された証明書を確認します。
+再度生成された証明書ディレクトリ内を確認すると以下の通りとなります。
 
 ```{code} bash
 # ls -l
@@ -519,6 +519,20 @@ total 16
 -rw-r--r-- 1 root root    5 Aug  1 02:09 passwd
 -rw------- 1 root root 1874 Aug  1 01:44 privkey.pem
 ```
+
+`passwd` ファイルは所有者以外に読み取られることがないようにパーミッションを変更しておきます。
+
+```{code}
+# chmod 600 passwd
+# ls -l
+total 16
+-rw-r--r-- 1 root root 1237 Aug  1 01:54 crt.pem
+-rw-r--r-- 1 root root 1013 Aug  1 01:46 csr.pem
+-rw------- 1 root root    5 Aug  1 02:09 passwd
+-rw------- 1 root root 1874 Aug  1 01:44 privkey.pem
+#
+```
+
 
 最後に忘れずにAdministratorユーザへ戻ってください。
 
@@ -578,7 +592,13 @@ server {
 nginx を起動します。
 
 ```{code} bash
-$ sudo service nginx start
+$ sudo systemctl start nginx
+```
+
+また、次回起動以後もnginxデーモンを自動起動する場合、以下のとおりサービス自動起動を有効にします。
+
+```{code} bash
+$ sudo systemctl enable nginx
 ```
 
 これにより他のTwinCATのOSと同様、ポート `42341` に直接ではなく、SSLでアクセスする事ができるようになりました。今回は自己署名証明書でしたが、ドメイン名やメールアドレス等正規な値を設定した証明書要求ファイルを作成の上、正式な署名ファイルにてSSL通信していただくとより安全です。
