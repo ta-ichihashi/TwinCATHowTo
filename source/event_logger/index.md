@@ -34,4 +34,5 @@ TwinCATの提供するファンクションブロック[`FB_TcEventLogger`](http
 make_user_event
 plc_api
 sample
+windows_event_logger
 ```
