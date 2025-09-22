@@ -101,7 +101,7 @@ NC-PTPやNCI, CNCなどを取り扱う場合、別途ユーザモードランタ
 対処方法
   : ユーザモードランタイムの使用するHeapメモリを設定するように定義を追加する必要があります。次のとおり、`HeapMemSizeMB` に十分なサイズのHeapメモリサイズ（単位：MByte）を設定します。512MByte程度あれば十分でしょう。
   : ```{code-block} xml
-    :capture: C:\ProgramData\Beckhoff\TwinCAT\3.1\Runtimes\UmRT_Default\3.1\TcRegistry.xml
+    :caption: C:\ProgramData\Beckhoff\TwinCAT\3.1\Runtimes\UmRT_Default\3.1\TcRegistry.xml
 
     <?xml version="1.0"?>
      <TcRegistry>
