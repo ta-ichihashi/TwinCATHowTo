@@ -1,3 +1,4 @@
+(chapter_usermode_runtime)=
 # ユーザモードランタイム
 
 ユーザモードランタイムは、TwinCAT 3.1 4026 から追加された機能です。
@@ -32,6 +33,23 @@ CPUコアへのタスクの割り当ては、Usermodeランタイムで受け入
 ```
 
 この節では、無償版のTC1700の説明について触れます。
+
+## 追加パッケージ
+
+```{tip}
+参考：[各種TwinCAT Functionのユーザモードランタイムへの統合](https://infosys.beckhoff.com/content/1033/tc170x_tc3_usermode_runtime/15569026315.html?id=2226885034770686651)
+```
+
+### モーションパッケージ向けドライバ
+
+NC-PTPやNCI, CNCなどを取り扱う場合、別途ユーザモードランタイム向けのドライバが用意されています。これらはWorkloadでは現れませんので、一覧をPackagesに切り替えた上で、`XARUM` という文字列で一覧されるパッケージを個別にインストールする必要があります。
+
+```{list-table}
+:align: center
+
+- * ![](assets/2025-09-09-19-55-02.png){align=center width=300px}
+  * ![](assets/2025-09-09-19-55-26.png){align=center width=450px}
+```
 
 ## ユーザモードランタイムの基本的な使い方
 
@@ -73,3 +91,26 @@ CPUコアへのタスクの割り当ては、Usermodeランタイムで受け入
 
 カーネルモードで提供されるXARに対して[いくつか制約事項](https://infosys.beckhoff.com/content/1033/tc170x_tc3_usermode_runtime/11319889035.html?id=6099265847340807990)があります。ご確認ください。
 ```
+
+## よくあるトラブル
+
+### ユーザモードランタイムでRUN中のPLCにログインしようとすると not enough memory というウィンドウが現れる
+
+![](https://infosys.beckhoff.com/content/1033/tc170x_tc3_usermode_runtime/Images/png/9007215564000267__en-US__Web.png)
+
+対処方法
+  : ユーザモードランタイムの使用するHeapメモリを設定するように定義を追加する必要があります。次のとおり、`HeapMemSizeMB` に十分なサイズのHeapメモリサイズ（単位：MByte）を設定します。512MByte程度あれば十分でしょう。
+  : ```{code-block} xml
+    :capture: C:\ProgramData\Beckhoff\TwinCAT\3.1\Runtimes\UmRT_Default\3.1\TcRegistry.xml
+
+    <?xml version="1.0"?>
+     <TcRegistry>
+      <Key Name="HKLM">
+        <Key Name="Software">
+          <Key Name="Beckhoff">
+            <Key Name="TwinCAT3">
+              <Value Name="CurrentVersion" Type="SZ">3.1</Value>
+              <Key Name="System">
+                  :
+                <Value Name="HeapMemSizeMB" Type="DW">512</Value>
+    ```

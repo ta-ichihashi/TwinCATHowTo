@@ -33,13 +33,12 @@
       ```
 
     : ```{tip}
-      Usermode runtimeのAms Net IDは下記の方法で調べられます。
-
-      ![](assets/2025-09-22-12-17-18.png){align=center}
+      Usermode runtimeの場合は、{ref}`chapter_usermode_runtime` にてターゲットを起動させてください。
       ```
 
 ## IPCからバックアップを収集するスクリプト
 
+次のスクリプトにて、ターゲットのIPCからプロジェクトファイルを吸い出して、開発環境にプロジェクトツリーを展開することができます。
 
 ```{admonition} ターゲットにソースファイルを含める設定を行ってください。
 :class: warning
@@ -51,8 +50,6 @@ PLCプロジェクトの`Settings`タブを開いて、`Project Source`および
 ![](assets/2023-12-25-17-18-29.png){align=center}
 
 ```
-
-上記をカスタマイズした次のPowershellスクリプトを準備します。
 
 ```{code-block} powershell
 :name: code_backup_from_target_powershell
@@ -95,7 +92,7 @@ $sln.SaveAs($backupDir + "\" + $BackupProjectName + ".sln")
 $sln.Close()
 ```
 
-このスクリプトを `twincat_backup.ps1` などPowershellが動作するテキストファイルとして保存します。スクリプト先頭部にある変数定義を次のとおり適切に設定します。
+このスクリプトを `twincat_backup.ps1` などPowershellが動作するテキストファイルとして保存します。保存する前にスクリプト先頭部にある変数定義を次のとおり適切に設定してください。
 
 $backupBaseDir
     : バックアップを保存する親フォルダパスを指定します。`$prjDir`同様、`$PSScriptRoot` からの相対パス表記でも構いません。
