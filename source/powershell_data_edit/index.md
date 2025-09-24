@@ -10,7 +10,7 @@ TwinCATのADS通信を使うと、TwinCATプロジェクト内の変数データ
 
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 setup
 twincat_example

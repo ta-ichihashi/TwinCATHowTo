@@ -39,7 +39,6 @@ Keyence
 この節では、弊社IPCとKeyence KV-8000と相互に通信する設定について説明いたします。
 
 ```{toctree}
-:hidden:
 
 ipc_adapter
 ```

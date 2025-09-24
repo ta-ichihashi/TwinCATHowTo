@@ -15,7 +15,7 @@ Ethernetスイッチポートターミナルの接続例
 ```
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 configuration
 ```

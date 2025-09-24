@@ -20,7 +20,7 @@
     * 自動デプロイシステム
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ../version_control/index.md
 ../multiuser/index.md

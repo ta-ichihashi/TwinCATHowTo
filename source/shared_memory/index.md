@@ -14,7 +14,7 @@
 本節では、EtherCATでバイト配列で共有されたIOを、構造体変数にマッピングすることを例に実例を説明します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 byte_swapping
 memory_alignment

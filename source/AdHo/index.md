@@ -51,7 +51,7 @@ TwinCATの場合、AdvancedHomingのライブラリの名称はTc3_MC2_AdvancedH
 
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ../McStepBlock/index.md
 

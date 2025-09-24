@@ -17,7 +17,7 @@ TwinCATのプロジェクトをパッケージ化し、ライブラリファイ�
 本節ではこれらの要件を満たすTwinCAT 3のライブラリ管理機能の使い方について説明します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 use_library
 make_library

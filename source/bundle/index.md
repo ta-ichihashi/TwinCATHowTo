@@ -12,7 +12,7 @@
 この章ではそれを実現する方法を説明します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 bundle.md
 bundle_library.md

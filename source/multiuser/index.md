@@ -27,7 +27,7 @@
 
 ```{toctree}
 :maxdepth: 2
-:hidden:
+:caption: 目次
 
 working_multiuser
 ```

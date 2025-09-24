@@ -21,13 +21,11 @@
 TwinCATを採用する際に最もハードルの高さを感じる一つが、上記の設計手法を使いこなす部分かと思います。この節ではまずは「カプセル化」に必要な機能について解説し、続いてオブジェクト指向機能についてご紹介します。
 
 ```{toctree}
-:hidden:
 
 encapsulation
 reference_variable
 irc-61131-3_3rd
 object_interface
-sample_universal_activity
 solid
 case_study
 ```
