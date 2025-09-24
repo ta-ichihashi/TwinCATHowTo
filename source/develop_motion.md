@@ -37,7 +37,6 @@ TwinCATによるPCベースモーション制御システム
 Make_Cam/index.md
 AdHo/index.md
 xplanar/index.md
-xts/index.md
 ```
 ```{admonition} C++ / MATLABライセンスをご検討中の方はご注意ください
 :class: warning

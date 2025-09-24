@@ -151,7 +151,7 @@ devops/index.md
 
 #### 節のタイトル
 
-各節のサブディレクトリ内には、それぞれ`index.md`を作成し、章の書式と同様、タイトル、概要を記載してから`{toctree}`にて小節に対するリンクを記載します。`{toctree}`は単なる小節への順次リンクとして機能させ、目次などは作成しません。よって、`:hidden:`を付加します。
+各節のサブディレクトリ内には、それぞれ`index.md`を作成し、章の書式と同様、タイトル、概要を記載してから`{toctree}`にて小節に対するリンクを記載します。`{toctree}`は単なる小節への順次リンクとして機能させ、目次などは作成しません。よって、`:caption: 目次`を付加します。
 
 ````markdown
 # 節のタイトル
@@ -159,7 +159,7 @@ devops/index.md
 <<節の説明など>>
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 <<小節（ページ）毎のmarkdownファイル名>>
  :
@@ -177,7 +177,7 @@ devops/index.md
 ![](assets/2023-07-14-15-36-01.png){align=center}
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 watch_window
 cross_reference

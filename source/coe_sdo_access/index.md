@@ -28,7 +28,7 @@ CoEのODは、青下線で示した`Index`と、赤下線で示した`Subindex`�
 本節では、TwinCAT PLCのファンクションブロックを使ってSDOデータを取得し、コンプリートアクセスで一度に得たバイト配列を、TwinCAT上の構造体データにパースするまでの手順を説明します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 analyze_data_model
 plc_sdo_access

@@ -1,10 +1,7 @@
-# パッケージマネージャ
+(section_package_manager_startup)=
+# パッケージマネージャのインストールと基本設定
 
 パッケージマネージャは、TwinCAT 3.1 build 4026 より導入されたTwinCAT関連ソフトウェアのインストール、アンインストールシステムです。特定のソフトウェアのインストールにおいて、依存する関連ソフトウェアを自動的にインストールしたり、個々のインストーラに頼らず、包括的にバージョンアップすることができます。
-
-最初に、以下のサイトからパッケージマネージャの最新を取得して、開発環境、および、IPCにインストールしてください。
-
-[https://www.beckhoff.com/ja-jp/products/automation/twincat/twincat-3-build-4026/](https://www.beckhoff.com/ja-jp/products/automation/twincat/twincat-3-build-4026/)
 
 ```{warning}
 
@@ -13,158 +10,145 @@
 * build 4024の環境にパッケージマネージャを導入しますと、build 4026への移行が行われます。
 ```
 
-```{warning}
+## 初期設定
 
-2025年3月時点ではパッケージマネージャの開発速度は極めて早く、バージョンによって利用できる機能に大きな差があります。
-この節では、`TcPkg 2.1.134` で利用できる機能を基に説明します。
-```
+### パッケージマネージャのインストール
 
+以下のサイトからパッケージマネージャをダウンロードします。
 
-build 4026のインストール方法について基本的なことを知りたい場合は、まず次の動画をまずご視聴ください。
+[https://www.beckhoff.com/ja-jp/products/automation/twincat/twincat-3-build-4026/](https://www.beckhoff.com/ja-jp/products/automation/twincat/twincat-3-build-4026/)
 
+ダウンロードしたパッケージマネージャをWindowsインストーラにてインストールを行います。インストールしたら、パッケージマネージャを起動してください。
 
-```{youtube} msYKl4Bjzio
-:align: center
-```
+### 4024からのマイグレーション
 
-## パッケージマネージャコマンドラインインターフェース
+すでに4024の環境がインストールされている場合は、パッケージマネージャによって4024から4026へのマイグレーションが行われます。
 
-パッケージマネージャはGUI版とコマンドインターフェース版の二つがインストールされます。
-TwinCAT BSDやLinux等ではコマンドインターフェース版により操作する必要があります。
-また、GUI版においては十分なエラー情報が得られない可能性が有ったり、依存関係にある
-個々の子パッケージの追加、削除など細かな操作ができない可能性があります。
-このため、GUI版において何等かの問題が生じた場合、ここで紹介するコマンドインターフェース
-の操作を行う必要があります。インストールするコンポーネントが決まっている場合、
-GUIでインストール作業を行うより、コマンドを組合せてシェルスクリプトを組む事でインストール
-作業を自動化できますので便利です。
+### Feed設定
 
-```{note}
-コマンドラインインターフェースに関するドキュメントは以下で紹介されています。ただし、パッケージマネージャの最新機能は反映されていません。
+左下の歯車アイコンを押して、最初にFeed設定を行います。Feedとは、パッケージの供給を受ける供給元のサーバです。
 
-[https://infosys.beckhoff.com/content/1033/tc3_installation/15698626059.html?id=5147078465983576506](https://infosys.beckhoff.com/content/1033/tc3_installation/15698626059.html?id=5147078465983576506)
-```
+新規にサーバを登録するには右下の `+` アイコンをクリックしてください。
 
-### コマンドインターフェースの出現方法
+![](assets/2025-09-24-11-36-27.png){align=center}
 
-パッケージマネージャは管理者権限で実行する必要があります。このため、Windows環境においては管理者モードによるPowerShellを起ち上げる必要があります。
+Add feed画面が現れますのでサーバのURLや認証情報を設定します。次の表のとおり、少なくとも2つのサーバを登録してください。
 
 ```{list-table}
-:widths: 1,1
+:header-rows: 1
+:stub-columns: 1
 
-- * `Windowsキー` + `X` を押してください。次のメニューが出現しますので、Windows PowerShell(管理者)( A ) を選んで権限昇格のダイアログを許可選択してください。
-  * ![](assets/2025-03-26-12-25-11.png){align=center height=500px}
+- * 
+  * Stable サーバ
+  * Outdated サーバ
+- * 説明
+  * 4026パッケージサーバ
+  * 4024リモートマネージャをインストールするためのサーバ
+- * 設定
+  * Feed url..
+        : https://public.tcpkg.beckhoff-cloud.com/api/v1/feeds/Stable
+
+      Name
+        : Beckhoff Stable Feed
+
+      Set credentials
+        : ON
+
+      User
+        : my beckhoff に登録したユーザ名
+
+      Password
+        : my beckhoff に登録したユーザ名のパスワード
+  * Feed url..
+        : https://public.tcpkg.beckhoff-cloud.com/api/v1/feeds/outdated
+
+      Name
+        : Beckhoff Outdated Feed
+    
+      Set credentials以後
+        : Stableサーバと同じ
 ```
 
-BSDの場合、管理者権限で実行するためには、コマンド発行前に`doas`を付加します。また、Linuxの場合は、`sudo` を付加します。
+![](assets/2025-09-24-11-41-54.png){align=center}
 
-```{code-block}
-$ doas pkg list
+### XAEの基本インストール
+
+つづいてサイドのタブから `Integration` を開きます。
+
+![](assets/2025-09-24-10-53-51.png){align=center}
+
+
+```{note}
+インストール、アンインストールを行うには、下記のバーをクリックしてください。
+
+青色でAdd
+    : 現在状態が未インストールであることを示します。クリックするとインストールを開始します。
+
+赤色でRemove
+    : 現在状態がインストール済みであることを示します。クリックすると **アン**インストールを開始します。
 ```
 
-### パッケージを一覧する
+TcXaeShell、TcXaeShell64、インストール済み任意のVisual Studioバージョンへのアドオンをそれぞれ必要なものを青色のAddバーをクリックしてインストールします。それぞれのXAEの基本パッケージについては、次の違いがありますので適したものをインストールしてください。
 
-インストール可能な全てのパッケージを一覧する方法は、`tcpkg list` を発行します。現在インストールされているパッケージだけを一覧するには、これに `-i` オプションを追加し、`tcpkg list -i` コマンドを発行します。次の通りの書式でパッケージが一覧されます。
+UseTcXaeShell
+    : ```{list-table}
+      :widths: 4,6
+      - * Windows10 20H2未満ではこちらを選択します。Visual Studio 2017 ベースの TwinCAT XAE build 4024と互換のある開発環境がインストールされます。Windows10 20H2以上であっても **4024のリモートマネージャをご利用いただくには** こちらを別途インストールする必要があります。
+        * ![](assets/2025-09-24-10-36-20.png){align=center}
+      ```
 
-```
-<パッケージ名> <バージョン番号>
-```
+UseTcXaeShell64
+    : ```{list-table}
+      :widths: 4,6
+      - * Windows10 20H2以上、Windows11ではこちらが選択可能です。Visual Studio 2022 ベースの TwinCAT XAE build 4026のネイティブな開発環境がインストールされます。この環境では4024のリモートマネージャはお使いいただけませんので、別途`UseTcXaeShell`も併せて構成してください。
+        * ![](assets/2025-09-24-10-45-06.png){align=center}
+        ```
+UseVS****
+    : あらかじめTwinCATがサポートするバージョンのVisual Studioがインストールされていればこの名前で一覧に現れます。これを構成すると指定したVisual Studioバージョンへ、TwinCAT XAE機能のアドオンを行います。お手持ちのVisual Studioとの統合化を行いたい場合はこちらを選択してください。参考：[https://infosys.beckhoff.com/content/1033/tc3_installation/15698621451.html?id=8658116531104156966](https://infosys.beckhoff.com/content/1033/tc3_installation/15698621451.html?id=8658116531104156966)
 
-以下はインストール済みパッケージを一覧させる例です。
 
-```{code-block} powershell
-PS C:\> tcpkg list -i
-TcPkg 2.1.86
-
-TC170x.UsermodeRuntime.XAR 4026.14.0
-TE1300.ScopeViewProfessional.XAE 34.49.0
-TF3300.ScopeServer.XAR 34.49.0
- :
-vcredist100.Beckhoff 10.0.40219.325
-vcredist140.Beckhoff 14.38.33130
-191 package(s) found.
-PS C:\>
-```
-
-一画面に収まらない場合は、ページネーションしてくれるコマンド `more` と組合せます。パイプ `|` に続いて次の通りコマンド発行してください。
-
-```{code-block} powershell
-PS C:\> tcpkg list -i | more
-TcPkg 2.1.86
-
-TC170x.UsermodeRuntime.XAR 4026.14.0
-TE1300.ScopeViewProfessional.XAE 34.49.0
-TF3300.ScopeServer.XAR 34.49.0
- :
-TwinCAT.XAE.HART 1.0.4
-TwinCAT.XAE.Integration 2.11.0
--- More  --
+```{tip}
+[InfoSysの情報](https://infosys.beckhoff.com/content/1033/tc3_installation/15698622603.html?id=8249084526473050017) の情報は、古いパッケージマネージャのUIのままとなっています。
 ```
 
-`Enter`キーを押しながら行送りができます。
+## 基本パッケージのインストール
 
-### パッケージをインストールする
+設定が完了したら、Finishボタンを押して設定を終えてください。インターネットに接続されていれば、設定したFeedよりパッケージ一覧を取得し、次図のとおり、Browse画面にワークロードが一覧されます。
 
-指定したパッケージをインストールするには下記のコマンドを発行します。依存関係にあるパッケージも自動的にインストールされます。リポジトリに登録された最新のパッケージがインストールされます。`-y` オプションを付加することで、インストールしてよいかどうかの確認は行わず、ただちにインストールを開始します。
+`TwinCAT Standard` が最上位に現れます。開発環境であれば`Engineering - TwinCAT Standard`を、IPC等のランタイムが必要であれば、`Runtime - TwinCAT Standard`の行の右側にあるバージョンボタンをクリックしてください。
 
-``` powershell
-PS C:\> tcpkg install <パッケージ名> -y
+![](assets/2025-09-24-21-59-02.png){align=center}
+
+次に右端のサイドバーから、![](assets/2025-09-24-22-01-54.png)アイコンをクリックします。
+
+Select products が一覧されていますので、最下部の `Apply modifications` ボタンを押してインストールを開始します。
+
+![](assets/2025-09-24-22-02-45.png){align=center}
+
+しばらく待つとプログレスウィンドウが現れます。100%に達するまでしばらく時間を要します。根気よく待ってください。
+
+![](assets/2025-09-24-22-06-30.png){align=center}
+
+````{tip}
+万が一インストールを途中で中断した場合、パッケージの整合状態が不正な状態となるため、最初からやり直す必要があります。この場合、まず管理者モードでターミナルを起動し、次のコマンドを発行してください。
+
+```{code} powershell
+PS> tcpkg uninstall all
 ```
+````
 
-任意のバージョンのソフトウェアをインストールしたい場合は `-v` オプションを指定します。
+下記のように緑色背景のウィンドウが現れたら無事インストールは完了です。
 
-``` powershell
-PS C:\> tcpkg install <パッケージ名> -v <バージョン番号>
+![](assets/2025-09-24-22-20-20.png){align=center}
+
+タスクトレーにTwinCATアイコンが現れますので、任意のXAEを起動してインストールできていることを確認してください。
+
+![](assets/2025-09-24-22-22-26.png){align=center}
+
+```{attention}
+
+ひきつづき Usermode runtime をインストールしてください
+  : 開発用PCに Windows11 を用いられる場合、仮想化ベースのセキュリティ（VBS）が強化されているためTwinCATのランタイムがカーネルモードでは動作しなくなっています。このため、開発用PCでIPCの動作をシミュレーションするには、ユーザモードランタイムの導入が欠かせません。引き続きユーザモードランタイムをインストールし、{ref}`chapter_usermode_runtime` の章をお読みの上、追加パッケージ `XARUM` 等をインストールしてください。
+
+    ![](assets/2025-09-24-22-25-55.png){align=center}
 ```
-
-### パッケージをアンインストールする
-
-指定したパッケージをアンインストールするには下記のコマンドを発行します。このコマンドでは依存関係にあるパッケージは連携してアンインストールされることはありません。
-
-``` powershell
-PS C:\> tcpkg uninstall <パッケージ名>
-```
-
-依存関係にあるパッケージを連携して削除するには、 `--include-dependencies` オプションを付加します。
-
-``` powershell
-PS C:\> tcpkg uninstall <パッケージ名> --include-dependencies
-```
-
-全てを削除する場合は、パッケージ名を `all` とします。
-
-``` powershell
-PS C:\> tcpkg uninstall all
-```
-
-### 構成のエクスポート
-
-次のコマンドにより、現在インストールされているTwinCATコンポーネントの構成を定義ファイルとしてエクスポートできます。
-
-```{code-block} powershell
-PS C:\> tcpkg export -o twincat_required.xml
-```
-
-上記により、次のように構成定義ファイル `twincat_required.xml` が作成されます。
-
-### 構成のインポート
-
-前節でエクスポートしたパッケージ構成ファイルに基づいて同じ構成のTwinCATコンポーネントをインストールします。
-
-```{code-block} powershell
-PS C:\> tcpkg import -i twincat_required.xml
-```
-
-各オプションの説明は以下の通りです。
-
-`-i`（必須）
-    : 読み込む構成定義ファイル。
-
-`-y`
-    : インストールするかどうか確認プロンプトは出現せず、インストールを開始します。
-
-`--no-cache`
-    : パッケージリポジトリからダウンロードしたファイルをキャッシュせず、インストール完了後ただちに削除します。ディスク容量が節約できます。
-
-`--all-sources`
-    : これを指定すると、読み込んだ定義ファイルに指定されたバージョンより最新のバージョンが利用可能であれば、そちらをインストールします。
-

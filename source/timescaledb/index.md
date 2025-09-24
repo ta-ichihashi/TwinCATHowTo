@@ -25,7 +25,7 @@ SQL ExpertモードであればSQL文を記述することで、データベー�
 ここでは、PLCのプログラムからTimescaleDBのデータテーブルスキーマを定義し、一括インサートする方法について示します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 setup
 createdb

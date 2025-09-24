@@ -46,7 +46,7 @@ PLCプロジェクトの構成
 ```
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ethercat_master
 simulation_plc

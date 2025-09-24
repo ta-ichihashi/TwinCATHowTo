@@ -1,7 +1,7 @@
 # 監視と障害対応
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ../latency/index.md
 bsod

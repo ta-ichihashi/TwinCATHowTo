@@ -13,7 +13,7 @@ TwinCATでチーム開発を行う為の機能が大別して2つ用意されて
 
 ```{toctree}
 :maxdepth: 2
-:hidden:
+:caption: 目次
 
 source_control
 create_repository

@@ -7,7 +7,7 @@ Linux 上には、IPCに適合したGPUドライバ、および、Waylandと呼�
 
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 install_tf1200.md
 wayvnc

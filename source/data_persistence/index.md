@@ -40,7 +40,7 @@ RESET ORIGIN操作, 初期化される, 初期化される, 初期化される
 
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ups
 sups_cx51x0

@@ -5,7 +5,7 @@
 本節も、{ref}`chapter_dev_ops`に関わる重要な機能について記載されますが、開発者にとって重要なテストや構成管理、継続的な統合化（CI/CD）についてではなく、現場のユーザが大きく関わる機能（パッケージングやデプロイ自動化など）についてご紹介します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ../bundle/index.md
 ../auto_deploy/index.md

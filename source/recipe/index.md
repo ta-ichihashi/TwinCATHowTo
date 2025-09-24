@@ -28,7 +28,7 @@ PLCプロジェクトにおいて永続化したいデータは、`PERSISTENT` �
 本章では、これらの操作方法について説明します。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 setup_recipe
 use_recipe

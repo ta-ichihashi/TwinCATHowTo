@@ -7,7 +7,7 @@ OPC UAには次の製品群があります。
 
 ```{toctree}
 :maxdepth: 2
-:hidden:
+:caption: 目次
 
 opcua_server
 ```

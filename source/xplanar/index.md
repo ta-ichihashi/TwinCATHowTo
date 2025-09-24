@@ -11,7 +11,7 @@ XPlanarはタイルからの磁力により強力な永久磁石である可動�
 ```
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ./basic/index.md
 ./startup/index.md

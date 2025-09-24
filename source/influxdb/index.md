@@ -16,7 +16,7 @@ influxDBは単にデータを収集するだけではなく、集計演算機能
 TwinCATではこのような密度の高いデータをInfluxDBというオープンソース上のデータ基盤に展開することが可能になり、データ活用に秀でたPythonをはじめ、JavaScript, Goといったクラウドと親和性の高い技術との組合せが非常に容易です。
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 setup_influxdb_windows
 setup_docker

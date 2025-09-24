@@ -169,7 +169,7 @@ futureオブジェクトの構成
 
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 usage
 library_document

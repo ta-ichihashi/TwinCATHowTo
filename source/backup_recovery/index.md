@@ -2,7 +2,7 @@
 
 
 ```{toctree}
-:hidden:
+:caption: 目次
 
 ../dongle/index.md
 ../bst/index.md

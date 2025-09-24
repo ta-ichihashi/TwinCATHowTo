@@ -10,7 +10,7 @@ requires-python = ">=3.12"
 dependencies = [
     "sphinx",
     "myst-parser",
-    "sphinx-book-theme",
+    "sphinx-nefertiti",
     "sphinx-markdown-tables",
     "sphinxcontrib-actdiag",
     "sphinxcontrib-applehelp",

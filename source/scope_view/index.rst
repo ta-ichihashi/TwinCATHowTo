@@ -21,7 +21,7 @@ TwinCAT上で制御するモーションデバイスの稼働状態を監視す�
 .. [#f1] トリガ条件といいます。
 
 .. toctree::
-   :hidden:
+   :caption: 目次
 
    introduction
    scope_view
