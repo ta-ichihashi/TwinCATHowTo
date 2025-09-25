@@ -105,6 +105,7 @@ PS C:\> tcpkg uninstall <パッケージ名> --include-dependencies
 PS C:\> tcpkg uninstall all
 ```
 
+(section_tcpkg_export_import)=
 ## 構成のエクスポートとインポート
 
 1台のパッケージインストールが終了しましたら、エクスポートコマンドを実行する事でインストールしたパッケージとそのバージョン情報が格納されたXMLファイルをエクスポートすることができます。

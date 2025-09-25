@@ -65,7 +65,3 @@ Selected products
     ![](assets/2025-09-24-17-03-18.png){align=center}
 
     Uninstall, Update, Install 予約したパッケージは、このフレームで一覧されます。下部の `Apply modifications` ボタンを押す事でインストール、アンインストール、更新が行われます。
-
-その他
-  : 
-

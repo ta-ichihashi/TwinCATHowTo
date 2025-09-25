@@ -19,6 +19,7 @@ TwinCAT Build 4026 の環境セットアップに関する情報をご提供し�
     その後、他の開発チーム内で同一環境を展開したり、量産装置等で他のIPCへおなじパッケージ構成を展開する場合は、`export` や `import` というコマンドを用いてインストール作業を自動化することができます。
     
     この場合、作業はGUIではなくコマンドインターフェースによるパッケージ操作で行う方がPowershellなどのスクリプトによって自動化しやすく、現場展開が容易になります。併せて {ref}`section_package_manager_cli_ope` や、 {ref}`section_package_manager_offline_install` をご覧ください。
+    
 ```{toctree}
 :caption: 目次
 
