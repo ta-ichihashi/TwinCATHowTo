@@ -33,7 +33,7 @@ class Author(Enum):
 
 # -- Project information -----------------------------------------------------
 
-titles = ['BECHKOFF TwinCATテクニカルノート']
+titles = ['BECKHOFF TwinCATテクニカルノート']
 
 project = ' '.join(titles)
 copyright = '2025, ベッコフオートメーション株式会社'
