@@ -22,6 +22,8 @@ TwinCATを採用する際に最もハードルの高さを感じる一つが、�
 
 ```{toctree}
 
+legacy_program
+function_block
 encapsulation
 reference_variable
 irc-61131-3_3rd
