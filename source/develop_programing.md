@@ -10,6 +10,6 @@
 ```{toctree}
 :caption: 目次
 
-plc_design_pattern/index.md
 plc_object_oriented_programming/index.md
+plc_design_pattern/index.md
 ```

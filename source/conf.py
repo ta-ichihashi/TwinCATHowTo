@@ -15,7 +15,7 @@ from sphinx.highlighting import lexers
 import sys
 import os
 sys.path.insert(0, os.path.abspath('.'))
-from iecst import IecstLexer
+from lexer_iec61131_3 import IecstLexer
 
 
 lexers['iecst'] = IecstLexer()
