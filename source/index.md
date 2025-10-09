@@ -14,9 +14,6 @@
 
     [https://github.com/Beckhoff-JP/TwinCATHowTo/issues](https://github.com/Beckhoff-JP/TwinCATHowTo/issues)
 
-* Beckhoff 製品カタログ
-
-    [https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf](https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf)
 
 ```{toctree}
 :maxdepth: 2
