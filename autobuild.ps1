@@ -1,0 +1,1 @@
+﻿uv run sphinx-autobuild source build/html

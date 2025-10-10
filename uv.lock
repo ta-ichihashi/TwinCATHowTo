@@ -782,7 +782,7 @@ requires-dist = [
     { name = "docxbuilder" },
     { name = "myst-parser" },
     { name = "sphinx" },
-    { name = "sphinx-autobuild", specifier = ">=2024.10.3" },
+    { name = "sphinx-autobuild" },
     { name = "sphinx-markdown-tables" },
     { name = "sphinx-nefertiti" },
     { name = "sphinxcontrib-actdiag" },
