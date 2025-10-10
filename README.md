@@ -8,61 +8,81 @@
 
 ## 環境構築
 
-powershellにより、 `setup_environment.ps1` を実行してください。途中でユーザ名とメールアドレスを聞かれます。今後gitのコミッタ（変更を加える人）の属性を示すものです。半角英数で入力してください。これにより以下のソフトウェアがインストールされます。
+文書作成システムは、pythonと関連パッケージを構築します。まず、uvをインストールし、その後、githubからリポジトリクローンしてPC上にソースコードを展開します。
 
-* [scoopパッケージマネージャ](https://scoop.sh/)
-* [git](https://git-scm.com/)
-* [7zip アーカイバ](https://sevenzip.osdn.jp/)
-* [Visual Studio Code （以後 vscode）](https://code.visualstudio.com/)
-* [Python](https://www.python.org/)
+1. [UVのインストール](https://docs.astral.sh/uv/getting-started/installation/)
 
-これらのソフトウェアは、Windowsインストーラを用いず、全て、ユーザディレクトリの以下の場所に配置されています。アンインストールする場合は、このフォルダごと削除してください。
+    ターミナルから次のコマンドを発行します。
 
-```
-C:\Users\<<ログオンユーザ名>>\scoop
-```
+    Windowsの場合
+    ```
+    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
 
-## リポジトリのクローン
+    Linuxの場合
 
-以下の手順を実行してください。
+    ```
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ```
 
-1. github のアカウントを作成してください。
-2. 次のリポジトリを自分のアカウントへフォークしてください。
+2. リポジトリのクローン
 
-    [https://github.com/Beckhoff-JP/TwinCATHowTo](https://github.com/Beckhoff-JP/TwinCATHowTo)
+    以下の手順を実行してください。
 
-    ![](assets/2023-04-13-11-08-47.png)
+    1. github のアカウントを作成してください。
+    2. 次のリポジトリを自分のアカウントへフォークしてください。
 
-3. フォークしたリポジトリを自分のコンピュータ上にクローンします。
+        [https://github.com/Beckhoff-JP/TwinCATHowTo](https://github.com/Beckhoff-JP/TwinCATHowTo)
 
-クローンし終わったら、リポジトリの中にある `setup.ps1` を実行します。文書作成に必要なPython sphinx関連のモジュールが自動的にインストールされます。
+        ![](assets/2023-04-13-11-08-47.png)
+
+    3. フォークしたリポジトリを自分のコンピュータ上にクローンします。
+
+3. VScodeをインストールし、アドオンを入れます
+
+    Windowsターミナル、または、Linux シェル共通
+    ```
+    code --install-extension ExecutableBookProject.myst-highlight
+    code --install-extension mushan.vscode-paste-image
+    ```
+
+4. VScodeでクローンしたgitリポジトリのフォルダをオープンします。
+
+5. 文書編集とコンパイル
+    
+    次節に示す手順に従い、文書を編集します。 編集結果は、htmlファイルとしてプレビューを確認することができます。まず、次のとおりVSCodeのターミナルを開きます。
+
+    ![](assets/2025-10-09-20-43-44.png)
+
+    次のコマンドによって、初回は`.venv`フォルダ内にPythonやsphinxなどの必要なツールが自動的にインストールされます。
+    
+    また同時に、編集したmarkdown文書をビルドしてhtmlへ変換します。html文書は、sphinx-autobuildによって起動するWEBサーバによって閲覧可能です。
+
+    ```
+    uv run sphinx-autobuild source build/html
+    ```
+
+    次のとおりコマンドが実行されると最後にWEBサーバが起動し、出力されたhtml文書をプレビューできます。プレビュー先のURLはビルド結果の最終行に表示される `http://127.0.0.1:8000` をクリックしてアクセスしてください。
+
+
+    ```
+    [sphinx-autobuild] Starting initial build
+    [sphinx-autobuild] > python -m sphinx build source build/html
+        :
+    The HTML pages are in build\html.
+    [sphinx-autobuild] Serving on http://127.0.0.1:8000
+    [sphinx-autobuild] Waiting to detect changes...
+    ```
+
+    その後も、継続して文書を編集してmarkdown文書を保存すると、自動的にビルドが行われ、ブラウザ上の文書は自動更新されます。
+
+6. 文書が完成したら、フォークされた自分のリポジトリからプルリクエストを行って、`BECKHOFF-JP` 内のリポジトリへの反映を申請してください。
 
 ## 文書編集方法
 
 文書の編集を行うには、WEBブラウザでプレビューを見ながら、vscode上でMarkdown文書の編集、mdファイルの上書き、プレビューソフトによるレイアウト確認、を繰り返します。
 
-まずは以下の手順でプレビューソフトを起動します。
-
-### プレビューソフトの起動
-
-vscodeを起動して、`Terminal` メニューの `New Terminal` を選択してください。下部の `TERMINAL` ウィンドウにPowerShellのプロンプトが現われます。下記の通り入力してください。
-
-```powershell
-> sphinx-autobuild.exe -b html source build/html
-```
-これにより以下の通りWEBサーバが起動します。最後に現われるURLの部分にマウスポインタを移動し、 `CTRL + click` してください。
-
-```powershell
-[sphinx-autobuild] > sphinx-build -b html....
-Running Sphinx v4.4.0
-loading translations [ja]... done
- :
-[I 230413 09:57:11 server:335] Serving on http://127.0.0.1:8000
-[I 230413 09:57:11 handlers:62] Start watching changes
-[I 230413 09:57:11 handlers:64] Start detecting changes
-```
-
-## 文書構成
+### 文書構成
 
 Markdownのソースは、 `source` ディレクトリ内にあります。以下の構成になっていますので、適時新規作成、編集を行ってください。
 
@@ -80,37 +100,51 @@ Markdownのソースは、 `source` ディレクトリ内にあります。以�
     │  │  <<本文>>.md
 ```
 
-### 章の作り方
+各トピックフォルダ内には、かならず一つの `index.md` ファイルを作成してください。他の md ファイルで副節を作成する場合、`toctree` ブロック命令で各 md ファイルへの目次を作ってツリー構造の章節構造を作成します。
 
-まず、source以下に任意の章名が分かるmarkdownファイルを作成します。このファイル名を、`source/index.md`上に登録します。
-
-````markdown
-   :
-   :
-* Beckhoff 製品カタログ
-
-    [https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf](https://download.beckhoff.com/download/document/Catalog/Beckhoff_Products_2023_jp.pdf)
-
+```` markdown
 ```{toctree}
-:maxdepth: 2
-:numbered: 2
 :caption: 目次
 
-basic.md
-develop_environment.md
-develop_security.md
-develop_motion.md
-develop_information.md
-operation.md
-faq.md
-<<任意の行にmarkdownファイル名を追加>>
- :
- :
+connect_remote
+scan_ethercat
+link_plc_variable
 ```
-
 ````
 
-次に、作成した章のmarkdownファイルを編集し、以下の通り記述します。
+VSCode上のフォルダツリーと`toctree`で定義するファイルの関係は次の通りです。
+
+![](assets/2025-10-10-10-51-03.png)
+
+たとえば、`toctree` 内で定義した別の `link_plc_variable.md` ファイルには、次のとおりトップレベルの見出し階層 `#` から始める文書となります。
+
+```` markdown
+# PLCプロジェクトの作成と変数とIOのリンク
+
+## PLCプロジェクトの作成
+
+```{list-table}
+- * PLCプロジェクトを追加します。
+  * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2602432011__en-US__Web.png)
+- * PLCプロジェクトの名称設定を行います。
+  * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605574539__en-US__Web.png)
+```
+````
+
+この文書を出力すると、次のようなhtml文書を出力します。
+
+![](assets/2025-10-10-10-55-07.png)
+
+
+個々の文書はトップレベルの見出し `#` から定義しますが、`toctree` を定義する位置によってその相対的な階層で文書は構成されます。
+
+よって、このあと`link_plc_variable.md`を別の階層の場所へ持っていったとしても、文書内の階層自体は変更することなく、配置された階層に適合した構造となります。
+
+このように全体の文書構造を組み替えた場合においても、個々の文書の修正が必要なく、独立性が保たれますので文書管理が容易になります。
+
+### toctreeの別ディレクトリへの参照
+
+toctreeを定義するmdファイルの位置からの相対パスで定義します。サブフォルダが有る場合は、`サブフォルダ/文書名`となるように、ディレクトリ区切りをスラッシュで定義します。
 
 ````markdown
 # 章のタイトル
@@ -126,11 +160,7 @@ faq.md
 ```
 ````
 
-カテゴリタイトルからは、章以下に節を示すサブフォルダを作成し、サブフォルダ毎にタイトルページ `index.md` を作成します。
-
-そこへ`{toctree}`のリンクを張ってください。章レベルでは、`:caption:`に「目次」を指定します。
-
-章のタイトルページ `index.md` では、タイトルと節へのリンクだけではなく、なるべく概要まで記載してください。下記に例を示します。
+また、 `:caption: 目次` を定義すると、文書内に `目次` ヘッダに続いて目次が構成されます。
 
 ````markdown
 # 開発編（開発環境）
@@ -145,79 +175,67 @@ devops/index.md
 ```
 ````
 
-上記の通りの構成によって次図のような出力が得られます。
-
 ![](assets/2023-04-13-10-42-20.png)
 
-#### 節のタイトル
+> [!TIP]
+> `toctree` ブロック内の先頭に :hidden: を定義すると、メニューツリーには文書が構成されますが、文書内の目次表示は表示されなくなります。
+> [https://myst-parser.readthedocs.io/en/latest/syntax/organising_content.html#using-toctree-to-include-other-documents-as-children](https://myst-parser.readthedocs.io/en/latest/syntax/organising_content.html#using-toctree-to-include-other-documents-as-children)
 
-各節のサブディレクトリ内には、それぞれ`index.md`を作成し、章の書式と同様、タイトル、概要を記載してから`{toctree}`にて小節に対するリンクを記載します。`{toctree}`は単なる小節への順次リンクとして機能させ、目次などは作成しません。よって、`:caption: 目次`を付加します。
 
-````markdown
-# 節のタイトル
+## Markdown 拡張命令
 
-<<節の説明など>>
+本システムは、Sphinxの myst-parserによってmarkdownをベースとしたさまざまな拡張機能が使えます。詳細は、以下のURLをご覧ください。
 
-```{toctree}
-:caption: 目次
+[https://myst-parser.readthedocs.io/en/latest/index.html](https://myst-parser.readthedocs.io/en/latest/index.html)
 
-<<小節（ページ）毎のmarkdownファイル名>>
+以下のとおりテクニカルノートの記述でよく使う命令についてご紹介します。
+
+### 節や章への相互参照
+
+文書同士でリンクを張る方法は次のサイトで解説されています。
+
+[https://myst-parser.readthedocs.io/en/latest/syntax/cross-referencing.html#creating-explicit-targets](https://myst-parser.readthedocs.io/en/latest/syntax/cross-referencing.html#creating-explicit-targets)
+
+リンク先の定義は章タイトルの前行に次のコマンドで`シンボル`定義します。
+
+``` markdown
+(シンボル)=
+# 章タイトル
+```
+
+次に文書中に、次のとおり参照用のコマンドを記述します。
+
+``` markdown
+この手順は、 {ref}`シンボル` に記載したとおりです。
+```
+
+例
+
+``` markdown
+(section_eip_adapter_connection_setting)=
+## アダプタのIO設定
+
+1. ソリューションウィンドウからTwinCATツリーの `I/O` > `Devices` のポップアップメニューを出現させ、EtherNet/IP Adapter (Slave) を選びOKボタンを押します。
  :
- :
 ```
+
+下記の通り文書内で定義します。
+
+``` markdown
+3. EtherNet/IP機器の一覧に、Beckhoff Automationのツリーの中にXAEで作成したアダプタが現われます。これをダブルクリックすると、アダプタとして登録されます。{ref}`section_eip_adapter_connection_setting` で設定したアダプタのIPアドレスを設定します。
+
+```
+
+すると、次のとおり文書中に節のタイトルである「アダプタIO設定」という文字列とそこへのリンクが設定されます。
+
+![](assets/2025-10-10-11-52-58.png)
+
+
+### 図の挿入
+
+図の挿入と、相互参照は次の通り`figure` ブロックを用います。
+
 ````
-
-例えば、前項の章の例で紹介した、`debug_support` の節の`index.md`では以下のとおりとなります。
-
-````markdown
-# 便利なデバッグ補助機能
-
-デバッグ時に有効な様々な機能が、`Extensions` > `PLC` > `Windows` 以下にあります。この章ではこれら機能についてご説明します。
-
-![](assets/2023-07-14-15-36-01.png){align=center}
-
-```{toctree}
-:caption: 目次
-
-watch_window
-cross_reference
-```
-````
-
-この出力は次の通りとなります。
-
-![](assets/2023-12-21-16-52-23.png)
-
-
-## vscodeによる編集テクニック
-
-本スクリプトを使うと、vscodeおよび、markdownのプレビューア、図のプラグインなどが自動的にインストールされます。以下にその使い方を説明します。
-
-### プレビュー
-
-前述の通り、ブラウザによるリアルタイムプレビューが可能ですが、vscode内でも簡易的なプレビューが可能です。次図の右上の赤丸アイコンをクリックすると、編集画面の右半分がプレビューウィンドウになります。ただし、実際ビルドして生成されたHTMLとは違いますので、あくまでも簡易的なプレビューであることをご理解ください。
-
-![](assets/2023-04-13-10-46-03.png)
-
-### 図の貼り付け
-
-スクリーンショットなどをクリップボードにコピーした後、vscodeのMarkdownソース文書の任意の行にて、`CTRL + ALT + V` のキー操作を行う事で、自動的にファイルが`assset`フォルダ上に配置され、そこへのリンクが張られます。
-
-```markdown
-![](assets/2023-04-13-10-46-03.png)
-```
-
-図の配置場所を指定する場合は、次の通り別途追加定義してください。
-
-```markdown
-![](assets/2023-04-13-10-46-03.png){align=center}
-```
-
-相互参照を使いたい場合は、次の通りブロック方式の図の定義が必要となります。
-
-````markdown
-一定のサイズになるまでバッファにデータが蓄積されたら、これを一つのチャンクとしてデータベースに書込みコマンドを発行します。チャンクサイズの決定方法は最小値を設定した上で、データベースの負荷やネットワークの影響により発生した遅延時間に比例して動的に増加させています。（{numref}`figure_cyclic_data_buffer`）
-
 ```{figure} cyclic_data_buffer.png
 :align: center
 :name: figure_cyclic_data_buffer
@@ -228,19 +246,25 @@ cross_reference
 
 `:name:` タグで定義された参照キーに対して、本文中に ``{numref}`参照キー` ``を記述すると、下図の通り相互参照が可能となります。
 
+
+````markdown
+一定のサイズになるまでバッファにデータが蓄積されたら、これを一つのチャンクとしてデータベースに書込みコマンドを発行します。チャンクサイズの決定方法は最小値を設定した上で、データベースの負荷やネットワークの影響により発生した遅延時間に比例して動的に増加させています。（{numref}`figure_cyclic_data_buffer`）
+````
+
 ![](assets/2023-04-13-10-54-26.png)
 
 ### 表の書き方
 
 最も簡単な表の書き方は、`csv-table`を用いることです。
 
+
 ```` markdown
 
-表の外で、表の番号を参照するには、{numref}`<<相互参照のキー文字列>>` と記述します。
+表の外で、表の番号を参照するには、{numref}`シンボル` と記述します。
 
 ```{csv-table} 表のキャプションの名称
 :header: 列1タイトル, 列2タイトル, 列3タイトル,...
-:name: <<相互参照のキー文字列>>
+:name: シンボル
 :widths: 列1の比率,列2の比率,列3の比率,...
 
 行1列1の内容, 行1列2の内容, 行1列3の内容,...
@@ -270,7 +294,7 @@ influxDBでは、`_time` 列に時刻が、 `_field` 列にフィールドが、
 
 ![](assets/2023-12-21-17-11-29.png)
 
-## 警告ラベル
+### 警告ラベル
 
 警告ラベルを入れるには、次の記述を行います。
 
@@ -301,7 +325,7 @@ influxDBでは、`_time` 列に時刻が、 `_field` 列にフィールドが、
 
 [https://myst-parser.readthedocs.io/en/latest/syntax/admonitions.html#admonition-types](https://myst-parser.readthedocs.io/en/latest/syntax/admonitions.html#admonition-types)
 
-## プログラムコードの挿入
+### プログラムコードの挿入
 
 プログラムコードを挿入する場合は、次の通り記述します。
 
@@ -346,3 +370,38 @@ END_TYPE
 ````
 
 ![](assets/2023-12-21-17-58-23.png)
+
+## vscodeによる編集テクニック
+
+本スクリプトを使うと、vscodeおよび、markdownのプレビューア、図のプラグインなどが自動的にインストールされます。以下にその使い方を説明します。
+
+### プレビュー
+
+前述の通り、ブラウザによるリアルタイムプレビューが可能ですが、vscode内でも簡易的なプレビューが可能です。次図の右上の赤丸アイコンをクリックすると、編集画面の右半分がプレビューウィンドウになります。ただし、実際ビルドして生成されたHTMLとは違いますので、あくまでも簡易的なプレビューであることをご理解ください。
+
+![](assets/2023-04-13-10-46-03.png)
+
+### 図の貼り付け
+
+図の貼り付けは、`figure` ブロックを用いることをご説明しましたが、相互参照が必要ない場合は、
+
+``` markdown
+![](ファイルパス){align=center width=300px}
+```
+
+のように、ワンラインで定義できます。このうち、`{align=center width=300px}` の直前までの命令は、VSCodeのプラグインの機能によってクリップボードにコピーされた画像データを`CTRL + ALT + V` のキー操作によって直接ペーストすることができます。
+
+スクリーンショットなどをコピーした際には、クリップボードに画像データが保存されています。この後、vscodeのMarkdownソース文書の任意の行にて`CTRL + ALT + V` のキー操作を行うと、自動的にpngファイルが同ディレクトリ以下に`assset`サブフォルダが作成され、この中に日付時刻が付いたファイル名として保存された上で、このpngファイルへのリンクが張られます。
+
+```markdown
+![](assets/2023-04-13-10-46-03.png)
+```
+
+図の配置場所を指定する場合は、次の通り `{align=center}` を追加定義してください。
+
+```markdown
+![](assets/2023-04-13-10-46-03.png){align=center}
+```
+
+> [!NOTE]
+> width などサイズ指定しますと、PCやスマートフォン等画面解像度に合わせて自動調整することができなくなりますので、なるべく指定しないことをお勧めします。

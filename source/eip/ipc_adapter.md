@@ -165,7 +165,7 @@ Keyence等のPLC側の設定として、前項のEDSを読み込んで子局と�
 
     ![](assets/2024-12-25-15-37-55.png){align=center}
 
-3. EtherNet/IP機器の一覧に、Beckhoff Automationのツリーの中にXAEで作成したアダプタが現われます。これをダブルクリックすると、アダプタとして登録されます。{numref}`section_eip_adapter_connection_setting` で設定したアダプタのIPアドレスを設定します。
+3. EtherNet/IP機器の一覧に、Beckhoff Automationのツリーの中にXAEで作成したアダプタが現われます。これをダブルクリックすると、アダプタとして登録されます。{ref}`section_eip_adapter_connection_setting` で設定したアダプタのIPアドレスを設定します。
 
     ![](assets/2024-12-25-15-43-35.png){align=center}
 

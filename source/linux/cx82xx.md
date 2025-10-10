@@ -127,17 +127,17 @@ Beckhoffの各種製品ソフトウェアは、事前にご登録いただきま
 
 2. TwinCAT RT Linux ベータ版のリポジトリ設定
 
-    現在、TwinCAT RT Linuxはベータ段階です。このため、パッケージマネージャのリポジトリサーバは、 `bookworm` ではなく、 `bookworm-unstable` に書き換える必要があります。`sources.list.d` 以下のファイルを編集します。
+    現在、TwinCAT RT Linuxはベータ段階です。このため、パッケージマネージャのリポジトリサーバは、 `trixie` ではなく、 `trixie-unstable` に書き換える必要があります。`sources.list.d` 以下のファイルを編集します。
 
     ```{code} bash
     $ sudo nano /etc/apt/sources.list.d/bhf.list
     ```
 
-    APTリポジトリを `bookworm` から `bookworm-unstable` へ書き換えます。
+    APTリポジトリを `trixie` から `trixie-unstable` へ書き換えます。
 
     ```{code} yaml
-    # https://deb.beckhoff.com/debian bookworm main
-    https://deb.beckhoff.com/debian bookworm-unstable main # add `-unstable`
+    # https://deb.beckhoff.com/debian trixie main
+    https://deb.beckhoff.com/debian trixie-unstable main # add `-unstable`
     ```
 
 
@@ -282,7 +282,7 @@ IPC納品時に含まれていないパッケージを追加するまでの手�
 $ sudo apt search tf1810
 Sorting... Done
 Full Text Search... Done
-tf1810-plc-hmi-web/bookworm-unstable,now 4.0.1.0-1 arm64 [installed]
+tf1810-plc-hmi-web/trixie-unstable,now 4.0.1.0-1 arm64 [installed]
   TF1810 | TC3 PLC HMI Web
 ```
 
