@@ -26,5 +26,5 @@ dependencies = [
     "sphinxcontrib-serializinghtml",
     "sphinxcontrib-youtube",
     "docxbuilder",
-    "sphinx-autobuild>=2024.10.3",
+    "sphinx-autobuild",
 ]

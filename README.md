@@ -62,8 +62,13 @@
     uv run sphinx-autobuild source build/html
     ```
 
-    次のとおりコマンドが実行されると最後にWEBサーバが起動し、出力されたhtml文書をプレビューできます。プレビュー先のURLはビルド結果の最終行に表示される `http://127.0.0.1:8000` をクリックしてアクセスしてください。
+    Windows環境の方にはこのコマンドをPowerShellスクリプトにした `autobuild.ps1` を用意しています。
 
+    ```
+    powershell ./autobuild.ps1
+    ```
+
+    次のとおりコマンドが実行されると最後にWEBサーバが起動し、出力されたhtml文書をプレビューできます。プレビュー先のURLはビルド結果の最終行に表示される `http://127.0.0.1:8000` をクリックしてアクセスしてください。
 
     ```
     [sphinx-autobuild] Starting initial build
