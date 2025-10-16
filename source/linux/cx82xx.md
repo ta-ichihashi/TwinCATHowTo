@@ -136,8 +136,8 @@ Beckhoffの各種製品ソフトウェアは、事前にご登録いただきま
     APTリポジトリを `trixie` から `trixie-unstable` へ書き換えます。
 
     ```{code} yaml
-    # https://deb.beckhoff.com/debian trixie main
-    https://deb.beckhoff.com/debian trixie-unstable main # add `-unstable`
+    # deb [signed-by=/usr/share/keyrings/bhf.asc] https://deb.beckhoff.com/debian trixie main
+    deb [signed-by=/usr/share/keyrings/bhf.asc] https://deb.beckhoff.com/debian trixie-unstable main # add `-unstable`
     ```
 
 
