@@ -17,4 +17,5 @@ shared_memory/index.md
 powershell_data_edit/index.md
 ads_python/index.md
 ads_plc/index.md
+serial_communication/index.md
 ```
