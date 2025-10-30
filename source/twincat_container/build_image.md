@@ -28,6 +28,16 @@ $ sudo apt install --yes make tcsysconf
 
 ## カスタマイズ
 
+### TwinCAT unstable apt リポジトリへ変更
+
+ホストマシン同様、apt パッケージのリポジトリを unstable へ変更します。 `tc31-xar-base/apt-config/bhf.list` ファイルを編集し、 trixie-stable 部分を trixie-**un**stable へ変更します。
+
+```{code-block}
+:caption: /opt/stacks/TC_XAR_Container_Sample/tc31-xar-base/apt-config/bhf.list
+
+deb [signed-by=/usr/share/keyrings/bhf.asc] https://deb.beckhoff.com/debian trixie-unstable main
+```
+
 ### TF5000とTF1810の追加設定
 
 まず、ビルド前にDockerFileを編集します。
