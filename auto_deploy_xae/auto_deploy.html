@@ -1,0 +1,1144 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="colorset-reset" content="0" />
+    <meta name="docsearch:name" content="BECKHOFF TwinCATテクニカルノート" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="第1版" />
+    <meta name="docsearch:version" content="" />
+    
+      <meta name="theme-color" content="#D2F4EA" media="(prefers-color-scheme: light)" />
+      <meta name="theme-color" content="#06281E" media="(prefers-color-scheme: dark)" />
+    
+    
+      <title>プロジェクトの読み書きの自動化 &mdash; BECKHOFF TwinCATテクニカルノート 第1版 ドキュメント</title>
+    
+    <link rel="canonical" href="auto_deploy_xae/auto_deploy" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../_static/sphinx-nefertiti-teal.min.css?v=ca08729c" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=abf98f06" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/ubuntu-sans-mono/stylesheet.css?v=8616a587" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/montserrat/stylesheet.css?v=2a9880ed" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../_static/pygments-dark.css?v=f21207c5" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../_static/pygments-light.css?v=6c104457" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
+        <link rel="index" title="索引" href="../genindex.html" />
+        <link rel="search" title="検索" href="../search.html" />
+        <link rel="top" title="BECKHOFF TwinCATテクニカルノート 第1版 ドキュメント" href="#" />
+        <link rel="up" title="PowershellによるAutomation Interfaceを使ったプロジェクト更新の自動化" href="index.html" />
+        <link rel="next" title="7.2. 監視と障害対応" href="../reliability/index.html" />
+        <link rel="prev" title="PowershellによるAutomation Interfaceを使ったプロジェクト更新の自動化" href="index.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Ubuntu Sans Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: "Montserrat", var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Montserrat", var(--nftt-documentation-font);--nftt-documentation-font-size: 1.05rem;}
+
+      h1 *,
+      h2 *,
+      h3 *,
+      h4 *,
+      h5 *,
+      h6 * {
+        font-size: inherit;
+      }
+
+      .light pre,
+      .dark pre {
+        line-height: var(--nftt-pre-line-height, 140%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="back-to-top-container" class="position-fixed start-50 translate-middle-x">
+      <button id="back-to-top" type="button" class="d-none btn btn-neutral btn-sm shadow px-4" data-bs-toggle="button">Back to top</button>
+    </div>
+    <header id="snftt-nav-bar" class="navbar navbar-expand-xl neutral nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start flex-grow-1">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to index filter</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+             class="navbar-brand"
+          ><span class="brand-text">BECKHOFF TwinCATテクニカルノート</span><span class="brand-short-text">BECKHOFF TwinCATテクニカルノート</span></a>
+        
+        
+          <ul class="nftt-header-links-large navbar-nav">
+          
+            
+            
+            
+            
+  
+    <li class="nav-item">
+      <a class="snftt-hl nav-link" href="https://www.beckhoff.com/ja-jp/" data-snftt-hl-id="1" >BECKHOFF</a>
+    </li>
+  
+
+  
+    <li class="nav-item dropdown">
+      <a class="snftt-hl nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="#" >技術情報</a>
+      <ul class="dropdown-menu">
+        
+          
+          
+          
+          
+  
+    <li >
+      <a class="snftt-hl dropdown-item" href="https://infosys.beckhoff.com/english.php?content=../content/1033/html/bkinfosys_intro.htm&id=" data-snftt-hl-id="2" >InfoSys</a>
+    </li>
+  
+
+  
+    <li >
+      <a class="snftt-hl dropdown-item" href="https://sites.google.com/site/twincathowto/home" data-snftt-hl-id="3" >TwinCAT HowTo</a>
+    </li>
+  
+
+  
+    <li >
+      <a class="snftt-hl dropdown-item" href="https://www.youtube.com/@%E3%83%99%E3%83%83%E3%82%B3%E3%83%95%E3%82%AA%E3%83%BC%E3%83%88%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE" data-snftt-hl-id="4" >YouTube</a>
+    </li>
+  
+
+        
+      </ul>
+    </li>
+  
+
+          
+          </ul>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="検索">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 ps-xl-4">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control search-input" placeholder="検索" aria-label="検索" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="検索"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-short-text">BECKHOFF TwinCATテクニカルノート</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+                <div class="nftt-header-links-small">
+                  
+                    
+                    
+                    
+                    <div class="d-inline-block">
+                      
+  
+    <li class="nav-item">
+      <a class="snftt-hl nav-link" href="https://www.beckhoff.com/ja-jp/" data-snftt-hl-id="1" >BECKHOFF</a>
+    </li>
+  
+
+  
+    <li class="nav-item dropdown">
+      <a class="snftt-hl nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="#" >技術情報</a>
+      <ul class="dropdown-menu">
+        
+          
+          
+          
+          
+  
+    <li >
+      <a class="snftt-hl dropdown-item" href="https://infosys.beckhoff.com/english.php?content=../content/1033/html/bkinfosys_intro.htm&id=" data-snftt-hl-id="2" >InfoSys</a>
+    </li>
+  
+
+  
+    <li >
+      <a class="snftt-hl dropdown-item" href="https://sites.google.com/site/twincathowto/home" data-snftt-hl-id="3" >TwinCAT HowTo</a>
+    </li>
+  
+
+  
+    <li >
+      <a class="snftt-hl dropdown-item" href="https://www.youtube.com/@%E3%83%99%E3%83%83%E3%82%B3%E3%83%95%E3%82%AA%E3%83%BC%E3%83%88%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE" data-snftt-hl-id="4" >YouTube</a>
+    </li>
+  
+
+        
+      </ul>
+    </li>
+  
+
+                    </div>
+                  
+                  <li class="nav-item col-12 col-xl-auto h-100" aria-hidden="true">
+                    <div class="vr d-none d-xl-flex h-100 mx-xl-2 text-white-50"></div>
+                    <hr class="d-xl-none text-white-50">
+                  </li>
+                </div>
+              
+              
+              <li class="nav-item col-12 col-xl-auto">
+                <a class="nav-link py-2 py-xl-0 px-0 px-xl-2" href="https://github.com/Beckhoff-JP/TwinCATHowTo" target="_blank" rel="noopener">
+                  <div class="d-flex align-items-center">
+                    <div class="me-2">
+                      <i class="bi bi-git size-24"></i>
+                    </div>
+                    <div class="repo d-flex flex-column align-items-center" data-snftt-repo-url="https://github.com/Beckhoff-JP/TwinCATHowTo">
+                      Beckhoff-JP/TwinCATHowTo
+                      <div class="d-flex justify-content-center" data-snftt-repo-metrics>
+                        <span class="pe-2 d-flex justify-content-center align-items-center">
+                          <i class="bi bi-tag size-14"></i>
+                          <span class="repo-metric" data-snftt-repo-tag></span>
+                        </span>
+                        <span class="pe-2 d-flex justify-content-center align-items-center">
+                          <i class="bi bi-star size-14"></i>
+                          <span class="repo-metric" data-snftt-repo-stars></span>
+                        </span>
+                        <span class="d-flex justify-content-center align-items-center">
+                          <i class="bi bi-diagram-2 size-14"></i>
+                          <span class="repo-metric" data-snftt-repo-forks></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item col-12 col-xl-auto h-100" aria-hidden="true">
+                <div class="vr d-none d-xl-flex h-100 mx-xl-2 text-white-50"></div>
+                <hr class="d-xl-none text-white-50">
+              </li>
+              
+              
+              
+  <!-- colorssets-dropdown.html -->
+  <li class="nav-item dropdown">
+    <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-color" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Change base color">
+      <i class="bi bi-palette"></i>
+      <span id="snftt-color-text" class="d-xl-none ms-2">Change base color</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-color-text">
+      <li>
+        <h6 class="dropdown-header">Change base color</h6>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="blue" href="#" aria-pressed="false">
+          <span class="blue">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Blue</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="indigo" href="#" aria-pressed="false">
+          <span class="indigo">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Indigo</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="purple" href="#" aria-pressed="false">
+          <span class="purple">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Purple</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="pink" href="#" aria-pressed="false">
+          <span class="pink">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Pink</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="red" href="#" aria-pressed="false">
+          <span class="red">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Red</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="orange" href="#" aria-pressed="false">
+          <span class="orange">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Orange</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="yellow" href="#" aria-pressed="false">
+          <span class="yellow">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Yellow</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="green" href="#" aria-pressed="false">
+          <span class="green">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Green</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="teal" href="#" aria-pressed="false">
+          <span class="teal">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Teal</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="dropdown-item d-flex align-items-center " data-snftt-colorset="default" href="#" aria-pressed="false">
+          <span class="cyan">
+            <i class="bi bi-circle-fill"></i>
+          </span>
+          <span class="ms-3">Cyan</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+      
+      <li><hr class="dropdown-divider" /></li>
+      <li>
+        <h6 class="dropdown-header">Header style</h6>
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center active current" data-snftt-colorset-neutral="on" href="#" aria-pressed="false">
+          <i class="bi bi-noise-reduction"></i>
+          <span class="ms-3">Neutral</span>
+          <i class="bi bi-check ms-auto"></i>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li class="nav-item col-12 col-xl-auto h-100" aria-hidden="true">
+    <div class="vr d-none d-xl-flex h-100 mx-xl-2 text-white-50"></div>
+    <hr class="d-lg-none text-white-50">
+  </li>
+
+              
+              <!-- lightdark-dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Change appearance">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none ms-2">Change appearance</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Change appearance</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span>
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span>
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span>
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="ms-3">Automatic</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+    </header>
+
+    <div class="container-fluid flex-grow-1">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar ">
+          <div class="nftt-sidebar-content">
+            
+            <div class="title d-none d-xl-none">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>索引</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    索引
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="index filter" aria-label="index filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">目次</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../basic.html">1. 基礎編</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../setup_twincat/index.html">1.1. TwinCAT Build 4026 のセットアップ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup_twincat/package_manager.html">パッケージマネージャのインストールと基本設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup_twincat/package_manager_gui_ope.html">パッケージマネージャGUI 操作編</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup_twincat/package_manager_cli_ope.html">パッケージマネージャCLI 操作編</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup_twincat/offline_install.html">パッケージマネージャでオフラインインストールする方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_twincat/index.html">1.2. TwinCATの始め方</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../basic_twincat/connect_remote.html">TwinCATプロジェクトの作成とIPCへの接続</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../basic_twincat/scan_ethercat.html">EtherCATのスキャン</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../basic_twincat/link_plc_variable.html">PLCプロジェクトの作成と変数とIOのリンク</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../linux/index.html">1.3. TwinCAT Linux</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../linux/cx82xx.html">CX82xxシリーズの利用方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../linux/tf1200/index.html">TF1200 UI Client</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../linux/tf1200/install_tf1200.html">TF1200のインストールとHMI画面設定</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../linux/tf1200/wayvnc.html">VNCで接続できるようにする</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../linux/reverse_proxy/index.html">nginx を用いたリバースプロキシの設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../linux/docker/index.html">Docker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../linux/docker/install_docker.html">Dockerのインストール</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../twincat_container/index.html">TwinCAT Container のセットアップ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../twincat_container/build_image.html">TwinCAT Docker イメージの構築</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../twincat_container/compose.html">Docker compose による TwinCAT のデプロイ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../twincat_container/reverse_proxy.html">リバースプロキシの設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../twincat_project_export_import/index.html">1.4. 開発プロジェクトの読み出し、保存、エクスポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ebus_current_consumption/index.html">1.5. ELターミナルの構成とカプラの選定方法と電源について</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TwinCATConfiguration/index.html">1.6. TwinCAT プロジェクトのConfiguration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../TwinCATConfiguration/scan.html">EtherCAT Slave の Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../TwinCATConfiguration/slave_version.html">Slave versionの管理</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../datetime/index.html">1.7. TwinCATにおける日時・時刻の取扱い</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../datetime/systemtime.html">TwinCAT内部のシステム時計</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../datetime/datetime_datatype.html">TwinCAT PLCで取り扱う日時と時刻の型</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../coe_sdo_access/index.html">1.8. PLCからのSDOデータアクセス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../coe_sdo_access/analyze_data_model.html">SDOデータの構造解析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coe_sdo_access/plc_sdo_access.html">ファンクションブロックを用いたデータアクセス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tcbsd/index.html">1.9. TwinCAT BSD</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_programing.html">2. 開発編（プログラミング）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plc_object_oriented_programming/index.html">2.1. PLCオブジェクト指向プログラミング</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/legacy_program.html">変数プログラムの基本</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/function_block.html">ファンクションブロック化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/reference_variable.html">参照型変数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/encapsulation.html">カプセル化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/irc-61131-3_3rd.html">IEC 61131-3 第3版の機能について</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/object_interface.html">インターフェースの活用</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/solid.html">単一責務の法則</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_object_oriented_programming/case_study.html">ケーススタディ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plc_design_pattern/index.html">2.2. PLCプログラム例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plc_design_pattern/abstruct_array.html">配列オブジェクトの参照渡しと処理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plc_design_pattern/pointer.html">ポインタ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../job_management/index.html">並行ジョブ実行フレームワーク</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../job_management/usage.html">ジョブフレームワークライブラリ使用方法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../job_management/library_document.html">技術資料</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_environment.html">3. 開発編（開発環境）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug_support/index.html">3.1. 便利なデバッグ補助機能</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../debug_support/watch_window.html">ウォッチウィンドウ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../debug_support/cross_reference.html">クロスリファレンス機能</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../devops/index.html">3.2. DevOps開発環境構築</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../version_control/index.html">ソースコントロール機能</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../version_control/source_control.html">導入</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../version_control/create_repository.html">リポジトリの作成（新規作成）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../version_control/clone_repository.html">リポジトリの作成（外部のリポジトリのクローン）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../version_control/commit.html">変更とコミット</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../version_control/sync.html">外部リポジトリとの同期</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../multiuser/index.html">マルチユーザ機能</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multiuser/working_multiuser.html">マルチユーザ運用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../library/index.html">TwinCAT3 ライブラリの活用</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/use_library.html">ライブラリを読み込んで使う</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../library/make_library.html">独自ライブラリのつくりかた</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../library/documentation.html">ライブラリドキュメントの作成</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../simulation/index.html">TE1111によるシミュレーションとテスト</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../simulation/ethercat_master.html">EtherCAT構成の定義</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../simulation/simulation_plc.html">シミュレーション用PLCプロジェクトの作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../simulation/demo.html">デモソフトウェア解説</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../usermode_runtime/index.html">ユーザモードランタイム</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_security.html">4. 開発編（セキュリティ）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../software_protection/index.html">4.1. ソフトウェア保護</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../software_protection/setup.html">導入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../software_protection/acl.html">グループと権限の設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../software_protection/users.html">ユーザ管理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../software_protection/distribution.html">TwinCATプロジェクトの配布</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../data_persistence/index.html">4.2. データ永続化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_persistence/ups.html">無停電電源装置（UPS）によるPERSISTENTデータの永続化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_persistence/sups_cx51x0.html">1 second UPS 制御FB実装</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../recipe/index.html">4.3. レシピ機能</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../recipe/setup_recipe.html">レシピの初期設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../recipe/use_recipe.html">レシピの使い方</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../recipe/recipe_library.html">PLCプログラムによるレシピ制御</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../event_logger/index.html">4.4. イベントロガーとアラーム管理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../event_logger/make_user_event.html">ユーザイベントの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../event_logger/plc_api.html">PLC API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../event_logger/sample.html">アラーム管理サンプルコードの解説</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../event_logger/windows_event_logger.html">Windowsイベントロガーとの連携</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_motion.html">5. 開発編（モーション）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Make_Cam/index.html">5.1. 電子カム</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../AdHo/index.html">5.2. 原点復帰</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../McStepBlock/index.html">MC_StepBlock</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../xplanar/index.html">5.3. XPlanar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xplanar/basic/index.html">概要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../xplanar/startup/index.html">開発手順</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../xplanar/configurator/index.html">Configurator 手順</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../xplanar/make_instance/index.html">PLCインスタンス作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../xplanar/link_configuration/index.html">リンク設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../develop_information.html">6. 開発編（ビジョン・機械学習・IoT）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../iot/index.html">6.1. IoT製品紹介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../opcua/index.html">6.2. OPC UA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../opcua/opcua_server.html">TF6100 OPC UA Server</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scope_view/index.html">6.3. Scope view</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/introduction.html">必要なライセンス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/introduction.html#pccsv">接続構成（外部PCでCSVファイル保存する場合）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/introduction.html#id2">全体の流れ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/introduction.html#scope-view">本書で紹介するScope viewの機能仕様</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/scope_view.html">Scope viewプロジェクト新規設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/scope_view.html#id3">変数登録とビュー作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/trigger_export.html">トリガとアクションの設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/watching.html">監視</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scope_view/control_by_functionblock.html">ファンクションブロックによるスコープ記録開始、停止制御</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../database/index.html">6.4. TF6420 データベース</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../sql/index.html">SQLデータベース</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../sql/sql_expert.html">SQL expertモードによるPLC実装</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../influxdb/index.html">InfluxDB</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/setup_influxdb_windows.html">InfluxDBとGrafanaの手動インストール</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/setup_docker.html">Docker composeによるインストール</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/setup_tf6420_influxdb.html">TF6420 のセットアップ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/tf6420_write_influxdb.html">PLCプログラム</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/tf6420_write_influxdb.html#influxdbgrafana">InfluxDBのクエリとGrafanaへの表示</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/visualization.html">InfluxDBによるクエリ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/grafana.html">Grafanaでダッシュボード作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/embed_grafana_HMI.html">TwinCAT HMIへの埋め込み</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/query_pattern.html">応用編：さまざまなクエリパターン</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/telegraf.html">付録：Telegraf を用いたIPCのWindowsメトリクス計測</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb/telegraf.html#ipctelegraf">IPCへのTelegrafのインストール</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../timescaledb/index.html">TimescaleDB</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../timescaledb/setup.html">セットアップ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../timescaledb/createdb.html">データベースの作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../timescaledb/plc_program.html">PLCサンプルプログラム</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../socket_communication/index.html">6.5. ソケット通信</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tf6311/index.html">TF6311によるソケット通信</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tf6311/driver_setup.html">TwinCATのドライバセットアップ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tf6311/udp_server.html">ダミーサーバの実装</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tf6311/udp_client.html">UDPクライアントの実装</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../tf6310/index.html">TF6310によるソケット通信</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../el_ethernet/index.html">6.6. Ethernetスイッチポートターミナルを通じた通信</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../el_ethernet/configuration.html">セットアップと運用</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../eip/index.html">6.7. EtherNet/IP による通信</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../eip/ipc_adapter.html">TF6280 EtherNet/IP アダプタによるIPCのEthernetポートを使った通信</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../shared_memory/index.html">6.8. バイトストリームや共有メモリによる通信</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../shared_memory/byte_swapping.html">バイトスワップ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../shared_memory/memory_alignment.html">メモリアライメント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../shared_memory/address_mapping.html">実装例：構造体と共用体を使ったマッピング</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../powershell_data_edit/index.html">6.9. PowerShellを使ったデータ操作</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../powershell_data_edit/setup.html">セットアップ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../powershell_data_edit/twincat_example.html">TwinCATのプロジェクト例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../powershell_data_edit/powershell.html">ADSを介して変数読み書きするPowerShellスクリプト実装</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ads_python/index.html">6.10. PythonとADSを用いたIoT実装例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ads_plc/index.html">6.11. PLC間のADS通信</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../serial_communication/index.html">6.12. シリアル通信</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../operation.html">7. 運用編</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../deployment/index.html">7.1. リリースとデプロイ</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../bundle/index.html">バージョンのフリーズ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../bundle/bundle.html">TwinCATビルドバージョンをフリーズする</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../bundle/bundle_library.html">内包されるライブラリバージョンをフリーズする</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_deploy/index.html">プロジェクト更新をTwinCAT XAEを使わず行う</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../auto_deploy/develop_project.html">Bootイメージの作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../auto_deploy/deploy_project.html">展開先への配置と起動</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">PowershellによるAutomation Interfaceを使ったプロジェクト更新の自動化</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">プロジェクトの読み書きの自動化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../powershell_data_edit/index.html">6.9. PowerShellを使ったデータ操作</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../powershell_data_edit/setup.html">セットアップ</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../powershell_data_edit/twincat_example.html">TwinCATのプロジェクト例</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../powershell_data_edit/powershell.html">ADSを介して変数読み書きするPowerShellスクリプト実装</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reliability/index.html">7.2. 監視と障害対応</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../latency/index.html">Power shellを用いたシステムレイテンシ計測</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reliability/bsod.html">BSoD対策</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reliability/perfmon.html">パフォーマンスモニタによる監視</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reliability/after_incident.html">障害発生後の対応方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../backup_recovery/index.html">7.3. バックアップとリカバリ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../dongle/index.html">ライセンスドングル</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../dongle/dongle.html">ドングル作成手順</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../bst/index.html">BSTによるIPCのバックアップリストア</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">8. よくある質問と答え</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../faq/133.html">8.1. TwinCATが対応するリアルタイムEthernetドライバの互換性はどのように調べますか？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/133.html#niccompatible">8.2. サイトに掲載されているNICなのですがCompatibleとして認識されません</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/647.html">8.3. TwinCATと外部機器と通信するにはどんな方法がありますか？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/5941.html">8.4. EtherCATスレーブごとのフレームエラーの記録方法をおしえてください</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/resume_op.html">8.5. EtherCATの通信異常が発生した後に自動的にOPに回復するにはどの設定が必要ですか</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/fb_local_system_time.html">8.6. PLC RUN後 しばらく FB_LocalSystemTime で取得した時刻データがUNIXエポックになるのはなぜですか？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/product_finder.html">8.7. このIPCはどのOSが使えますか？またどのTF****が使えますか？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/open_from_target.html">8.8. リモートIPCからTwinCATプロジェクトを読み出す方法をおしえてください</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/IPC_iis_setting.html">8.9. IPCの各種情報をブラウザで提供するBECKHOFF Device ManagerのWEBサービスを起動させるにはどうすればよいですか？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/visualization_password.html">8.10. Visualizationにて、パスワード入力した値を * で隠蔽する方法を教えてください</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq/cannot_make_plc_project.html">8.11. PLCプロジェクトが作成できません</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+            
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+          <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../index.html">Start</a></li>
+      <li class="breadcrumb-item"><a href="../operation.html"><span class="section-number">7. </span>運用編</a></li>
+      <li class="breadcrumb-item"><a href="../deployment/index.html"><span class="section-number">7.1. </span>リリースとデプロイ</a></li>
+      <li class="breadcrumb-item"><a href="index.html">PowershellによるAutomation Interfaceを使ったプロジェクト更新の自動化</a></li>
+    <li class="breadcrumb-item active" aria-current="page">プロジェクトの読み書きの自動化</li>
+  </ol>
+</nav>
+    <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>プロジェクトの読み書きの自動化<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>既に稼働中の設備において、IPCのプロジェクト書き換えを行う場合、次の2点の作業が必要です。</p>
+<ul class="simple">
+<li><p>現在稼働中のプロジェクトのバックアップを取得する。</p></li>
+<li><p>新しいTwinCAT XAEプロジェクトをIPCに書き込み（ダウンロード）し、RUNモードへ移行し、プログラムスタートする。</p></li>
+</ul>
+<p>これらをTwinCAT XAEのGUI操作無しにスクリプトで実施する方法についてご説明します。</p>
+<section id="id2">
+<h2>事前準備<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<dl class="simple myst">
+<dt>言語設定</dt><dd><p>本スクリプトでは、ターゲットIPCからのバックアップ取得の際、Visual Studioのメニューコマンドをリモートで操作する<code class="docutils literal notranslate"><span class="pre">ExecuteCommand</span></code>を用いています。このコマンドは、Visual Studioの言語設定により変化します。</p>
+<p>ツールバーの Tools &gt; Options… メニューの Environment &gt; International 設定</p>
+</dd>
+<dd><p>紹介するスクリプトは、この設定が英語であることを前提としています。その他の言語に切り替えてお使いいただいている方は、バックアップが正しく機能しませんのでご注意ください。</p>
+</dd>
+<dt>ターゲットへの接続</dt><dd><p>TwinCAT XAEがインストールされた別PCから行う事を前提としています。該当PCのEdit routeにて、ターゲットIPCへの接続を行ってください。本節の例では、下記の通り接続が有るものとします。</p>
+</dd>
+<dd><dl class="simple myst">
+<dt>Route名</dt><dd><p>バックアップに用います。ユーザモードランタイムは指定できません。下記スクリプト例では、<code class="docutils literal notranslate"><span class="pre">BTN-000****</span></code>として説明します。</p>
+</dd>
+</dl>
+</dd>
+<dd><dl class="simple myst">
+<dt>AmsNetId</dt><dd><p>あらかじめ指定したTwinCATプロジェクトを書き込む（ダウンロード）先のターゲットのルータAMS Net IDを指定します。ユーザモードランタイムを指定可能です。下記スクリプト例では<code class="docutils literal notranslate"><span class="pre">10.200.64.8.1.1</span></code>として説明しています。</p>
+</dd>
+</dl>
+</dd>
+<dd><figure class="align-center" id="figure-router-list">
+<img alt="../_images/2023-12-25-16-30-51.png" src="../_images/2023-12-25-16-30-51.png" />
+<figcaption>
+<p><span class="caption-number">図 7.1 </span><span class="caption-text">Edit Routesウィンドウ</span><a class="headerlink" href="#figure-router-list" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd>
+<dd><div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Usermode runtimeの場合は、<a class="reference internal" href="../usermode_runtime/index.html#chapter-usermode-runtime"><span class="std std-ref">ユーザモードランタイム</span></a>にてターゲットを起動させてください。</p>
+</div>
+</dd>
+</dl>
+</section>
+<section id="ipc">
+<h2>IPCからバックアップを収集するスクリプト<a class="headerlink" href="#ipc" title="Link to this heading">¶</a></h2>
+<p>次のスクリプトにて、ターゲットのIPCからプロジェクトファイルを吸い出して、開発環境にプロジェクトツリーを展開することができます。</p>
+<div class="warning admonition">
+<p class="admonition-title">ターゲットにソースファイルを含める設定を行ってください。</p>
+<p>ターゲットからバックアップしたプロジェクトのPLCを開くには、そもそもIPCに書き込むPLCプロジェクトにソースファイルが含まれていなければなりません。</p>
+<p>PLCプロジェクトの<code class="docutils literal notranslate"><span class="pre">Settings</span></code>タブを開いて、<code class="docutils literal notranslate"><span class="pre">Project</span> <span class="pre">Source</span></code>およびそのサブメニュー全てにチェックを入れてください。</p>
+<p><img alt="" class="align-center" src="../_images/2023-12-25-17-18-29.png" /></p>
+</div>
+<div class="literal-block-wrapper docutils container" id="code-backup-from-target-powershell">
+<div class="code-block-caption"><span class="caption-number">リスト 7.1 </span><span class="caption-text">ターゲットからバックアップを自動化するPowershellスクリプト</span><a class="headerlink" href="#code-backup-from-target-powershell" title="Link to this code">¶</a></div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c"># バックアップ用変数</span>
+<span class="linenos"> 2</span><span class="nv">$backupBaseDir</span> <span class="p">=</span> <span class="nv">$PSScriptRoot</span> <span class="p">+</span> <span class="s2">&quot;\backup&quot;</span> <span class="c"># バックアップを保存する親フォルダパス</span>
+<span class="linenos"> 3</span><span class="nv">$BackupProjectName</span> <span class="p">=</span> <span class="s2">&quot;backup&quot;</span>
+<span class="linenos"> 4</span><span class="nv">$BackupTargetRouteName</span> <span class="p">=</span> <span class="s2">&quot;btn-000****&quot;</span> <span class="c"># バックアップ元のターゲットIPCのRoute名</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c">#$dte = new-object -com VisualStudio.DTE.10.0 # VS2010</span>
+<span class="linenos"> 7</span><span class="c">#$dte = new-object -com VisualStudio.DTE.11.0 # VS2012</span>
+<span class="linenos"> 8</span><span class="c">#$dte = new-object -com VisualStudio.DTE.12.0 # VS2013</span>
+<span class="linenos"> 9</span><span class="c">#$dte = new-object -com VisualStudio.DTE.14.0 # VS2015</span>
+<span class="linenos">10</span><span class="c">#$dte = new-object -com VisualStudio.DTE.15.0 # VS2017</span>
+<span class="linenos">11</span><span class="c">#$dte = new-object -com VisualStudio.DTE.16.0 # VS2019</span>
+<span class="linenos">12</span><span class="c">#$dte = new-object -com VisualStudio.DTE.17.0 # VS2022</span>
+<span class="linenos">13</span><span class="c">#$dte = new-object -com TcXaeShell.DTE.15.0 # TwinCAT XAE Shell</span>
+<span class="linenos">14</span><span class="nv">$dte</span> <span class="p">=</span> <span class="nb">new-object</span> <span class="n">-com</span> <span class="n">TcXaeShell</span><span class="p">.</span><span class="n">DTE</span><span class="p">.</span><span class="n">17</span><span class="p">.</span><span class="n">0</span> <span class="c"># TwinCAT XAE Shell x64 (build 4026)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="c">### backup process</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="c"># create backup directory including datetime string.</span>
+<span class="linenos">19</span><span class="nv">$now</span> <span class="p">=</span> <span class="nb">Get-Date</span>
+<span class="linenos">20</span><span class="nv">$strDT</span> <span class="p">=</span> <span class="nv">$now</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyyMMddHHmmss&#39;</span><span class="p">)</span>
+<span class="linenos">21</span><span class="nv">$backupDir</span> <span class="p">=</span> <span class="nv">$backupBaseDir</span> <span class="p">+</span> <span class="s2">&quot;\&quot;</span> <span class="p">+</span> <span class="nv">$strDT</span> <span class="p">+</span> <span class="s2">&quot;_&quot;</span> <span class="p">+</span> <span class="nv">$BackupProjectName</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="k">if</span> <span class="p">(</span><span class="nb">test-path</span> <span class="nv">$backupDir</span> <span class="n">-pathtype</span> <span class="n">container</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">24</span>    <span class="nb">Remove-Item</span> <span class="nv">$backupDir</span> <span class="n">-Recurse</span> <span class="n">-Force</span>
+<span class="linenos">25</span><span class="p">}</span>
+<span class="linenos">26</span><span class="nb">New-Item</span> <span class="nv">$backupDir</span> <span class="n">-type</span> <span class="n">directory</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="c"># fetch from target</span>
+<span class="linenos">29</span><span class="nv">$dte</span><span class="p">.</span><span class="n">ExecuteCommand</span><span class="p">(</span><span class="s2">&quot;File.OpenProjectSolutionFromTarget&quot;</span><span class="p">,</span> <span class="nv">$BackupTargetRouteName</span> <span class="p">+</span> <span class="s2">&quot; &quot;</span> <span class="p">+</span> <span class="nv">$backupDir</span> <span class="p">+</span> <span class="s2">&quot; &quot;</span> <span class="p">+</span> <span class="nv">$BackupProjectName</span><span class="p">);</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="c"># Save as solution</span>
+<span class="linenos">32</span><span class="nv">$sln</span> <span class="p">=</span> <span class="nv">$dte</span><span class="p">.</span><span class="n">Solution</span>
+<span class="linenos">33</span><span class="nv">$sln</span><span class="p">.</span><span class="n">SaveAs</span><span class="p">(</span><span class="nv">$backupDir</span> <span class="p">+</span> <span class="s2">&quot;\&quot;</span> <span class="p">+</span> <span class="nv">$BackupProjectName</span> <span class="p">+</span> <span class="s2">&quot;.sln&quot;</span><span class="p">)</span>
+<span class="linenos">34</span><span class="nv">$sln</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>このスクリプトを<code class="docutils literal notranslate"><span class="pre">twincat_backup.ps1</span></code>などPowershellが動作するテキストファイルとして保存します。保存する前にスクリプト先頭部にある変数定義を次のとおり適切に設定してください。</p>
+<dl class="simple myst">
+<dt>$backupBaseDir</dt><dd><p>バックアップを保存する親フォルダパスを指定します。<code class="docutils literal notranslate"><span class="pre">$prjDir</span></code>同様、<code class="docutils literal notranslate"><span class="pre">$PSScriptRoot</span></code>からの相対パス表記でも構いません。</p>
+</dd>
+<dt>$BackupProjectName</dt><dd><p>バックアップを保存するプロジェクト名を指定します。</p>
+</dd>
+<dt>$BackupTargetRouteName</dt><dd><p><a class="reference internal" href="#figure-router-list"><span class="std std-numref">図 7.1</span></a>の接続先Route名を小文字に変換した文字列を指定します。</p>
+</dd>
+<dd><div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p><code class="docutils literal notranslate"><span class="pre">$BackupTargetRouteName</span></code>は、下記の通りAdd Route Dialogで作成した際の、<code class="docutils literal notranslate"><span class="pre">Route</span> <span class="pre">Name(Target)</span></code>項目で設定した内容に準じます。この設定はデフォルトで小文字ですが、意図してこの設定を変更した場合は、その文字列を指定する必要があります。</p>
+<p>一方、Routerの一覧（<a class="reference internal" href="#figure-router-list"><span class="std std-numref">図 7.1</span></a>）ではRoute名が全て大文字となっています。大文字小文字が異なると、正しくRoute名として認識できなくなりますのでご注意ください。</p>
+<p><img alt="" class="align-center" src="../_images/2023-12-25-17-30-13.png" /></p>
+</div>
+</dd>
+<dt>$dte</dt><dd><p>Visual Studioのオートメーションモデルである<code class="docutils literal notranslate"><span class="pre">EnvDTE.DTE</span></code>インターフェースが提供するAPI機能です。Visual Studio または TwinCAT XAEシェルなどの開発環境のバージョンにより異なるProgram IDを指定することでオブジェクトを生成することができます。<a class="reference external" href="https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307">Visual StudioのProgram ID</a>を参照してください。<a class="reference internal" href="#code-backup-from-target-powershell"><span class="std std-numref">リスト 7.1</span></a>例では、TwinCAT XAEシェル版の開発環境を用いています。</p>
+</dd>
+</dl>
+<div class="warning admonition">
+<p class="admonition-title">Visual Studioのバージョンによるコマンドの違いに注意</p>
+<p>ターゲットからプロジェクトを開くコマンドをDTEインターフェースを通じて実行するには、<code class="docutils literal notranslate"><span class="pre">$dte.ExecuteCommand()</span></code>では第一引数にコマンドを記載する必要があります。4024をVisual Studio 2017 をベースとする build 4024 と、Visual Studio 2022 をベースとする build 4026 では次のとおりコマンドが異なりますのでご注意ください。（<a class="reference internal" href="#section-visual-studio-dte-api"><span class="std std-ref">Visual Studio DTEインターフェースの使い方</span></a>参照）</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>build 4024（TcXaeShell.DTE.15.0）</p></td>
+<td><p>build 4026（TcXaeShell.DTE.17.0）</p></td>
+</tr>
+<tr class="row-even"><td><p>File.OpenProjectFromTarget</p></td>
+<td><p>File.OpenProjectSolutionFromTarget</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>次に、<code class="docutils literal notranslate"><span class="pre">$backupBaseDir</span></code>で設定したバックアップを保存する先のフォルダを用意してください。本スクリプト例では、Powershellスクリプトを配置する同じディレクトリに、<code class="docutils literal notranslate"><span class="pre">backup</span></code>という名前の空フォルダを作り、その中に保存する仕様です。</p>
+<p>設定が完了したら、Powershellを実行してください。下記の通り、実行した日時の数字列が先頭に付いたプロジェクトフォルダが自動的に作成され、その中に<code class="docutils literal notranslate"><span class="pre">$BackupProjectName</span></code>で指定した名前でソリューションが作成されます。</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">Mode</span>                 <span class="n">LastWriteTime</span>         <span class="n">Length</span> <span class="n">Name</span>
+<span class="p">----</span>                 <span class="p">-------------</span>         <span class="p">------</span> <span class="p">----</span>
+<span class="n">d</span><span class="p">-----</span>        <span class="n">2023</span><span class="p">/</span><span class="n">12</span><span class="p">/</span><span class="n">25</span>     <span class="n">16</span><span class="p">:</span><span class="n">22</span>                <span class="n">20231225162119_backuo</span>
+<span class="n">d</span><span class="p">-----</span>        <span class="n">2023</span><span class="p">/</span><span class="n">12</span><span class="p">/</span><span class="n">25</span>     <span class="n">16</span><span class="p">:</span><span class="n">28</span>                <span class="n">20231225162755_backup</span>
+<span class="n">d</span><span class="p">-----</span>        <span class="n">2023</span><span class="p">/</span><span class="n">12</span><span class="p">/</span><span class="n">25</span>     <span class="n">16</span><span class="p">:</span><span class="n">33</span>                <span class="n">20231225163334_backup</span> 
+    <span class="p">:</span>              <span class="p">:</span>            <span class="p">:</span>                               <span class="p">:</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2>ランタイムへ新しいプロジェクトを書き込むスクリプト<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>既存のプロジェクトを開き、ユーザモードランタイムや、ターゲットIPCなどのXARに書き込むスクリプトをご紹介します。</p>
+<div class="literal-block-wrapper docutils container" id="code-auto-dploy-powershell">
+<div class="code-block-caption"><span class="caption-number">リスト 7.2 </span><span class="caption-text">ターゲットへのデプロイを自動化するPowershellスクリプト</span><a class="headerlink" href="#code-auto-dploy-powershell" title="Link to this code">¶</a></div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c"># プロジェクトのビルドとターゲットへの書き込み用変数</span>
+<span class="linenos"> 2</span><span class="nv">$prjDir</span> <span class="p">=</span> <span class="nv">$PSScriptRoot</span> <span class="p">+</span> <span class="s2">&quot;\sample_project&quot;</span> <span class="c"># 元となるプロジェクトが格納されたフォルダパス</span>
+<span class="linenos"> 3</span><span class="nv">$prjName</span> <span class="p">=</span> <span class="s2">&quot;sample_project&quot;</span> <span class="c"># $prjDir以下にあるソリューションファイル名から拡張子(*.sln)を取り除いたもの</span>
+<span class="linenos"> 4</span><span class="nv">$targetNetId</span> <span class="p">=</span> <span class="s2">&quot;10.200.64.8.1.1&quot;</span> <span class="c"># ダウンロード先のルータ設定で行ったターゲットIPCのAmsNetIdを指定</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c">#$dte = new-object -com VisualStudio.DTE.10.0 # VS2010</span>
+<span class="linenos"> 7</span><span class="c">#$dte = new-object -com VisualStudio.DTE.11.0 # VS2012</span>
+<span class="linenos"> 8</span><span class="c">#$dte = new-object -com VisualStudio.DTE.12.0 # VS2013</span>
+<span class="linenos"> 9</span><span class="c">#$dte = new-object -com VisualStudio.DTE.14.0 # VS2015</span>
+<span class="linenos">10</span><span class="c">#$dte = new-object -com VisualStudio.DTE.15.0 # VS2017</span>
+<span class="linenos">11</span><span class="c">#$dte = new-object -com VisualStudio.DTE.16.0 # VS2019</span>
+<span class="linenos">12</span><span class="c">#$dte = new-object -com VisualStudio.DTE.17.0 # VS2022</span>
+<span class="linenos">13</span><span class="c">#$dte = new-object -com TcXaeShell.DTE.15.0 # TwinCAT XAE Shell</span>
+<span class="linenos">14</span><span class="nv">$dte</span> <span class="p">=</span> <span class="nb">new-object</span> <span class="n">-com</span> <span class="n">TcXaeShell</span><span class="p">.</span><span class="n">DTE</span><span class="p">.</span><span class="n">17</span><span class="p">.</span><span class="n">0</span> <span class="c"># TwinCAT XAE Shell x64 (build 4026)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="c">### Build or Activate specified project process</span>
+<span class="linenos">17</span><span class="nv">$prjPath</span> <span class="p">=</span> <span class="nv">$prjDir</span> <span class="p">+</span> <span class="s2">&quot;\&quot;</span> <span class="p">+</span> <span class="nv">$prjName</span> <span class="p">+</span> <span class="s2">&quot;.sln&quot;</span>
+<span class="linenos">18</span><span class="nv">$sln</span> <span class="p">=</span> <span class="nv">$dte</span><span class="p">.</span><span class="n">Solution</span>
+<span class="linenos">19</span><span class="nv">$sln</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="nv">$prjPath</span><span class="p">)</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="nv">$project</span> <span class="p">=</span> <span class="nv">$sln</span><span class="p">.</span><span class="n">Projects</span><span class="p">.</span><span class="n">Item</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="c">### Only build. build image is created into &quot;_boot&quot; directory</span>
+<span class="linenos">24</span><span class="c"># $sysManProjectName = $project.FullName</span>
+<span class="linenos">25</span><span class="c"># $sln.SolutionBuild.BuildProject(&quot;Release|TwinCAT OS (x64)&quot;,$sysManProjectName,$true) # TwinCAT OS (x64) -&gt; Usermode runtime </span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="c">### Build and Activation into target IPC</span>
+<span class="linenos">28</span><span class="nv">$systemManager</span> <span class="p">=</span> <span class="nv">$project</span><span class="p">.</span><span class="n">Object</span>
+<span class="linenos">29</span><span class="nv">$systemManager</span><span class="p">.</span><span class="n">SetTargetNetId</span><span class="p">(</span><span class="nv">$targetNetId</span><span class="p">)</span>
+<span class="linenos">30</span><span class="nv">$systemManager</span><span class="p">.</span><span class="n">ActivateConfiguration</span><span class="p">()</span>
+<span class="linenos">31</span><span class="nv">$systemManager</span><span class="p">.</span><span class="n">StartRestartTwinCAT</span><span class="p">()</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="nv">$sln</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">デプロイは行わずにビルドだけ行いたい場合</p>
+<p>上記スクリプト例では、ターゲットにプログラムをデプロイし、RUNモード移行、およびPLCスタートまで自動化しています。ビルドだけを行いたい場合もコメントアウトした状態で併記していますので、次のとおり書き換えてください。</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c">### Only build. build image is created into &quot;_boot&quot; directory</span>
+<span class="nv">$sysManProjectName</span> <span class="p">=</span> <span class="nv">$project</span><span class="p">.</span><span class="n">FullName</span>
+<span class="nv">$sln</span><span class="p">.</span><span class="n">SolutionBuild</span><span class="p">.</span><span class="n">BuildProject</span><span class="p">(</span><span class="s2">&quot;Release|TwinCAT OS (x64)&quot;</span><span class="p">,</span><span class="nv">$sysManProjectName</span><span class="p">,</span><span class="nv">$true</span><span class="p">)</span> <span class="c"># TwinCAT OS (x64) -&gt; Usermode runtime </span>
+
+<span class="c">### Build and Activation into target IPC</span>
+<span class="c"># $systemManager = $project.Object</span>
+<span class="c"># $systemManager.SetTargetNetId($targetNetId)</span>
+<span class="c"># $systemManager.ActivateConfiguration()</span>
+<span class="c"># $systemManager.StartRestartTwinCAT()</span>
+</pre></div>
+</div>
+<p>ビルドしたブートイメージは、プロジェクトフォルダ内の<code class="docutils literal notranslate"><span class="pre">_boot</span></code>フォルダに生成されます。（<a class="reference internal" href="../auto_deploy/develop_project.html#section-boot-image"><span class="std std-ref">Bootイメージの作成</span></a>参照）ただし、<code class="docutils literal notranslate"><span class="pre">&quot;Release|TwinCAT</span> <span class="pre">OS</span> <span class="pre">(x64)&quot;</span></code>の部分でどのターゲット向けにビルドを行うのか明記する必要があります。ターゲットの環境に合わせて書き換えてください。<img alt="" class="align-center" src="../_images/2025-09-22-18-15-31.png" /></p>
+<dl class="simple myst">
+<dt>TwinCAT OS</dt><dd><p>Usermode runtimeやTwinCAT Linuxをターゲットとする場合のビルド</p>
+</dd>
+<dt>TwinCAT RT</dt><dd><p>カーネルモードで動作するTwinCAT XAR向けのビルド</p>
+</dd>
+</dl>
+</div>
+<p>このスクリプトを<code class="docutils literal notranslate"><span class="pre">twincat_deploy.ps1</span></code>などPowershellが動作するテキストファイルとして保存します。スクリプト先頭部にある変数定義を次のとおり適切に設定します。</p>
+<dl class="simple myst">
+<dt>$prjDir</dt><dd><p>デプロイする元のTwinCATプロジェクトフォルダを配置したディレクトリのパスを指定します。</p>
+</dd>
+<dt>$prjName</dt><dd><p>$prjDir以下にあるソリューションファイル名から拡張子(*.sln)を取り除いた名前を設定してください。</p>
+</dd>
+<dt>$targetNetId</dt><dd><p><a class="reference internal" href="#figure-router-list"><span class="std std-numref">図 7.1</span></a>の接続先AmsNetIdを指定します。デプロイ先をXAE開発環境のPC上のUsermode runtimeにする場合、NetIDを次図のようにタスクトレーから調べて設定してください。</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><img alt="" class="align-center" src="../_images/2025-09-22-18-27-20.png" /></p></td>
+<td><p><img alt="" class="align-center" src="../_images/2025-09-22-12-17-18.png" /></p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>$dte</dt><dd><p>Visual Studioのオートメーションモデルである<code class="docutils literal notranslate"><span class="pre">EnvDTE.DTE</span></code>インターフェースが提供するAPI機能です。Visual Studio または TwinCAT XAEシェルなどの開発環境のバージョンにより異なるProgram IDを指定することでオブジェクトを生成することができます。<a class="reference external" href="https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307">Visual StudioのProgram ID</a>を参照してください。<a class="reference internal" href="#code-auto-dploy-powershell"><span class="std std-numref">リスト 7.2</span></a>例では、TwinCAT XAEシェル版の開発環境を用いています。</p>
+</dd>
+</dl>
+<p>また、スクリプトで指定した<code class="docutils literal notranslate"><span class="pre">$prjDir</span></code>にターゲットへ書き込むソリューションプロジェクトを、<code class="docutils literal notranslate"><span class="pre">$prjName</span></code>で指定したソリューション名で格納してください。</p>
+<p>設定が完了したら、Powershellを実行してください。<code class="docutils literal notranslate"><span class="pre">$prjDir</span></code>に格納したプロジェクトを自動的にビルドしてIPCへ書き込み、その後、RUNモードへ移行、PLCスタートまで行います。</p>
+</section>
+<section id="api">
+<h2>API解説<a class="headerlink" href="#api" title="Link to this heading">¶</a></h2>
+<p>基本としてTwinCATのアプリケーションリソースへ接続する方法は、次の二通りがあります。（<a class="reference external" href="https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242721803.html?id=6926366377621229322">参考</a>）</p>
+<dl class="simple myst">
+<dt>Visual Studio DTE</dt><dd><p>Microsoft社が提供するVisual Studio用のインターフェース<a class="reference external" href="https://learn.microsoft.com/ja-jp/dotnet/api/envdte.dte?view=visualstudiosdk-2022"><code class="docutils literal notranslate"><span class="pre">EnvDTE.DTE</span></code></a>を使ってアクセスします。本スクリプト上では、<code class="docutils literal notranslate"><span class="pre">$dte</span></code>にオブジェクトが格納されています。</p>
+</dd>
+<dt>TwinCAT Automation Interface</dt><dd><p>Beckhoff TwinCAT プロジェクトが提供する<a class="reference external" href="https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242750731.html?id=8779542607648763499">APIインターフェース</a>を使ってアクセスします。本スクリプト上では、<code class="docutils literal notranslate"><span class="pre">$SystemManager</span></code>にオブジェクトが格納されています。</p>
+</dd>
+</dl>
+<p>上記を組み合わせて、TwinCAT上の操作を自動化させることができます。</p>
+<section id="visual-studio-dte">
+<span id="section-visual-studio-dte-api"></span><h3>Visual Studio DTEインターフェースの使い方<a class="headerlink" href="#visual-studio-dte" title="Link to this heading">¶</a></h3>
+<p>スクリプト中での使用箇所は次のとおりです。COMオブジェクトを作成するには、<a class="reference external" href="https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242746251.html?id=1279209786026709307">Visual StudioのProgram ID</a>に示されるように各アプリケーションのバージョン毎に異なる Program IDが割り振られており、<code class="docutils literal notranslate"><span class="pre">new-object</span> <span class="pre">-com</span></code>でProgram IDを指定することで取得できます。これをオブジェクト変数<code class="docutils literal notranslate"><span class="pre">$dte</span></code>に代入し、以後dteインターフェースで定義されたプロパティやメソッドを活用してリソースにアクセスします。</p>
+<p>多用されるメソッドとしては、<code class="docutils literal notranslate"><span class="pre">ExecuteCommand</span></code>があります。これの第一引数には、コマンド名<code class="docutils literal notranslate"><span class="pre">File.OpenProjectFromTarget</span></code>を指定し、第二引数にはスペース区切りで、そのコマンドの引数を指定します。これらのProgram IDで指定したアプリケーションが提供するコマンドは、Visual Studioの場合、ツールバーの<code class="docutils literal notranslate"><span class="pre">Tools</span></code>&gt;<code class="docutils literal notranslate"><span class="pre">Options...</span></code>メニューの<code class="docutils literal notranslate"><span class="pre">Environment</span></code>&gt;<code class="docutils literal notranslate"><span class="pre">Keyboard</span></code>を開くと全てのコマンドが一覧されます。</p>
+<p><img alt="" class="align-center" src="../_images/2023-12-25-17-03-21.png" /></p>
+<p>注意点として以下が挙げられます。</p>
+<dl class="simple myst">
+<dt>Visual Studioのバージョンによってコマンド名が変化する</dt><dd><p>keyboardに割り当てられたコマンド名が、バージョンによって異なることがあります。例えば以下のスクリプトはエラーとなります。</p>
+</dd>
+<dd><div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$dte</span> <span class="p">=</span> <span class="nb">new-object</span> <span class="n">-com</span> 	<span class="n">TcXaeShell</span><span class="p">.</span><span class="n">DTE</span><span class="p">.</span><span class="n">17</span><span class="p">.</span><span class="n">0</span> <span class="c"># TwinCAT XAE Shell x64 (build 4026)</span>
+ <span class="p">:</span>
+ <span class="p">:</span>
+<span class="nv">$dte</span><span class="p">.</span><span class="n">ExecuteCommand</span><span class="p">(</span><span class="s2">&quot;File.OpenProjectFromTarget&quot;</span><span class="p">,</span> <span class="nv">$BackupTargetRouteName</span> <span class="p">+</span> <span class="s2">&quot; &quot;</span> <span class="p">+</span> <span class="nv">$backupDir</span> <span class="p">+</span> <span class="s2">&quot; &quot;</span> <span class="p">+</span> <span class="nv">$BackupProjectName</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+<dd><p>TwinCAT build 4024 の32bit版のDTEインターフェースはTcXaeShell.DTE.15.0で、上記のスクリプトのコマンドはこのバージョンのものが使用されています。4026から使用可能である、64bit版TCシェルは、TcXaeShell.DTE.17.0で、同様のコマンドが “File.OpenProject<strong>Solution</strong>FromTarget” となっていますので、修正が必要です。</p>
+</dd>
+<dt>国際化言語設定によりコマンドが変わる</dt><dd><p>コマンド名は言語が変わると変化します。<code class="docutils literal notranslate"><span class="pre">ExecuteCommand</span></code>メソッドでは、文字列でコマンド名を指定する必要がありますので、言語設定を変更された場合は、このメニューから都度選び直す必要があります。</p>
+</dd>
+</dl>
+</section>
+<section id="twincat-automation-interface-api">
+<span id="section-twincat-automation-interface-api"></span><h3>TwinCAT Automation Interface APIの使い方<a class="headerlink" href="#twincat-automation-interface-api" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242750731.html?id=8779542607648763499">APIドキュメントはこちら</a>にあります。まず、大きく分けて下記二つのメインインターフェースが用意されています。</p>
+<dl class="simple myst">
+<dt>ITcSysManager</dt><dd><p>基本機能のオブジェクトです。最も初期に新しい構成を新規作成したり、ターゲットIPCのAmsNetIdを指定してリモートIPCと接続したり、構成（プログラムや設定）をIPCに適用してRUNモードへ移行させたり、といった基本機能です。</p>
+</dd>
+<dt>ITcSmTreeItem</dt><dd><p>プロジェクト内にあるツリー形式の様々なリソースに対する追加、削除、変更などの機能を提供します。</p>
+</dd>
+</dl>
+<p>その他、ライブラリに特化したものや、タスク設定、ライセンス設定など専用のインターフェースが用意されています。</p>
+<p>オブジェクトの取得からオブジェクトの使い方までは、次の通りの手順になります。</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$prjPath</span> <span class="p">=</span> <span class="nv">$prjDir</span> <span class="p">+</span> <span class="s2">&quot;\&quot;</span> <span class="p">+</span> <span class="nv">$BackupProjectName</span> <span class="p">+</span> <span class="s2">&quot;.sln&quot;</span>
+<span class="nv">$sln</span> <span class="p">=</span> <span class="nv">$dte</span><span class="p">.</span><span class="n">Solution</span>
+<span class="nv">$sln</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="nv">$prjPath</span><span class="p">)</span>
+
+<span class="nv">$project</span> <span class="p">=</span> <span class="nv">$sln</span><span class="p">.</span><span class="n">Projects</span><span class="p">.</span><span class="n">Item</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
+<span class="nv">$systemManager</span> <span class="p">=</span> <span class="nv">$project</span><span class="p">.</span><span class="n">Object</span>
+<span class="nv">$systemManager</span><span class="p">.</span><span class="n">SetTargetNetId</span><span class="p">(</span><span class="nv">$targetNetId</span><span class="p">)</span>
+<span class="nv">$systemManager</span><span class="p">.</span><span class="n">ActivateConfiguration</span><span class="p">()</span>
+<span class="nv">$systemManager</span><span class="p">.</span><span class="n">StartRestartTwinCAT</span><span class="p">()</span>
+
+<span class="nv">$sln</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>まず、Visual StudioのDTEインターフェースのSolutionプロパティにより、<a class="reference external" href="https://learn.microsoft.com/ja-jp/dotnet/api/envdte.solution?view=visualstudiosdk-2022">ソリューションオブジェクト</a>を取得します。これを使ってソリューションを開き、<a class="reference external" href="https://learn.microsoft.com/ja-jp/dotnet/api/envdte._solution.projects?view=visualstudiosdk-2022#envdte-solution-projects">Projectsプロパティ</a>からソリューションにぶら下がっているプロジェクトのコレクションを取得します。大概は、一つ目のアイテムにTwinCATオブジェクトが格納されていますので、<a class="reference external" href="https://learn.microsoft.com/ja-jp/dotnet/api/envdte.projects.item?view=visualstudiosdk-2022#envdte-projects-item(system-object)"><code class="docutils literal notranslate"><span class="pre">Projects.Item</span></code></a>メソッドを使って、要素番号でこれを取得し、ObjectでTwinCATの<a class="reference external" href="https://infosys.beckhoff.com/content/1033/tc3_automationinterface/242753675.html?id=5988206545626171718"><code class="docutils literal notranslate"><span class="pre">ITcSysManager</span></code>オブジェクト</a>を収集します。</p>
+<p>以後、<code class="docutils literal notranslate"><span class="pre">SetTargetNetId</span></code>や<code class="docutils literal notranslate"><span class="pre">ActivateConfiguration</span></code>や<code class="docutils literal notranslate"><span class="pre">StartRestartTwinCAT</span></code>などのメソッドを使って、一連のTwinCATの操作を行います。</p>
+</section>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc my-3">
+          
+          <div class="my-sm-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">プロジェクトの読み書きの自動化</a><ul>
+<li><a class="reference internal" href="#id2">事前準備</a></li>
+<li><a class="reference internal" href="#ipc">IPCからバックアップを収集するスクリプト</a></li>
+<li><a class="reference internal" href="#id3">ランタイムへ新しいプロジェクトを書き込むスクリプト</a></li>
+<li><a class="reference internal" href="#api">API解説</a><ul>
+<li><a class="reference internal" href="#visual-studio-dte">Visual Studio DTEインターフェースの使い方</a></li>
+<li><a class="reference internal" href="#twincat-automation-interface-api">TwinCAT Automation Interface APIの使い方</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="d-flex page-item">
+            <a href="index.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: PowershellによるAutomation Interfaceを使ったプロジェクト更新の自動化">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-none d-sm-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">PowershellによるAutomation Interfaceを使ったプロジェクト更新の自動化</span>
+              </div>
+            </a>
+          </li>
+        <li class="d-flex page-item ms-auto">
+            <a href="../reliability/index.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 7.2. 監視と障害対応">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline"><span class="section-number">7.2. </span>監視と障害対応</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="BECKHOFF TwinCATテクニカルノート">
+          <span class="fs-6 fw-bold">BECKHOFF TwinCATテクニカルノート</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2025, ベッコフオートメーション株式会社</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 8.2.3</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.8.9</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=0ba929c6"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <script src="../_static/colorsets.js?v=58f89e02"></script>
+    <script src="../_static/docs-versions.js?v=08b0cbfb"></script>
+    <script src="../_static/sphinx-nefertiti.min.js?v=cd4e68e4"></script>
+    <script src="../_static/bootstrap.bundle.min.js?v=647f0dd8"></script>
+  </body>
+</html>
