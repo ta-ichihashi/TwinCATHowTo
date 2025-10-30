@@ -6,6 +6,8 @@
 Dockerはpodman等と異なり、サービスとして管理者権限で動作します。よって、一般ユーザの権限では操作できない場所に配置してください。
 ```
 
+## 前準備
+
 まず、[TC_XAR_Container_Sample](https://github.com/Beckhoff/TC_XAR_Container_Sample) をクローンします。
 
 ```{code} bash
@@ -18,7 +20,23 @@ $ cd ./TC_XAR_Container_Sample
 Githubに習熟されている方は、上記本家リポジトリをご自分のアカウントにフォークした上でクローンしてください。独自の変更を管理することができます。
 ```
 
+次に、ビルドに必要なツールをインストールします。
+
+```{code} bash
+$ sudo apt install --yes make tcsysconf
+```
+
 ## カスタマイズ
+
+### TwinCAT unstable apt リポジトリへ変更
+
+ホストマシン同様、apt パッケージのリポジトリを unstable へ変更します。 `tc31-xar-base/apt-config/bhf.list` ファイルを編集し、 trixie-stable 部分を trixie-**un**stable へ変更します。
+
+```{code-block}
+:caption: /opt/stacks/TC_XAR_Container_Sample/tc31-xar-base/apt-config/bhf.list
+
+deb [signed-by=/usr/share/keyrings/bhf.asc] https://deb.beckhoff.com/debian trixie-unstable main
+```
 
 ### TF5000とTF1810の追加設定
 

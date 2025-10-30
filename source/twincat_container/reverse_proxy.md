@@ -75,12 +75,34 @@ server {
 }
 ```
 
+## 設定したバーチャルホストのポート42343と42344を開放
+
+外部からアクセスできるように、nftables の設定にて 42343と42344のポートを開放します。`/etc/nftables.conf.d/` に、`60-tc31container-plc-hmi.conf` を追加します。
+
+```{code-block} 
+:caption: /etc/nftables.conf.d/60-tc31container-plc-hmi.conf
+
+table inet filter {
+  chain input {
+    # accept plc hmi on container
+    tcp dport 42343 accept
+    tcp dport 42344 accept
+  }
+}
+```
+
+次に下記のコマンドにて設定を反映します。
+
+```{code} bash
+$ sudo systemctl restart nftables
+```
+
 ## nginx 再起動と試運転
 
 以下のコマンドにてnginxを再起動し、新たなバーチャルホストが有効となります。
 
 ```{code} bash
-$ sudo sytemctl restart nginx
+$ sudo systemctl restart nginx
 ```
 
 IPCにネットワークに接続された周辺PCからブラウザにて次のURLアクセスし、HMI画面が現れることを確認してください。

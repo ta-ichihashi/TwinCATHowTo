@@ -17,6 +17,9 @@ $ cd /etc/TwinCAT/Functions/TF1200-UI-Client/scripts
 $ sudo ./setup-full.sh --user=TF1200 --autologin --autostart
 ```
 
+このあと、コンピュータを再起動してください。
+
+
 ```{csv-table}
 :widths: 3,7
 :header: パラメータ, 説明
