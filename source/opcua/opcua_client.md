@@ -45,13 +45,16 @@ Runtime - TF610x | TwinCAT 3 OPC UA Client PubSub
 * セキュリティ設定はサーバ側の求めるポリシーに応じてください。ここではセキュリティ無し、ノードセット読み込みを行わない前提として説明を勧めます。
 ```
 
-`Add Nodes` ボタンを押して次図のツリーが現れたら接続成功です。取得するデータを選択します。
+`Add Nodes` ボタンを押してサーバへの接続を試みます。
 
 ![](assets/2025-11-14-09-33-54.png){align=center}
 
-選択すると、IOツリー上にデータノードが現れます。
+サーバの公開しているデータ一覧のツリーが現れたら接続成功です。取得したいデータをチェックボックスで選択してOKを押すと、IOツリーに選択したデータノードが一覧されます。
 
-![](https://infosys.beckhoff.com/content/1033/tf6100_tc3_opcua_client/Images/png/9007215259482635__Web.png){align=center height=400px}
+```{list-table}
+* - ![](https://infosys.beckhoff.com/content/1033/tf6100_tc3_opcua_client/Images/png/9007215259485835__Web.png){align=center}
+  - ![](https://infosys.beckhoff.com/content/1033/tf6100_tc3_opcua_client/Images/png/9007215259482635__Web.png){align=center}
+```
 
 続いて変数定義を行います。手動でリンクする事も可能ですが、次のとおりの操作で自動的にリンクされた変数を定義することができます。
 
