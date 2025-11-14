@@ -18,11 +18,13 @@ TF6100 OPC UA Serverを用いた接続方法は次の2通りあります。
 
 次のコンポーネントを個々にインストールしてください。
 
-TF6100 | TwinCAT 3 OPC UA Server
-    : IPCにインストールします。
+開発環境（XAE）側にインストールするもの
+    : * Engineering - TF6100 | TwinCAT 3 OPC UA Server
+      * Engineering - TF6100 | TwinCAT 3 OPC UA Configurator
 
-TF6100 | TwinCAT 3 OPC UA Configurator
-    : XAE側にインストールします。
+IPC（XAR）側にインストールするもの
+    : * Runtime - TF6100 | TwinCAT 3 OPC UA Server（全てのエッジ・サーバ）
+      * Runtime - TF6100 | TwinCAT 3 OPC UA Gateway　（ゲートウェイマシンのみ）
 
 ## 初期設定
 
