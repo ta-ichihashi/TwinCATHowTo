@@ -27,4 +27,5 @@ dependencies = [
     "sphinxcontrib-youtube",
     "docxbuilder",
     "sphinx-autobuild",
+    "lxml"
 ]

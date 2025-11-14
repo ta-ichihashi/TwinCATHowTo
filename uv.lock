@@ -758,6 +758,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "docxbuilder" },
+    { name = "lxml" },
     { name = "myst-parser" },
     { name = "sphinx" },
     { name = "sphinx-autobuild" },
@@ -780,6 +781,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "docxbuilder" },
+    { name = "lxml" },
     { name = "myst-parser" },
     { name = "sphinx" },
     { name = "sphinx-autobuild" },
