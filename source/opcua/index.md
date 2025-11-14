@@ -10,4 +10,5 @@ OPC UAには次の製品群があります。
 :caption: 目次
 
 opcua_server
+opcua_client
 ```
