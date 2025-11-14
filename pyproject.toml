@@ -25,7 +25,5 @@ dependencies = [
     "sphinxcontrib-seqdiag",
     "sphinxcontrib-serializinghtml",
     "sphinxcontrib-youtube",
-    "docxbuilder",
     "sphinx-autobuild",
-    "lxml"
 ]
