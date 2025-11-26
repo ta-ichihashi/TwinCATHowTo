@@ -89,11 +89,20 @@ TwinCAT BSDの場合はiptables, TwinCAT Linux の場合はnftablesで許可設�
 
 同様に `<InputRegisters>` や`<OutputRegisters>` セクションは WORDデバイス（16bit整数サイズ）の入出力データエリアです。こちらについても同様の方法で、EtherCATやEtherNet/IPなどの入出力データを直接モニタ、書き込む事ができます。
 
-### PLC内部メモリのModbusクライアントへの共有
+### PLC変数シンボルを指定したModbusクライアントへの共有
 
- PLCプログラム内で定義した変数への共有は、以下のとおり変数名とModbusアドレスの開始～終了アドレスを指定する方法で定義します。
+ PLCプログラム内で定義した変数への共有は、以下のとおり変数名とModbusアドレスの開始～終了アドレスを指定する方法で定義します。初期設定は以下のとおりです。
 
- 必要に応じてサイズや参照変数を変更してください。
+```{csv-table}
+:header: エリア, Modbusアドレス, 変数, 型・サイズ
+
+入力ステータス, 0x8000 - 0x80FF, GVL.mb_Input_Coils, 256点 BOOL型 
+出力コイル, 0x8000 - 0x80FF, GVL.mb_Output_Coils, 256点 BOOL型 
+入力レジスタ, 0x8000 - 0x80FF, GVL.mb_Input_Registers, 256点 WORD型
+出力レジスタ, 0x8000 - 0x80FF, GVL.mb_Output_Registers, 256点 WORD型
+```
+
+ 必要に応じてサイズや変数を変更・追加・削除してください。
 
  ```{code-block} xml
 <Configuration>
@@ -137,4 +146,37 @@ VAR_GLOBAL
     mb_Input_Registers    : ARRAY [0..255] OF WORD;
     mb_Output_Registers   : ARRAY [0..255] OF WORD;
 END_VAR
+```
+
+### PLCデータのADSインデックスグループ・オフセットを指定したModbusクライアントへの共有
+
+シンボル化されていない様々なPLC内部のADSアドレスは、インデックスグループ `0x4040` にてアクセスできます。このインデックスオフセットは、PLCインスタンスの、`Data Area` タブに一覧されるPLC内部データツリーの `Size` 列に表記されています。
+
+![](assets/2025-11-26-16-44-07.png){align=center}
+
+ここから読み取った値は、次の通りModbusアドレスの`0x6000`～`0x7fff`にマッピングされています。デフォルトの場合のインデックスオフセットは `0` のため、最大 `0x00001FFF` のオフセットまでしか読み取ることができません。インデックスグループ `0x4040` のオフセット範囲は`0x00000000`～`0xFFFFFFFF` と広大なため、必要な個所を適切にセグメントを分けて定義する必要があります。この際、先頭の任意のオフセットアドレスを定義してください。
+
+```{code-block} xml
+<Configuration>
+    <Port>502</Port>
+    <IpAddr/>
+    <Mapping>
+        <OutputRegisters>
+                :
+            <!--  PLC data area -->
+            <MappingInfo>
+                <AdsPort>851</AdsPort>
+                <!-- Modbus Address 32768 = 0x6000 -->
+                <StartAddress>24576</StartAddress>
+                <!-- Modbus Address 32767 = 0x7FFF -->
+                <EndAddress>32767</EndAddress>
+                <!-- IndexGroup 16448 = 0x4040 - PLC data area -->
+                <IndexGroup>16448</IndexGroup>
+                <!-- The index offset is byte offset -->
+                <IndexOffset>0</IndexOffset>
+            </MappingInfo>
+                  :
+        </OutputRegisters>
+    </Mapping>
+</Configuration>
 ```
