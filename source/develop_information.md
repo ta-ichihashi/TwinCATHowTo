@@ -8,6 +8,7 @@
 
 iot/index.md
 opcua/index.md
+modbus/index.md
 scope_view/index.rst
 database/index.md
 socket_communication/index.md
