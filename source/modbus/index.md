@@ -1,5 +1,5 @@
 (chapter_modbus)=
-# TF6250 MODBUS/TCP server / client
+# TF6250 MODBUS TCP
 
 [Infosys サイトリンク](https://infosys.beckhoff.com/content/1033/tf6250_tc3_modbus_tcp/192708875.html?id=8902985709589009113)
 
