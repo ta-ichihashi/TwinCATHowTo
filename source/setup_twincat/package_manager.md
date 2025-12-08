@@ -152,3 +152,16 @@ PS> tcpkg uninstall all
 
     ![](assets/2025-09-24-22-25-55.png){align=center}
 ```
+
+## インストール、アンインストールがエラーとなる場合の解決方法
+
+パッケージマネージャにて、マイグレーションが途中で失敗したり、インストール、アンインストールが途中で失敗する場合、次のとおり対策を行ってください。
+
+MicrosoftProgram_Install_and_Uninstall.meta
+  : インストールやアンインストールを途中で中断した場合、レジストリキーが破損したり、インストーラがロックされてインストールや削除のどちらもできない状態となることが起こります。この状態を修復するためのツール[MicrosoftProgram_Install_and_Uninstall.meta](https://support.microsoft.com/ja-jp/topic/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%BE%E3%81%9F%E3%81%AF%E5%89%8A%E9%99%A4%E3%82%92%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E3%81%99%E3%82%8B%E5%95%8F%E9%A1%8C%E3%82%92%E4%BF%AE%E6%AD%A3%E3%81%99%E3%82%8B-cca7d1b6-65a9-3d98-426b-e9f927e1eb4d)がありますので、このリンクからダウンロードを行い、ツールを実行してください。
+
+いちど全てのパッケージをアンインストールする
+  : {ref}`section_package_manager_cli_ope` に記載されているとおり、管理者モードでコマンドプロンプトを立ち上げ、次のコマンドを発行して全てのパッケージをアンインストールしてください。
+  ```{code} powershell
+  > tcpkg uninstall all
+  ```
