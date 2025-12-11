@@ -51,3 +51,10 @@ ExceedCounter間に合ってない
 %タスクの処理時間に間に合っているときは、ExceedCounterは積算されていきます。
 %![](2025-12-11-14-49-06.png){align=center}
 
+繰り上がったExeedCounterをリセットします。
+
+![](https://infosys.beckhoff.com/content/1033/tc3_system/Images/png/5210442251__Web.png){align=center}
+
+これまでの説明は以下を参照してください。
+
+[infosysのExceedCounterの説明](https://infosys.beckhoff.com/content/1033/tc3_system/5210418059.html?id=8177134032076340246)
