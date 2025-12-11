@@ -13,4 +13,5 @@ connect_remote
 scan_ethercat
 link_plc_variable
 task_management
+exceed_counter
 ```
