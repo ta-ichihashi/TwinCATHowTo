@@ -1,8 +1,4 @@
-# EtherCATのスキャン
-
-すでにEtherCATの通信経路が構成されている場合は、次のメニューからEtherCATの通信経路のSCANを行い、その結果を一覧させることができます。
-
-![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605443467__en-US__Web.png){align=center}
+# EtherCATネットワークの構成
 
 ## ESIファイルの配置
 
@@ -24,12 +20,15 @@ Build 4026以後
 
 [Beckhoff製 EtherCAT サブデバイスのESIファイルのダウンロード](https://www.beckhoff.com/ja-jp/support/download-finder/search-result/?c-1=27833244)
 
+ESIファイルを配置しましたら、次節以後の実際のネットワークをスキャンするか、手動で登録した機器を配置する設定を行ってください。
 
 ## ネットワークのスキャン
 
-すでにIPCへEtherCATネットワークが組みあがっている環境において、接続されたサブデバイスをスキャンしてソフトウェア上の定義（ENI）として自動的に構成するために、デバイスのスキャン機能を用います。
+すでにEtherCATの通信経路が構成されている場合は、次のメニューからEtherCATの通信経路のSCANを行い、その結果を一覧させることができます。
 
-手順はこちらのドキュメントをご覧ください。
+![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605443467__en-US__Web.png){align=center width=600px}
+
+詳細な手順はこちらのドキュメントをご覧ください。
 
 ```{tip}
 * [ネットワークのスキャン](https://sites.google.com/site/twincathowto/io-she-ding/ethercatnettowakunosukyan)
