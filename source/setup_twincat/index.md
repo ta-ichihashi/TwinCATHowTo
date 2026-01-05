@@ -27,4 +27,5 @@ package_manager
 package_manager_gui_ope
 package_manager_cli_ope
 offline_install
+remote_manager
 ```

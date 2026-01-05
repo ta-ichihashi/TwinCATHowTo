@@ -1,3 +1,4 @@
+(chapter_freeze_build_version)=
 # TwinCATビルドバージョンをフリーズする
 
 PLCのソースコードは、TwinCATのビルドシステムによりコンパイルが行われ、{ref}`ブートイメージ<section_boot_image>` が生成されます。アクティブコンフィギュレーションを行うことでターゲットのXARにこのブートイメージがダウンロードされます。
