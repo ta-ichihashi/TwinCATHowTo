@@ -26,4 +26,5 @@ dependencies = [
     "sphinxcontrib-serializinghtml",
     "sphinxcontrib-youtube",
     "sphinx-autobuild",
+    "sphinx-copybutton"
 ]
