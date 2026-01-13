@@ -5,6 +5,7 @@ TwinCATはVisual Studioの優れた開発環境をベースとしています。
 ```{toctree}
 :caption: 目次
 
+XAE_Product/index.md
 debug_support/index.md
 devops/index.md
 ```
