@@ -56,7 +56,8 @@ extensions = [
     'sphinxcontrib.actdiag',
     'sphinxcontrib.nwdiag',
     'sphinxcontrib.youtube',
-    'sphinxcontrib.applehelp'
+    'sphinxcontrib.applehelp',
+    'sphinx_copybutton'
 ]
 
 source_suffix = {
