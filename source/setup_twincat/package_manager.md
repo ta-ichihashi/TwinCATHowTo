@@ -72,6 +72,7 @@ Add feed画面が現れますのでサーバのURLや認証情報を設定しま
 
 ![](assets/2025-09-24-11-41-54.png){align=center}
 
+(section_select_xae_integration)=
 ### XAEの基本インストール
 
 つづいてサイドのタブから `Integration` を開きます。

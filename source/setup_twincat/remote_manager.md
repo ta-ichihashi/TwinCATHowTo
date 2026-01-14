@@ -40,3 +40,11 @@
 ```{note}
 具体的な運用手順は、 {ref}`chapter_freeze_build_version` も併せてご覧ください。プロジェクトを開く前のバージョン切替の手間を省くために XAE のデフォルトバージョンを設定しておいたり、プロジェクトにビルドバージョンを指定する **ピンバージョン** という仕組みがあります。
 ```
+
+```{warning}
+TwinCAT Build 4026には、Visual Studil 2019をベースとしたTcXaeShellの32bit版と、Visual Studil 2022をベースとした64bit版があります。4024以前のリモートマネージャをお使いいただくには、32bit版のTcXaeShellが必要です。
+
+![](assets/2026-01-14-09-27-19.png){align=center}
+
+32bit版のTcXaeShellがみつからない場合は、パッケージマネージャによるインストールが必要です。{ref}`section_select_xae_integration` をご覧ください。
+```
