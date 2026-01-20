@@ -75,7 +75,7 @@ language = 'ja'
 
 # source/conf.py
 html_css_files = [
-    'https://fonts.googleapis.com',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap',
     'custom.css', # カスタムCSSを併用する場合
 ]
 
