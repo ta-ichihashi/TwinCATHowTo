@@ -33,7 +33,7 @@ class Author(Enum):
 
 # -- Project information -----------------------------------------------------
 
-titles = ['BECKHOFF TwinCATテクニカルノート']
+titles = ['TwinCATテクニカルノート']
 
 project = ' '.join(titles)
 copyright = '2025, ベッコフオートメーション株式会社'
@@ -57,7 +57,8 @@ extensions = [
     'sphinxcontrib.nwdiag',
     'sphinxcontrib.youtube',
     'sphinxcontrib.applehelp',
-    'sphinx_copybutton'
+    'sphinx_copybutton',
+    'sphinx_design'
 ]
 
 source_suffix = {
@@ -72,6 +73,11 @@ exclude_patterns = []
 
 language = 'ja'
 
+# source/conf.py
+html_css_files = [
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap',
+    'custom.css', # カスタムCSSを併用する場合
+]
 
 # Config for plugins
 
@@ -88,64 +94,23 @@ nwdiag_fontpath = './source/assets/ipaexg.ttf'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_nefertiti'
-
-html_theme_options = {
-    # "sans_serif_font": "Nunito",  # Default value.
-    "documentation_font": "Montserrat",
-    "documentation_font_size": "1.05rem",
-    "doc_headers_font": "Montserrat",
-    #"monospace_font": "Red Hat Mono",
-    #"monospace_font_size": ".90rem",
-    # "project_name_font": "Nunito",  # Default value.
-    # "documentation_font_size": "1.0rem",  # Default value.
-    # "doc_headers_font": "Georgia",  # Default value.
-    # ... other options ...
-    "pygments_light_style": "pastie",
-    "pygments_dark_style": "dracula",
-    "style_header_neutral": True,
-    "show_colorset_choices": True,
-    "style": "Teal",
-    "header_links_in_2nd_row": False,
-    "header_links": [
-        {
-            'text': 'BECKHOFF',
-            'link': 'https://www.beckhoff.com/ja-jp/',
-        },
-        {
-            "text": "技術情報",
-            "dropdown": (
-                {
-                    "text": "InfoSys",
-                    "link": "https://infosys.beckhoff.com/english.php?content=../content/1033/html/bkinfosys_intro.htm&id=",
-                }, {
-                    "text": "TwinCAT HowTo",
-                    "link": "https://sites.google.com/site/twincathowto/home",
-                }, {
-                    "text": "YouTube",
-                    "link": "https://www.youtube.com/@%E3%83%99%E3%83%83%E3%82%B3%E3%83%95%E3%82%AA%E3%83%BC%E3%83%88%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE",
-                }
-            )
-        }
-    ],
-    "repository_url": "https://github.com/Beckhoff-JP/TwinCATHowTo",
-    "repository_name": "Beckhoff-JP/TwinCATHowTo"
-}
-'''
-html_sidebars = {
-    "**": [
-        "search-field.html",
-        "sbt-sidebar-nav.html"
-        ]
-}
+html_theme = "sphinx_book_theme"
 
 html_theme_options = {
     "repository_url": "https://github.com/Beckhoff-JP/TwinCATHowTo",
     "use_repository_button": True,
-    "home_page_in_toc": True,
+    "use_issues_button": True,
+    "use_edit_page_button": True,
+    "path_to_docs": "source",
+    "home_page_in_toc": False
 }
 
-'''
+language = 'ja'
+
+# Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named "default.css" will overwrite the builtin "default.css".
+html_static_path = ['_static']
 
 myst_enable_extensions = [
     "amsmath",
@@ -183,6 +148,18 @@ docx_table_options = {
     'header_in_all_page': True,  #
 }
 
+# sphinx-dsign
+
+sd_custom_directives = {
+    "dropdown-syntax": {
+        "inherit": "dropdown",
+        "argument": "Syntax",
+        "options": {
+            "color": "primary",
+            "icon": "code",
+        },
+    }
+}
 
 # latex_docclass = {'manual': 'jsbook'}
 
