@@ -34,28 +34,70 @@ ESIファイルを配置しましたら、次節以後の実際のネットワ�
 * [ネットワークのスキャン](https://sites.google.com/site/twincathowto/io-she-ding/ethercatnettowakunosukyan)
 ```
 
+````{admonition} EtherCATとして利用するEthernetポートの選択にご注意ください
+:class: attention
+
+多くのIPCには複数のEthernetポートを備えていますが、EtherCATとしてお使いいただく場合、ポートによってサイクルタイムの制限があります。たとえば、C6025は3つのEthernetポートがありますが、次の参考リンクの説明にあるとおり、Intel® i210を搭載したX103, LAN2; X104, LAN3は1ms以下のサイクルタイムに使用できますが、Intel® i219を搭載したX102, LAN1は1msより大きなサイクルタイムのみでお使いいただけます。
+
+{bdg-link-primary-line}`参考：InfoSys <https://infosys.beckhoff.com/content/1033/c6025/8212982923.html?id=3163034562408065601>`
+
+事前に各機種のマニュアルをご覧いただき、最適なEthernetポートを選んでEtherCATネットワークを接続してください。また、リアルタイムネットワークとして利用いただくことを前提としたフィールドバスは、EtherCATの他にEtherNet/IPやProfinet、またTF6311によるソケット通信などがございます。同様のサイクルタイム制限となりますのでご留意ください。
+````
+
+
 ## 手動で構成する
 
 まだ実物が無い状態で、設計上のEtherCATネットワークを構成するには次の手順に従ってください。
 
-```{list-table}
-:widths: 3,7
 
-- * EtherCATメインデバイスの新規作成
-        : `I/O` - `Devices` ツリーからコンテキストメニューで `Add New Item...` を選択し、`EtherCAT Master` を選んでOKボタンを押します。
-  * ![](assets/make_ethercat_master.png){align=center}
-- * ネットワークインターフェースカード指定
-        : EtherCATメインデバイスとするネットワークインターフェースカードを指定します。
-  * ![](assets/ethercat_adapter_setting.png){align=center}
-- * 1. EtherCAT メインデバイスの、Adapterタブにある `Search` ボタンを押して現れるネットワークインターフェースを選択してください。
-  * 2. Virtual Device Namesにチェックを入れます。これによりネットワークカードのMACアドレスではなく、ネットワークインターフェース名を基にインターフェースの割り当てが行われます。同じタイプのIPCであればネットワークアダプタ名称が同じですのでターゲットIPC毎にネットワークカードを指定しなおす必要がなくなります。
-- * カプラーの追加
-        : 最初に接続されるターミナルがカプラーの場合、`System Couplers` のツリーから型番を選びます。
-  * ![](assets/add_coupler.png){align=center}
-- * カプラーへの追加
-        : カプラーを選択して ebus に接続されたELターミナルの追加を行います。
-  * ![](assets/add_elterminal.png){align=center}
-- * ターミナルの追加・挿入
-        : Insertを選ぶと選択したターミナルの前段に、Addを選ぶと後段に指定したターミナルが追加されます。
-  * ![](assets/insert_add_terminal.png){align=center}
+``````{grid} 1
+`````{grid-item-card} EtherCATメインデバイスの新規作成
+````{grid} 2
+```{grid-item} 
+:columns: 4
+`I/O` - `Devices` ツリーからコンテキストメニューで `Add New Item...` を選択し、`EtherCAT Master` を選んでOKボタンを押します。
 ```
+```{grid-item}
+:columns: 8
+![](assets/make_ethercat_master.png){align=center}
+```
+`````
+`````{grid-item-card} ネットワークインターフェースカード指定
+````{grid} 2
+```{grid-item} 
+:columns: 4
+EtherCATメインデバイスとするネットワークインターフェースカードを指定します。
+1. EtherCAT メインデバイスの、Adapterタブにある `Search` ボタンを押して現れるネットワークインターフェースを選択してください。
+```
+```{grid-item}
+:columns: 8
+![](assets/ethercat_adapter_setting.png){align=center}
+```
+```{grid-item}
+:columns: 12
+2. Virtual Device Namesにチェックを入れます。これによりネットワークカードのMACアドレスではなく、ネットワークインターフェース名を基にインターフェースの割り当てが行われます。同じタイプのIPCであればネットワークアダプタ名称が同じですのでターゲットIPC毎にネットワークカードを指定しなおす必要がなくなります。
+```
+`````
+`````{grid-item-card} カプラーの追加
+````{grid} 2
+```{grid-item} 
+:columns: 4
+最初に接続されるターミナルがカプラーの場合、`System Couplers` のツリーから型番を選びます。
+```
+```{grid-item}
+:columns: 8
+![](assets/add_coupler.png){align=center}
+```
+`````
+`````{grid-item-card} ターミナルの追加・挿入
+````{grid} 2
+```{grid-item} 
+:columns: 4
+Insertを選ぶと選択したターミナルの前段に、Addを選ぶと後段に指定したターミナルが追加されます。
+```
+```{grid-item}
+:columns: 8
+![](assets/insert_add_terminal.png){align=center}
+```
+`````
+``````

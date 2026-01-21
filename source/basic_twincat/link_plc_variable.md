@@ -2,12 +2,24 @@
 
 ## PLCプロジェクトの作成
 
-```{list-table}
-- * PLCプロジェクトを追加します。
-  * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2602432011__en-US__Web.png)
-- * PLCプロジェクトの名称設定を行います。
-  * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605574539__en-US__Web.png)
+````{grid} 2
+```{grid-item} 
+:columns: 4
+PLCプロジェクトを追加します。
 ```
+```{grid-item}
+:columns: 8
+![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2602432011__en-US__Web.png)
+```
+```{grid-item} 
+:columns: 4
+PLCプロジェクトの名称設定を行います。
+```
+```{grid-item}
+:columns: 8
+![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605574539__en-US__Web.png)
+```
+````
 
 ## 変数宣言とIOとのリンク
 
@@ -44,17 +56,25 @@ PLCプロジェクトがソリューションツリーのTwinCATプロジェク�
 
 例にはプログラム部にもロジックを記述していますが、IOとLinkするだけであれば変数宣言だけでも構いません。このプログラムを書いたら、ビルドを行います。すると、PLCプロジェクトの下部に入出力変数のインスタンスが現れます。
 
-```{list-table}
-- * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605869195__en-US__Web.png){align=center}
-  * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605879819__en-US__Web.png){align=center}
+````{grid} 2
+```{grid-item}
+![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605869195__en-US__Web.png){align=center}
 ```
+```{grid-item}
+![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2605879819__en-US__Web.png){align=center}
+```
+````
 
 この変数インスタンスを右クリックして現れるコンテキストメニューの先頭にある、`Change Link...` を選択すると、EtherCATのツリー以下にある同じデータ型のIOアドレスが一覧されます。任意のIOを選択してOKボタンを押すとリンクが完成です。
 
-```{list-table}
-- * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2606528139__en-US__Web.png){align=center}
-  * ![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2606532107__en-US__Web.png){align=center}
+````{grid} 2
+```{grid-item}
+![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2606528139__en-US__Web.png)
 ```
+```{grid-item}
+![](https://infosys.beckhoff.com/content/1033/ethercatsystem/Images/png/2606532107__en-US__Web.png){align=center}
+```
+````
 
 EL2008などは、8bitの連続したアドレスとなっています。例にあげた `nEL2008_value` は `BYTE` 型の変数ですので、`All Types` にチェックを入れることで `BYTE` 型以外のIOも一覧され、EL2008の先頭BITを選択後、SHIFTを押しながら最終BITをクリックすると全BIT選択できますので、`Continuous` にチェックを入れてリンクを行うと、全 bit 順次連続的にリンクを行います。1bitづつリンク操作を行うより省力可能です。
 
