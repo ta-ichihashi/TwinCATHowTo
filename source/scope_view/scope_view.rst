@@ -133,7 +133,6 @@ Trueとなるフラグ ``export_triger[]`` を作成しています。後ほど�
 
    .. figure:: image/chose_target_browser.png
         :align: center
-        :width: 400px
         :name: chose_target_browser
 
         ターゲットブラウザを出現
