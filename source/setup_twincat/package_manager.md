@@ -93,18 +93,29 @@ Add feed画面が現れますのでサーバのURLや認証情報を設定しま
 TcXaeShell、TcXaeShell64、インストール済み任意のVisual Studioバージョンへのアドオンをそれぞれ必要なものを青色のAddバーをクリックしてインストールします。それぞれのXAEの基本パッケージについては、次の違いがありますので適したものをインストールしてください。
 
 UseTcXaeShell
-    : ```{list-table}
-      :widths: 4,6
-      - * Windows10 20H2未満ではこちらを選択します。Visual Studio 2017 ベースの TwinCAT XAE build 4024と互換のある開発環境がインストールされます。Windows10 20H2以上であっても **4024のリモートマネージャをご利用いただくには** こちらを別途インストールする必要があります。
-        * ![](assets/2025-09-24-10-36-20.png){align=center}
+    : ````{grid} 2
+      ```{grid-item} 
+      :columns: 6
+      Windows10 20H2未満ではこちらを選択します。Visual Studio 2017 ベースの TwinCAT XAE build 4024と互換のある開発環境がインストールされます。Windows10 20H2以上であっても **4024のリモートマネージャをご利用いただくには** こちらを別途インストールする必要があります。
       ```
+      ```{grid-item}
+      :columns: 6
+      ![](assets/2025-09-24-10-36-20.png){align=center}
+      ```
+      ````
 
 UseTcXaeShell64
-    : ```{list-table}
-      :widths: 4,6
-      - * Windows10 20H2以上、Windows11ではこちらが選択可能です。Visual Studio 2022 ベースの TwinCAT XAE build 4026のネイティブな開発環境がインストールされます。この環境では4024のリモートマネージャはお使いいただけませんので、別途`UseTcXaeShell`も併せて構成してください。
-        * ![](assets/2025-09-24-10-45-06.png){align=center}
-        ```
+    : ````{grid} 2
+      ```{grid-item} 
+      :columns: 6
+      Windows10 20H2以上、Windows11ではこちらが選択可能です。Visual Studio 2022 ベースの TwinCAT XAE build 4026のネイティブな開発環境がインストールされます。この環境では4024のリモートマネージャはお使いいただけませんので、別途`UseTcXaeShell`も併せて構成してください。
+      ```
+      ```{grid-item}
+      :columns: 6
+      ![](assets/2025-09-24-10-45-06.png){align=center}
+      ```
+      ````
+      
 UseVS****
     : あらかじめTwinCATがサポートするバージョンのVisual Studioがインストールされていればこの名前で一覧に現れます。これを構成すると指定したVisual Studioバージョンへ、TwinCAT XAE機能のアドオンを行います。お手持ちのVisual Studioとの統合化を行いたい場合はこちらを選択してください。参考：[https://infosys.beckhoff.com/content/1033/tc3_installation/15698621451.html?id=8658116531104156966](https://infosys.beckhoff.com/content/1033/tc3_installation/15698621451.html?id=8658116531104156966)
 

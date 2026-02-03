@@ -15,20 +15,18 @@
 
 ## コマンドインターフェースの出現方法
 
+````{grid} 2
+```{grid-item} 
+:columns: 6
 パッケージマネージャは管理者権限で実行する必要があります。このため、Windows環境においては管理者モードによるPowerShellを起ち上げる必要があります。
 
-```{list-table}
-:widths: 1,1
-
-- * `Windowsキー` + `X` を押してください。次のメニューが出現しますので、Windows PowerShell(管理者)( A ) を選んで権限昇格のダイアログを許可選択してください。
-  * ![](assets/2025-03-26-12-25-11.png){align=center height=500px}
+`Windowsキー` + `X` を押してください。次のメニューが出現しますので、Windows PowerShell(管理者)( A ) を選んで権限昇格のダイアログを許可選択してください。
 ```
-
-BSDの場合、管理者権限で実行するためには、コマンド発行前に`doas`を付加します。また、Linuxの場合は、`sudo` を付加します。
-
-```{code-block}
-$ doas pkg list
+```{grid-item}
+:columns: 6
+![](assets/2025-03-26-12-25-11.png){align=center height=500px}
 ```
+````
 
 ## パッケージを一覧する
 
