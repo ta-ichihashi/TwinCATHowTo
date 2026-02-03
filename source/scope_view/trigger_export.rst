@@ -76,32 +76,39 @@ Export Type
 
 次の通りの設定を行ってください。
 
-.. list-table::
+.. grid:: 2
 
-    * - .. figure:: image/csv_export1.png
-            :width: 400px
-            :align: center
-            :name: csv_export1
+  .. grid-item::
+    .. figure:: image/csv_export1.png
+        :width: 400px
+        :align: center
+        :name: csv_export1
 
-            CSVを選択
-      - .. figure:: image/csv_export2.png
-            :width: 400px
-            :align: center
-            :name: csv_export2
+    CSVを選択
 
-            記録不要な要素を選択してExcludeで右側へ移動する
-    * - .. figure:: image/csv_export3.png
-            :width: 400px
-            :align: center
-            :name: csv_export3
+  .. grid-item::
+    .. figure:: image/csv_export2.png
+        :width: 400px
+        :align: center
+        :name: csv_export2
 
-            そのまま次へ
-      - .. figure:: image/csv_export3-2.png
-            :width: 400px
-            :align: center
-            :name: csv_export3-2
+    記録不要な要素を選択してExcludeで右側へ移動する
 
-            CSV-SeparatorはCommaを、Decimal markはPointを選びます。HeaderはCSVファイルそれぞれに付加されるメタデータの要否を設定します。問題なければFull headerを選びます。
+  .. grid-item::
+    .. figure:: image/csv_export3.png
+        :width: 400px
+        :align: center
+        :name: csv_export3
+
+    そのまま次へ
+
+  .. grid-item::
+    .. figure:: image/csv_export3-2.png
+        :width: 400px
+        :align: center
+        :name: csv_export3-2
+
+    CSV-SeparatorはCommaを、Decimal markはPointを選びます。HeaderはCSVファイルそれぞれに付加されるメタデータの要否を設定します。問題なければFull headerを選びます。
 
 最後に、確認画面が現れます。問題なければ ``Create`` ボタンを押すと、設定内容が ``Export Type`` フィールドの値に反映されます。
 

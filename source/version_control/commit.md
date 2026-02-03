@@ -2,7 +2,7 @@
 
 リポジトリとして登録された状態になると、「コミット」という単位で変更履歴が管理されます。コミットはTwinCATで変更を加えるたびに行うのではなく、意味のある変更単位でまとめると、後々のトレーサビリティ上便利です。サンプルプログラムとして、0.5秒間隔でON/OFFを繰り返すBlinkerファンクションブロックを、ST、FBD、LD、CFCで作成したものをベースとします。
 
-```iecst
+```{code} iecst
 FUNCTION_BLOCK ST_blinker
 VAR_INPUT
 	execute:BOOL;
@@ -20,7 +20,7 @@ output := (NOT output AND delay.Q) OR (output AND NOT delay.Q) AND execute;
 
 上記ファンクションブロックを次の通りMAINプログラムで使います。
 
-```
+```{code} iecst
 PROGRAM MAIN
 VAR
 	button1:BOOL;
