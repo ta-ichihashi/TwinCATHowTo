@@ -15,13 +15,14 @@ winget install Git.Git
 [WingetとはMicrosoft社が提供する公式パッケージ管理ツール](https://learn.microsoft.com/ja-jp/windows/package-manager/winget/)です。Wingetを使ってインストールされたソフトウェアは、インストーラを使わずに一括で最新ソフトウェアにアップグレードすることができます。
 
 ```{code}
-winget upgrade --all
+> winget upgrade --all
 ```
 
 任意のソフトウェアを探すには `winget search` に続いて、インストールしたいソフトのキーワードを入力します。
 
 ```{code}
-winget search git
+> winget search git
+
 名前                                  ID                              バージョン   一致     ソース
 ---------------------------------------------------------------------------------------------------
 My Git                                9NLVK2SL2SSP                    Unknown               msstore
@@ -35,8 +36,7 @@ SoX_ng                                sox_ng.sox_ng                   14.6.0.4  
 xploview                              xploview.xploview               3.3.31       Tag: di… winget
 ```
 
-上記から、gitの場合、`Git.Git` をインストールするのが良いのが分かります。
-
+上記に一覧された中の `ID` 列に表記されたものを、 `winget install` に続いて指定してインストールを行います。gitの場合、`Git.Git` がインストール指定のIDとなります。
 ````
 
 ## Git初期設定
