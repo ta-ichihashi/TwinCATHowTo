@@ -65,11 +65,15 @@ Hot connect グループ内の Safetyターミナルに特別なsync unitを設�
 ```
 ````
 `````
-`````{grid-item-card} 設定を確認すると、SafetyPlc, SafetyIO, Hot connect グループ内にあるSafetyIO, Hot connectグループ内にあるそれ以外のIO という四象限の sync unit ができ、に属する
+`````{grid-item-card} 設定を確認すると、SafetyPlc, SafetyIO, Hot connect グループ内にあるSafetyIO, Hot connectグループ内にあるそれ以外のIO という4パターンの独立した sync unit ができます。
 ![](assets/syncunit_safetyplc.drawio.png){align=center}
 ![](assets/syncunit_safetyio.drawio.png){align=center}
 ![](assets/syncunit_safetyio_hotconnect.drawio.png){align=center}
 ![](assets/syncunit_generalio_hotconnect.drawio.png){align=center}
+`````
+
+`````{grid-item-card} また、EtherCATのデータグラムのリストにおいても、<default> や Hot connect のグループから独立した Safety 用の sync unit 毎のデータグラムが現れていることが確認できます。
+![](assets/ethercat_datagram_list.png){align=center}
 `````
 ``````
 
