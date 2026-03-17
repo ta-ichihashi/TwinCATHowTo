@@ -10,4 +10,5 @@
 ../bundle/index.md
 ../auto_deploy/index.md
 ../auto_deploy_xae/index.md
+../tc_delay_start/index.md
 ```
