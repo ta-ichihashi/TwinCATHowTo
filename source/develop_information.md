@@ -8,6 +8,7 @@
 
 iot/index.md
 opcua/index.md
+can/index.md
 modbus/index.md
 scope_view/index.rst
 database/index.md
