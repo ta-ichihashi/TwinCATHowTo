@@ -313,8 +313,6 @@ END_IF
 
 PROGRAM MAIN
 VAR
-    i : UDINT;
-    tx_index : UDINT;
     test_message :STRING := '9876543210abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     received_data : STRING(1024);
