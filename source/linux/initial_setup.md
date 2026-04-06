@@ -1,6 +1,6 @@
-# CX82xxシリーズの利用方法
+# TC RT Linuxの初期設定
 
-[Beckhoff RT Linuxの導入](https://infosys.beckhoff.com/content/1033/beckhoff_rt_linux/index.html?id=1171886970310160181)のドキュメントに従い、説明します。このドキュメントではOS無しのIPCに対してインストールする個所からの手順となっていますが、CX82xxにはあらかじめBeckhoff RT Linuxがインストール済みの状態で納入されます。ここからTwinCAT XAEで作成したプロジェクトを動作させるまでの手順を説明します。
+[Beckhoff RT Linuxの導入](https://infosys.beckhoff.com/content/1033/beckhoff_rt_linux/index.html?id=1171886970310160181)のドキュメントに従い、CX82xxシリーズを例に説明します。このドキュメントではOS無しのIPCに対してインストールする個所からの手順となっていますが、CX82xxにはあらかじめBeckhoff RT Linuxがインストール済みの状態で納入されます。ここからTwinCAT XAEで作成したプロジェクトを動作させるまでの手順を説明します。
 
 ## 設置と電源投入
 
@@ -211,7 +211,7 @@ $ ip a
 
 ### 固定IPアドレスの設定
 
-IPアドレスに関する設定は `/etc/systemd/network` 以下にあります。初期状態ではこの下に `020-wired.network` があり、IPアドレスやルーティング設定はDHCPによる自動割り当てが有効となっています。
+IPアドレスに関する設定は `/usr/lib/systemd/network` 以下にあります。初期状態ではこの下に `020-wired.network` があり、IPアドレスやルーティング設定はDHCPによる自動割り当てが有効となっています。
 
 ```{code} toml
 $ cat 020-wired.network
@@ -226,16 +226,27 @@ LinkLocalAddressing=yes
 ClientIdentifier=mac
 ```
 
-固定IPを設定する場合、このファイルを書き換えるのではなく、起動時にこの後に上書き設定されるように、次のファイルを新規作成します。
+固定IPを設定する場合、このファイルを直接書き換えるのではなく、`/etc/systemd/network` 以下に定義したファイルでカスタム設定を行い、この設定ファイルで設定が上書きされます。
+
+{bdg-link-info}`参考Infosys <https://infosys.beckhoff.com/content/1033/beckhoff_rt_linux/20793625995.html?id=3379311017365700743>`
+
+よって、`touch`コマンドにて定義ファイルを新規作成します。
 
 ```{code} bash
 $ sudo touch /etc/systemd/network/10-end0-static.network
+```
+
+次に`nano`エディタで作成した定義ファイルを編集します。
+
+```{code} bash
 $ sudo nano /etc/systemd/network/10-end0-static.network 
 ```
 
-`touch` コマンドで空のファイルを作成し、そのあと `nano` で定義ファイルを編集します。前節で調べたとおり、あらかじめ `ip a` コマンドで一覧させたネットワークカードのうち、設定したい対象のカード（今回の例では `end0` ）を `Match.Name` に指定し、`Network` セクションにIPアドレスとネットワークアドレスセグメント、および、ゲートウェイアドレスを設定します。
+あらかじめ `ip a` コマンドで一覧させたネットワークカードのうち、設定したい対象のカード（今回の例では `end0` ）を `Match.Name` に指定し、`Network` セクションにIPアドレスとネットワークアドレスセグメント、および、ゲートウェイアドレスを設定します。
 
-```{code} toml
+```{code-block} ini
+:caption: /etc/systemd/network/10-end0-static.network
+
 [Match]
 Name=end0
 
@@ -252,11 +263,41 @@ Gateway=192.168.3.1
 このため、上位 24bit が同一のIPアドレス同士であれば、Gatewayで指定したルータを経由せずとも直接通信することができます。
 ```
 
-```{admonition} 設定ファイル名にお気を付けください
+```{warning}
+キーはすべて先頭大文字です。大文字小文字を間違えますと認識しなくなりますのでご注意ください。
+```
+
+````{admonition} 設定ファイル名と実行順序
 :class: important
 
-既存の設定ファイル名が `020-` から始まるのに対して今回作成するものが `10` から始まる設定ファイルとしています。networkctlサービス起動時にはこの設定ファイルの文字列の昇順で処理されます。よって、`en*` `eth*` にマッチするすべてのインターフェースはDHCPが適用され、`end0` のカードのみ固定IPが設定されます。このように優先順を考慮したファイル名とする必要があります。
+`/etc/systemd/network` 以下に作成した設定ファイルの中でどの順序で実行されるかはファイル名に依存します。先頭が`10-`から始まるように2桁数字としている理由は、文字列の数値順でソートされた順に定義ファイルが読み込まれるためです。
+
+なお、`[Match]`セクションで定義する`Name`キーに指定するインターフェースデバイス名はワイルドカード`*`が使用できます。たとえば、`end*` とした場合、`end0`や`end1`のどちらにもマッチします。
+
+このようなワイルドカードを用いたデフォルト設定と、特定ネットワークカードに対して特化する設定を混在させる場合、次の通り`10-`のデフォルト設定が反映されたあとに`11-`の設定を反映するようにファイル名を決めていただく必要があることをご留意ください。
+
+```{code-block} bash
+10-end-default.network
+11-end0-static.network
+11-end1-static.network
 ```
+また、あくまでも文字列でのソートとなります。次のケースでは`2`から始まる文字の方が大きいため、`2-end-default.network`の設定が優先されてしまいます。
+
+```{code-block} bash
+2-end-default.network
+10-end0-static.network
+```
+
+このため、`10-end0-static.network` をあとから実行させるには桁数を揃えてゼロサプレスとする必要があります。
+
+```{code-block} bash
+02-end-default.network
+10-end0-static.network
+```
+
+なお、冒頭でご説明したとおり `systemd-networkd` システムの初期化実行順は、まず、`/usr/lib/systemd/network` フォルダ以下の設定ファイル群が処理され、その後、`/etc/systemd/network` 以下の設定ファイル群が処理されます。ディレクトリ毎にバッチ式に処理されますので、ディレクトリ間において実行順を考慮した命名規則としていただく必要はありません。
+
+````
 
 
 設定が完了したら、次のとおりネットワークサービスを再起動するコマンドを発行して設定を反映させます。

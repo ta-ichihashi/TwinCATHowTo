@@ -9,7 +9,7 @@ TwinCAT Linuxの導入に関するドキュメントを提供します。
 
 ```{toctree}
 
-cx82xx
+initial_setup
 tf1200/index
 reverse_proxy/index
 docker/index
