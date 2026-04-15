@@ -223,6 +223,10 @@ xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2015/12/TcConfig"
 </TcConfig>
 ```
 
+ファイルを保存しましたら、次のとおりTwinCATのConfigモードのアイコンをクリックすることで、XAEの初期化が行われ、設定が反映されます。
+
+![](assets/reinit_xae.png){align=center}
+
 ```{note}
 動作確認は次の節で行いますので、ここでは設定のみ済ませてください。
 ```
@@ -237,7 +241,7 @@ xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2015/12/TcConfig"
 
 ```{code} bash
 $ cd /opt/stacks/TC_XAR_Container_Sample
-$ sudo make image-build
+$ sudo make build-image
 ```
 
 管理者パスワードを入力したらビルドを開始します。
