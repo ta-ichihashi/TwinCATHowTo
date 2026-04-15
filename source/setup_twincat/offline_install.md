@@ -88,7 +88,19 @@ Beckhoff Stable Feed   TwinCAT.SupportInformationReport.XAE      20.17.3
 
 ````
 
-## オフライン環境のIPCでの作業
+````{tip}
+{ref}`section_tcpkg_export_import` でエクスポートされたパッケージだけをダウンロードいただく場合は、次の二つを満たすスクリプトへ改造してください。
+
+* エクスポートしたパッケージ構成定義ファイル（XML形式）を読み込んでパッケージ名とバージョンを読み込む
+* 読み込まれたパッケージリストから `tcpkg download` コマンドにてバージョン指定付きでダウンロードする。バージョン指定する書式は`packageName=version`です。たとえば次のとおりパッケージ名に続いて`=4026.21.2`のように指定します。
+  ```{code} powershell
+  PS> tcpkg download TwinCAT.Standard.XAE=4026.21.2 TwinCAT.Standard.XAR=4026.21.2 -o "C:\home\Administrator\pakages"
+  ```
+
+ただし、パッケージ構成ファイルに記録されているバージョンが古くなると、該当バージョンのパッケージがFeedリポジトリから消滅してしまう可能性があります。{ref}`section_tcpkg_export_import` でパッケージ構成ファイルをエクスポートするタイミングとダウンロードを行うタイミングはなるべく同時に行ってください。
+````
+
+## オフラインインストールを可能にする設定（GUI編）
 
 次にオフライン環境のIPCにてUSBメモリを挿し、IPC内に展開します。パッケージマネージャの設定にてオフラインパス設定を変更し、そのフォルダからインストールできるようにします。
 
@@ -113,3 +125,40 @@ Beckhoff Stable Feed   TwinCAT.SupportInformationReport.XAE      20.17.3
 ```{note}
 Feed URLで指定したフォルダを定期的に更新してください。Feed URLで指定したフォルダ内にあるパッケージのみインストール可能です。
 ```
+
+## オフラインインストールを可能にする設定（CLI編）
+
+まず、管理者権限でターミナルを起動します。次のコマンドでオンラインfeedを無効化します。
+
+```{code-block} powershell
+tcpkg source edit "Beckhoff Stable Feed" --enabled false
+tcpkg source edit "Beckhoff Outdated Feed" --enabled false
+```
+
+次にオフラインインストール用のFeedを追加します。
+
+```{code-block} powershell
+tcpkg source add -n "Offline Feed" -s "C:\Users\Administrator\Documents\packages"
+```
+
+もしパスが存在しないと次のとおりエラーとなります。
+
+```{code-block} powershell
+> tcpkg source add -n "Offline Feed" -s "C:\Users\Administrator\Documents\packages"
+Error: A remote target named 'C:\Users\Administrator\Documents\packages' does not exist!
+
+Error: Errors occurred while trying to ensure a safe remote command execution. Aborting command...
+```
+
+追加に成功した場合は次の通り現れます。
+
+```{code-block} powershell
+> tcpkg source add -n "Offline Feed" -s "C:\Users\Administrator\Documents\packages"
+TcPkg 2.4.18
+
+Source 'Offline Feed' has successfully been added.
+```
+
+次に前節でダウンロードしたパッケージファイルを`-s "C:\Users\Administrator\Documents\packages"` で指定したフォルダへコピーします。
+
+その後、{ref}`section_tcpkg_export_import` に示すインポートコマンドで構成を適用すると、オフラインのディレクトリに置いたパッケージからインストールが開始されます。
