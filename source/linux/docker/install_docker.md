@@ -99,3 +99,18 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 $ docker --version
 Docker version 28.3.3, build 980b856
 ```
+
+## dockerサービスの有効化・無効化
+
+
+Dockerサービスのコントロールは以下の通り`systemctl`コマンドを発行します。
+
+有効にする場合
+  : ```{code} bash
+    sudo systemctl enable docker.service docker.socket
+    ```
+
+無効化する場合
+  : ```{code} bash
+    sudo systemctl disable --now docker.service docker.socket
+    ```
