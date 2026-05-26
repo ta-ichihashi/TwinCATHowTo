@@ -1,4 +1,13 @@
-# 変数プログラムの基本
+# ST言語プログラムを使った実例
+
+ST言語は、ラダーやFBDに比べて高度な制御構文を持っています。たとえば、FORやWHILEなどで繰り返し構文を処理する場合、また、CASEなどでブロック状態遷移を処理する場合、LadderではJumpと変数の値を組み合わせ自分でその制御ロジックを組み込む必要があります。
+
+
+この特性はモデル（型指向）化されたコンポーネントとインスタンスというIEC 61131-3の言語思想にとてもマッチしています。たとえば、IEC 61131-3の第3版ではインターフェースという型を抽象化する機能があります。抽象型を定義することで様々なバリエーションのオブジェクトを共通プログラムで処理できます。この際、配列などを用いてオブジェクトを集合として管理します。`FOR`, `WHILE`, `REPEAT`などの繰り返し制御構文や
+
+だけではなくプログラム構造
+多くの場合、設備は次のような
+
 
 照光式押し釦スイッチにボタンを押すと点滅する制御するプログラムを例に、リファクタリングするプロセスをご紹介します。
 
@@ -6,6 +15,11 @@
 
 プログラム上に記載した点滅プログラムです。button入力、lightが出力で、buttonがTRUEの間、0.5秒間隔でlight出力に対して点滅を繰り返すSTプログラムです。
 
+ラダーで書くと次のとおりとなります。
+
+![](assets/ld_blinker.png){align=center}
+
+ST言語では以下のとおりです。
 
 ```{code-block} iecst
 PROGRAM MAIN
@@ -18,11 +32,11 @@ END_VAR
 
 IF button THEN
     interval_timer(IN := NOT interval_timer.Q);
-
     IF interval_timer.Q THEN 
         light := NOT light;
     END_IF
 ELSE
+    interval_timer(IN := FALSE);
     light := FALSE;
 END_IF
 ```
@@ -31,11 +45,6 @@ END_IF
 * `TON` （タイマオン）ファンクションブロックを使って周期タイマを作ります。以下の実装で `interval_timer.Q` は0.5秒おきに1サイクルだけTRUEとなります。
     ```{code} iecst
     interval_timer(IN := NOT interval_timer.Q, PT := T#0.5S);
-    ```
-    ラダーで表現するなら、次のとおりで、自己切り回路でT001接点は1パルスONします。    
-    ```
-      T001           K5
-    |--|/|---------(T001)
     ```
     
 * `button` 入力が`TRUE`になると、`interval_timer`の周期タイマが動作します。それ以外のとき、`light` 出力はFALSEです。

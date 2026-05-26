@@ -50,6 +50,7 @@ extensions = [
     'myst_parser',
     'japanesesupport',
      # 'docxbuilder',
+    'sphinxcontrib.mermaid',
     'sphinx.ext.githubpages',
     'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag',

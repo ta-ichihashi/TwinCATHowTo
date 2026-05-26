@@ -12,6 +12,7 @@ dependencies = [
     "myst-parser",
     "sphinx-book-theme",
     "sphinx-markdown-tables",
+    "sphinxcontrib-mermaid",
     "sphinxcontrib-actdiag",
     "sphinxcontrib-applehelp",
     "sphinxcontrib-blockdiag",
