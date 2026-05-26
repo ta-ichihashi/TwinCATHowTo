@@ -7,6 +7,7 @@
 :caption: 目次
 
 iot/index.md
+ads/index.md
 opcua/index.md
 can/index.md
 modbus/index.md
@@ -17,8 +18,6 @@ el_ethernet/index.md
 eip/index.md
 shared_memory/index.md
 powershell_data_edit/index.md
-ads_python/index.md
-ads_plc/index.md
 serial_communication/index.md
 file_api/index.md
 ```
