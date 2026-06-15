@@ -7,4 +7,5 @@
 bsod
 perfmon
 after_incident
+../et2000/index.md
 ```
