@@ -123,14 +123,14 @@
   - 処理が完了すると、自動的にbmlファイルが生成されたフォルダをエクスプローラで開かれます。
   - ![TagetFile](assets/TagetFile.png)
     ```
-    C:\TwinCAT\Functions\TF5890-TC3-XPlanar-Technology\mllib_toolbox\target
+    C:\Program Files (x86)\Beckhoff\TwinCAT\Functions\TF5890-TC3-XPlanar-Technology\mllib_toolbox\target
     ```
 
 * - 5
   - これらのファイル全てを選択し、ターゲットIPCの以下のフォルダへ配置してください。
   - ![BmlFile](assets/BmlFile.png)
     ```
-    C:\TwinCAT\3.1\Target\Config\XPlanar\bml
+    C:\Program Files (x86)\Beckhoff\TwinCAT\3.1\Target\Config\XPlanar\bml
     ```
 
 * - 6

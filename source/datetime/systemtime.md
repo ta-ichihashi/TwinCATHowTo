@@ -2,10 +2,7 @@
 
 IPC上には、マザーボード上にボタン電池とクロック回路があり、これによって **Real Time Clock 略して RTC** と呼ばれるハードウェア上の時計があります。ここから、Windows等のOS用の時計、TwinCAT内部の時計、そしてEtherCATのDistributed clock用の時計を個別に3つのソフトウェア時計が生成されます。
 
-```{admonition} 参考InfoSys
-
-[TwinCAT time sources](https://infosys.beckhoff.com/content/1033/ethercatsystem/2469114379.html?id=8514660852001287726)
-```
+{bdg-link-info}`参考Infosys <https://infosys.beckhoff.com/content/1033/ethercatsystem/2469114379.html?id=8514660852001287726>`
 
 これらのソフトウェア時計は、次の通り初期化時に同期されて以後、CPUの割り込みタイマを基に時刻計測を行います。基本的にCPUの割り込みタイマは単一の発振子によるクロックを基にカウントを行っていますので、個別の時計であっても差が生まれる訳ではありません。しかし、次の要因により差が生まれます。
 
