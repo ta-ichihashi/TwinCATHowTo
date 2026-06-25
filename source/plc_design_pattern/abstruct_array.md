@@ -4,9 +4,7 @@
 
 ## 可変長配列を使って受け渡す
 
-```{note}
-参考InfoSysサイト : [Array with variable length](https://infosys.beckhoff.com/content/1033/tc3_plc_intro/8825257611.html?id=420093545259366736)
-```
+{bdg-link-info}`参考Infosys <https://infosys.beckhoff.com/content/1033/tc3_plc_intro/8825257611.html?id=420093545259366736>`
 
 上記参考サイトに記載されているとおり、ファンクションブロックのVAR_IN_OUT定義ブロック内でのみ、可変長配列を定義することができます。ファンクションブロック外部からセットする際の配列長は固定でなければなりません。
 

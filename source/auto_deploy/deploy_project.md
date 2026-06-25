@@ -22,14 +22,36 @@ blockdiag {
 1. 前項で採取したモデルマシンのファイル・フォルダをターゲットマシンに配置する
 
 
-    ```{csv-table}
-    :header: モデルマシンのファイル, ターゲットマシンの配置先, 備考
+    Windows上の TwinCAT3.1 Build 4024 以前のXAR
+      : ```{csv-table}
+        :header: モデルマシンのファイル, ターゲットマシンの配置先, 備考
 
-    _Boot\TwinCAT RT(X**)\PLC,C:\TwinCAT\3.X\Boot, PLCモジュール有り時
-    _Boot\TwinCAT RT(X**)\CustomConfig.xml,C:\TwinCAT\3.X\Boot, PLCモジュール有り時
-    _Development\TwinCAT RT(X**)\*.pdb, C:\TwinCAT\3.X\AutoInstall, C++モジュール有り時
-    _Development\TwinCAT RT(X**)\*.sys, C:\TwinCAT\3.X\AutoInstall, C++モジュール有り時
-    ```
+        _Boot\TwinCAT RT(X**)\PLC,C:\TwinCAT\3.X\Boot, PLCモジュール有り時
+        _Boot\TwinCAT RT(X**)\CustomConfig.xml,C:\TwinCAT\3.X\Boot, PLCモジュール有り時
+        _Development\TwinCAT RT(X**)\*.pdb, C:\TwinCAT\3.X\AutoInstall, C++モジュール有り時
+        _Development\TwinCAT RT(X**)\*.sys, C:\TwinCAT\3.X\AutoInstall, C++モジュール有り時
+        ```
+
+    Windows上の TwinCAT3.1 Build 4026 以後のXAR
+      : ```{csv-table}
+        :header: モデルマシンのファイル, ターゲットマシンの配置先, 備考
+
+        _Boot\TwinCAT RT(X**)\PLC,C:\Program Files (x86)\Beckhoff\TwinCAT\3.X\Boot, PLCモジュール有り時
+        _Boot\TwinCAT RT(X**)\CustomConfig.xml,C:\Program Files (x86)\Beckhoff\TwinCAT\3.X\Boot, PLCモジュール有り時
+        _Development\TwinCAT RT(X**)\*.pdb, C:\Program Files (x86)\Beckhoff\TwinCAT\3.X\AutoInstall, C++モジュール有り時
+        _Development\TwinCAT RT(X**)\*.sys, C:\Program Files (x86)\Beckhoff\TwinCAT\3.X\AutoInstall, C++モジュール有り時
+        ```
+
+    Linux または TwinCAT/BSD 上のXAR
+      : ```{csv-table}
+        :header: モデルマシンのファイル, ターゲットマシンの配置先, 備考
+
+        _Boot\TwinCAT RT(X**)\PLC,/etc/TwinCAT/3.X/Boot, PLCモジュール有り時
+        _Boot\TwinCAT RT(X**)\CustomConfig.xml,/etc/TwinCAT/3.X/Boot, PLCモジュール有り時
+        _Development\TwinCAT RT(X**)\*.pdb, /etc/TwinCAT/3.X/AutoInstall, C++モジュール有り時
+        _Development\TwinCAT RT(X**)\*.sys, /etc/TwinCAT/3.X/AutoInstall, C++モジュール有り時
+        ```
+
 
 2. 自動ログイン・自動RUNモード移行設定
 

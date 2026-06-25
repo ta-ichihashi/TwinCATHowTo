@@ -26,26 +26,26 @@ ELターミナル
 
 ## 開発手順
 
-まずはTwinCATでシリアルポートの受信データにアクセスする物理的なIOを作成します。
+1. まずはTwinCATでシリアルポートの受信データにアクセスする物理的なIOを作成します。 {bdg-link-info}`参考Infosys <https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85875723.html?id=6382383804496181965>`
 
-[参考InfoSys](https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85875723.html?id=6382383804496181965)
+    この物理IOにアクセスするには、TF6340パッケージを別途インストールしていただく必要があります。パッケージマネージャからTF6340を指定してインストールを実施してください。
 
-この物理IOにアクセスするには、TF6340パッケージを別途インストールしていただく必要があります。パッケージマネージャからTF6340を指定してインストールを実施してください。
+2. インストール後、PLCプロジェクトにライブラリを追加し {bdg-link-info}`参考Infosys <https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/396591499.html?id=2081309549300242125>`、IOとのリンクを行います。
 
-インストール後、PLCプロジェクトにライブラリを追加します。
+    また、本ライブラリには、物理インターフェースに合わせたIOの型が用意されています。たとえばPC上のCOMポートでしたら`PcComInData`、`PcComOutData`、EL6001などでしたら、`EL6inData22B`、`EL6outData22B`　です。この型で宣言した変数に対してIOにリンクします。
 
-[参考InfoSys](https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/396591499.html?id=2081309549300242125)
+3. `SerialLineControl` ファンクションブロックの実装
 
-このライブラリには、`ComBuffer`という構造体が用意され、ここに蓄えられたデータをファンクションブロックを使って順次アクセスします。
+    ライブラリには、`ComBuffer` という構造体型が定義され、送受信それぞれでインスタンス化します。これがデータバッファとなりIOとの中継を行います。アプリケーションは `ComBuffer` からデータを入出力します。{bdg-link-info}`参考InfoSys <https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85865099.html?id=1229754603186087237>`
 
-[参考InfoSys](https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85871115.html?id=8195232895777850580)
+    `ComBuffer` とIOとのデータ入出力制御を行うため、 `SerialLineControl` というファンクションブロックを毎サイクル常時実行します。（{bdg-link-info}`参考Infosys <https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85871115.html?id=8195232895777850580>` のSerialLineControl参照）。このコード例では、ファンクションブロックのインスタンス `fbPcComCtrl`　の引数としてIOの変数のポインタを`pComIn`、`pComOut`にセットし、データ読み書きを行う `ComBuffer` 構造体を `RxBufferPcCom` 、`TxBufferPcCom` にそれぞれセットして常時実行しています。アプリケーション側はこの`ComBuffer`の変数を使ってデータの読み書きを行います。
 
-このサイト例のとおり`PcComInData`、`PcComOutData` をそれぞれ先ほど作成したIOにリンクします。
+    ```{note}
+    `SerialLineControl` を実行するタスクサイクルはシリアルポートのIOストリームデータをComBufferに移動する制御を行います。この処理サイクルが低速で、通信相手からの受信データが多くなるとシリアルポートのIOストリームデータがオーバフローとなりデータが破損する可能性があります。独立した十分速いサイクルのタスクで実行していただくことをお勧めします。
+    ```
 
-`SerialLineControl` というファンクションブロックが、このIOを通じて、`RxBufferPcCom` 、`TxBufferPcCom` という変数の`ComBuffer`構造体にデータを蓄積していきます。
+4. Send/Receiveの実装
+   
+   アプリケーション側からは次のリンクで示されているファンクションブロック（Send*** や、Receive***）に`ComBuffer`を監視させることで、アプリケーション側から任意のバイトやテキストデータを送ったり受信データをパースする、という流れになります。
 
-この`ComBuffer`を通じて、Send*** や、Receive***というファンクションブロックを使ってバッファに溜まったデータを直列化する、という流れになります。
-
-[参考InfoSys](https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85865099.html?id=1229754603186087237)
-
-[参考InfoSys](https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85884555.html?id=3522409791184920023)
+    [ファンクションブロックの実装方法](https://infosys.beckhoff.com/content/1033/tf6340_tc3_serial_communication/85884555.html?id=3522409791184920023)
