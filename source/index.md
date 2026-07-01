@@ -26,6 +26,7 @@ develop_environment.md
 develop_security.md
 develop_safety.md
 develop_motion.md
+develop_cnc.md
 develop_information.md
 operation.md
 faq.md
