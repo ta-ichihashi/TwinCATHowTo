@@ -284,3 +284,22 @@ CNC HMIでエンコーダ値がオフセットされていることを確認し�
 
 ## ソフトリミットの設定
 
+軸をストローク内で安全に動作させるために、ソフトリミットを設けることが有効です。  
+  
+ソフトリミットの下限をP-AXIS-00177で、上限をP-AXIS-00178で設定します。  
+(「軸」 -> 「Param List」タブ -> 「P-AXIS-00177」,「P-AXIS-00178」)
+
+```{figure} assets/00_introduction_035.png
+:name: figure_softlimit_param
+ソフトリミットの設定
+```
+
+ActiveConfigurationでRunモードへ移行し、PLCを実行、CNC HMIを起動します。  
+  
+ソフトリミットの上限・下限が設定されていることを確認します。  
+必要であれば、実際に動かしソフトリミットが機能しているか確認します。
+
+```{figure} assets/00_introduction_036.png
+:name: figure_softlimit_display
+ソフトリミットの確認
+```
