@@ -27,15 +27,12 @@ PosError
 可動子および冶具を含めた、固有の共振周波数を除去することで、サーボON時や動作時の共振を抑えることができるようになります。XTSでは「Tuning Assist」機能を用いることで、この共振周波数を除去するための最適値を得ることが可能となります。
 
 
-1. XtsTuningAssystance用のJobタスクを追加します。
-   ![](assets/add_tuning_assystant_task.png){align=center}
-
-2. `TcCOM Objects` にて右クリックのコンテキストメニューかｒ `Add New Item...` を選択し、 XtsMoverTuningAssystant モジュールを追加します。
+1. `TcCOM Objects` にて右クリックのコンテキストメニューかｒ `Add New Item...` を選択し、 XtsMoverTuningAssystant モジュールを追加します。
    
-    `XTS Modules` > `Mover Controller Modules` > `XtsMoverTuningAssistant [Module]`
+    `XTS with NC2` > `Mover Controller` > `XtsMoverTuningAssistant [Module *.*.**.*]`
    ![](assets/add_tuning_assystant_object.png){align=center}
 
-3. オブジェクトとタスクを紐づけます
+2. `XtsMoverTuningAssistant` を作成すると、自動的に `Job Task` タスクが作成されます。オブジェクトとタスクを紐づけます。
    ![](assets/map_tuning_assystance_objerct_task.png){align=center}
 
 
