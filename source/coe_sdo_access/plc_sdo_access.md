@@ -1,6 +1,11 @@
 # ファンクションブロックを用いたデータアクセス
 
-コンプリートアクセスでSDOデータを読み出すには、`FB_ECCoeSdoReadEx`ファンクションブロックを使います。以下の手順でお使いください。
+コンプリートアクセスでSDOデータを読み書きする場合、次のページで紹介されているファンクションブロックを用います。
+
+{bdg-link-primary-line}`FB_EcCoeSdo***のつかいかた<https://infosys.beckhoff.com/content/1033/tcplclib_tc2_ethercat/56994827.html?id=1722338225767758862>`
+
+
+ここでは、`FB_ECCoeSdoReadEx`ファンクションブロックを使いてターミナルの診断情報などを読み出す例をご紹介します。
 
 ## ライブラリの有効化
 
