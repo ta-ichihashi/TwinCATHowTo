@@ -15,7 +15,9 @@
 
 ***
 
-**一般的なCNCとTwinCAT 3 CNCの違い**  
+:::
+## 一般的なCNCとTwinCAT 3 CNCの違い
+:::
 
 現在広く普及しているCNCは、補間演算・軸指令の生成、画面の表示、PLC機能、サーボ制御など、複数の機能をまとめて専用のCNC装置として提供されています。({numref}`figure_cnc_system`)
 
@@ -49,7 +51,9 @@ PLC機能, CNCの補助機能・PMC, TwinCAT 3 PLC
 
 ***
 
-**Beckhoffの工作機械制御**  
+:::
+## Beckhoffの工作機械制御
+:::
 
 前述の通り、Beckhoffが提供するCNCは、TwinCAT 3の機能モジュールの一部であり、ハードウェアとして専用のCNC装置を必要としません。代わりに、産業用PC（IPC）上で動作するTwinCAT 3 Runtimeを使用して、CNC機能を実現します。({numref}`figure_beckhoff_cnc_control`)  
 CNCは、NCプログラムに従って補間演算や軸指令の生成を行います。生成された指令が、EtherCATを介してサーボドライブアンプに送信されることで、工作機械の各軸を制御します。また、PLCはEtherCATで接続された入出力デバイスを制御することで周辺機器の制御を、HMIは操作画面の表示と操作の入力処理を担います。さらに、IPC上ではWindowsのアプリケーションを実行できるため、通信機能を介したIoTやクラウドサービスなどの連携も可能です。
@@ -73,7 +77,9 @@ CNCによるモータ制御
 
 ***
 
-**TwinCAT 3 CNCのアーキテクチャ**  
+:::
+## TwinCAT 3 CNCのアーキテクチャ
+:::
 
 TwinCAT 3 CNCによる工作機械の制御実装において、そのアーキテクチャを理解することは非常に重要です。以降では、工作機械の制御におけるTwinCATの各機能の役割と、CNCとPLCをつなぐHLIの説明をします。  
 
@@ -121,6 +127,9 @@ PLCとCNCをつなぐHLI
 
 ```{toctree}
 :caption: 目次
+:maxdepth: 5
 
 cnc/00_introduction/index.md
+cnc/01_configuration/index.md
+cnc/02_parameter/index.md
 ```
