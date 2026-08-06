@@ -28,6 +28,7 @@ develop_safety.md
 develop_motion.md
 develop_cnc.md
 develop_information.md
+develop_advanced.md
 operation.md
 faq.md
 ```
