@@ -11,23 +11,29 @@
 [https://github.com/Beckhoff-JP/TF4110_TemperatureControlSample](https://github.com/Beckhoff-JP/TF4110_TemperatureControlSample) 
 ```
 
-## チューニング中の動作
+## チューニングの流れ
 
-- まず、固定の待ち時間20秒（ `sControllerParameter` の `tTuneStabilisation` で設定）が経過します。この待ち時間の間、温度が±1℃以内に収まり安定していることを確認します。温度がこの範囲外になった場合、待ち時間が再び開始されます。
+### チューニング開始
+
+- `FB_CTRL_TempController` の入力変数 `eCtrlMode` を `E_CTRL_MODE.eCTRL_MODE_TUNE` にセットしてファンクションブロックを実行するとチューニングを開始します。
+
+- チューニング中に不要なアラームが出ないようにアラームを抑制します。`FB_CTRL_TempController`の入出力変数`sControllerParameter`の構造体メンバーである`dwAlarmSupp`（{ref}`section_st_ctrl_tempcontrolparameter` 参照）にビットマスクを設定してください。
+
+### チューニング中の動作
+
+- まず、固定の待ち時間20秒（ `sControllerParameter` の `tTuneStabilisation` で設定）が経過します。この待ち時間の間、温度が$\pm1^\circ\text{C}$以内に収まり安定していることを確認します。温度がこの範囲外になった場合、待ち時間が再び開始されます。
 
 - 待ち時間経過後、制御値fYTuneによってステップ応答を実行します。温度が設定値の80％に達していない間は、変曲点を用いたチューニング手法により、PIDコントローラのプロセスパラメータを決定します。
 
-- また、安全上の理由により、**設定値の80％に達した後は、制御は閉ループ制御に切り替わります**。
+- また、安全上の理由により、**設定値の$80\%$に達した後は、制御は閉ループ制御に切り替わります**。
 
 - チューニングが正常に終了すると、**eCtrlStateはeCTRL_STATE_TUNEDに設定され、スタンバイモード**に入ります。推定パラメータによる閉ループ操作は、制御モードをe_CTRL_MODE_ACTIVEに設定することで有効になります。
 
 - 調整されたパラメータは、FB_CTRL_TempControllerの (VAR_OUTPUT) `sParaControllerInternal` で取得することが可能です。このパラメータをPERSISTENT変数で保持しておくことで、PC再起動後も保持された値が再現されます。
 
-### 制御方法
+### チューニング完了後
 
-* 実際の運用では、制御モードをe_CTRL_MODE_ACTIVEにし、PID制御のパラメータはチューニングモードで調整されたものを用います。アクティブモード時に、調整済みのパラメータを用いるには以下のように設定します。
-
-   - チューニング中に不要なアラームが出ないようにアラームを抑制します。`FB_CTRL_TempController`の入出力変数`sControllerParameter`の構造体メンバーである`dwAlarmSupp`（{ref}`section_st_ctrl_tempcontrolparameter` 参照）にビットマスクを設定してください。
+* チューニングモードで調整されたパラメータを保持しておき、制御モードをe_CTRL_MODE_ACTIVEで制御実行するとチューニングされたPIDパラメータで温度制御を行うことができます。
 
    - PERSISTENT変数で保持しておいた `sParaControllerInternal` を `sParaControllerExternal` に代入。
 
